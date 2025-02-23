@@ -30,22 +30,22 @@ Install instructions can be found here: https://docs.docker.com/get-started/get-
 5. You should see a database instance with the settings from your .env file running in your docker!
 6. Connect to your database using PgAdmin4 or similar and the settings prefixed with POSTGRES_ from your .env and run the following:
 ```
-CREATE USER migrator WITH PASSWORD 'mMiIgGrRaAtToOrR1!2@3#4$' SUPERUSER; 
+CREATE USER mnfp_migrator WITH PASSWORD 'migrator_password_1234' SUPERUSER; 
 
-GRANT ALL PRIVILEGES ON DATABASE dics TO migrator;
+GRANT ALL PRIVILEGES ON DATABASE mnfp TO mnfp_migrator;
 
-CREATE USER service WITH PASSWORD 'sSeErRvViIcCeE1!2@3#4$' SUPERUSER;
+CREATE USER mnfp_service WITH PASSWORD 'service_password_1234' SUPERUSER;
 
 GRANT 
 	SELECT,
 	INSERT,
 	UPDATE,
 	DELETE
-ON ALL TABLES IN SCHEMA public TO service;
+ON ALL TABLES IN SCHEMA public TO mnfp_service;
 
-GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public to service;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public to mnfp_service;
 
-ALTER DEFAULT PRIVILEGES FOR ROLE migrator IN SCHEMA public GRANT SELECT, UPDATE, INSERT, DELETE ON TABLES TO service;
+ALTER DEFAULT PRIVILEGES FOR ROLE mnfp_service IN SCHEMA public GRANT SELECT, UPDATE, INSERT, DELETE ON TABLES TO mnfp_service;
 ```
 This is important for setting up the roles that would already exist in a deployed database.
 
