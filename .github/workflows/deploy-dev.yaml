@@ -1,0 +1,63 @@
+name: AWS Service CI/CD
+
+on:
+  push:
+    branches: [dev]
+env:
+  MIGRATOR_POSTGRES_PASSWORD: ${{secrets.MIGRATOR_POSTGRES_PASSWORD}}
+  MIGRATOR_POSTGRES_USER: ${{secrets.MIGRATOR_POSTGRES_USER}}
+  MIGRATOR_POSTGRES_HOST: ${{secrets.MIGRATOR_POSTGRES_HOST}}
+  MIGRATOR_POSTGRES_DB: ${{secrets.MIGRATOR_POSTGRES_DB}}
+  MIGRATOR_POSTGRES_PORT: ${{secrets.MIGRATOR_POSTGRES_PORT}}
+
+jobs:
+  build:
+    environment: dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+      - name: Migrator - Install Python
+        run: |
+          cd database
+          python -m pip install --upgrade pip
+      - name: Migrator - Install Python
+        run: |
+          cd database
+          pip install -r ./requirements.txt
+      - name: Migrator - Migrate
+        run: |
+          cd database
+          python ./db_migrate.py
+      - name: Service - Install Python and CDK
+        run: |
+          cd serverlessservice
+          python -m pip install --upgrade pip         
+          npm install -g aws-cdk
+      - name: Service - Install Poetry
+        uses: Gr1N/setup-poetry@v8
+      - name: Service - Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "us-west-2"
+      - name: Service - Install Dependencies
+        run: |
+          cd serverlessservice  
+
+          poetry install
+
+          poetry export --without-hashes --format=requirements.txt > ./requirements.txt
+          poetry export --without-hashes --format=requirements.txt > ./app/requirements.txt
+
+          echo "here we go"
+
+          poetry run cdk deploy --context stage="dev"

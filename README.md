@@ -1,6 +1,6 @@
 # Summary
 
-The MNP_Fantasy Core Data Service repository has three major moving parts:
+The DICS Core Data Service repository has three major moving parts:
 
 1. The Database Migrator
 2. The API itself built primarily as a CRUD service
@@ -26,7 +26,7 @@ Install instructions can be found here: https://docs.docker.com/get-started/get-
 1. Open the /database folder in Visual Studio Code.
 2. Make sure your Docker is running.
 3. Copy the .env-example file and name it ".env" (these are default values for the database and are fine for local development)
-4. Open the terminal and run ```docker-compose up -d```.
+4. Open the terminal and run ```docker compose up -d```.
 5. You should see a database instance with the settings from your .env file running in your docker!
 6. Connect to your database using PgAdmin4 or similar and the settings prefixed with POSTGRES_ from your .env and run the following:
 ```

@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "dics-core-data-service"
+version = "0.1.0"
+description = ""
+authors = ["Clayton <clayton.stetz@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.0"
+uvicorn = "^0.31.0"
+python-dotenv = "^1.0.1"
+pydantic = {extras = ["email"], version = "^2.9.2"}
+phonenumbers = "^8.13.46"
+pydantic-extra-types = "^2.9.0"
+mangum = "^0.19.0"
+constructs = "^10.3.0"
+psycopg2-binary = "^2.9.9"
+requests = "^2.32.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^8.3.3"
+aws-cdk-lib = "^2.161.1"
+aws-cdk-aws-lambda-python-alpha = "^2.161.1a0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.yapfignore]
+ignore_patterns = [
+  "**/__pycache__/*.*",
+  "venv/**/*.*",
+  "venv/*.*",
+  "venv/**",
+  "venv/bin/python3"
+]
