@@ -1,86 +1,80 @@
 from uuid import UUID
-
 from fastapi import HTTPException
-from adapters.user_adapters import UserAdapter
+from adapters.venue_adapters import VenueAdapter
 from adapters.common_adapters import CommonAdapters
-from managers.user_manager import UserManager
-from models.user_model import (
-    UserCreateModel,
-    UserInboundCreateModel,
-    UserInboundSearchModel,
-    UserInboundUpdateModel,
-    UserModel,
-    UserOutboundModel,
-    UserSearchModel,
-    UserUpdateModel,
+from managers.venue_manager import VenueManager
+from models.venue_model import (
+    VenueCreateModel,
+    VenueInboundCreateModel,
+    VenueInboundSearchModel,
+    VenueModel,
+    VenueOutboundModel,
+    VenueSearchModel,
 )
 from models.common_model import (
     ItemList,
     OutboundItemListResponse,
     OutboundResultantPagingModel,
 )
-
-from fastapi.datastructures import Headers
 from util.database import PagingModel
 
 
-class UserController:
+class VenueController:
     def __init__(
         self,
-        adapter: UserAdapter = UserAdapter(),
+        adapter: VenueAdapter = VenueAdapter(),
         common_adapter: CommonAdapters = CommonAdapters(),
-        manager: UserManager = UserManager(),
+        manager: VenueManager = VenueManager(),
     ) -> None:
         self.adapter = adapter
         self.common_adapter = common_adapter
         self.manager = manager
 
     def create(
-        self, inbound_model: UserInboundCreateModel, headers: Headers
-    ) -> UserOutboundModel | None:
+        self, inbound_model: VenueInboundCreateModel, headers: dict[str, str]
+    ) -> VenueOutboundModel | None:
         request_operators = self.common_adapter.convert_from_headers_to_operators(
             headers
         )
 
-        model: UserCreateModel = (
+        model: VenueCreateModel = (
             self.adapter.convert_from_inbound_create_model_to_create_model(
                 inbound_model
             )
         )
 
-        result = self.manager.create_user(model, request_operators)
+        result = self.manager.create_venue(model, request_operators)
 
         if result is None:
             raise Exception("Received no model from create operation.")
 
-        response_model: UserOutboundModel = (
+        response_model: VenueOutboundModel = (
             self.adapter.convert_from_model_to_outbound_model(result)
         )
 
         return response_model
 
-    def get_by_id(self, id: UUID, headers: Headers) -> UserOutboundModel | None:
+    def get_by_id(self, id: UUID, headers: dict[str, str]) -> VenueOutboundModel | None:
         request_operators = self.common_adapter.convert_from_headers_to_operators(
             headers
         )
 
-        result = self.manager.get_user_by_id(id, request_operators)
+        result = self.manager.get_venue_by_id(id, request_operators)
 
         if result is None:
             raise HTTPException(
-                status_code=404,
-                detail=f"User with id {id} not found.",
+                status_code=404, detail=f"Venue with id {id} not found."
             )
 
-        response_model: UserOutboundModel = (
+        response_model: VenueOutboundModel = (
             self.adapter.convert_from_model_to_outbound_model(result)
         )
 
         return response_model
 
     def search(
-        self, inbound_model: UserInboundSearchModel, headers: Headers
-    ) -> OutboundItemListResponse[UserOutboundModel]:
+        self, inbound_model: VenueInboundSearchModel, headers: dict[str, str]
+    ) -> OutboundItemListResponse[VenueOutboundModel]:
         request_operators = self.common_adapter.convert_from_headers_to_operators(
             headers
         )
@@ -91,13 +85,13 @@ class UserController:
             )
         )
 
-        search_model: UserSearchModel = (
+        search_model: VenueSearchModel = (
             self.adapter.convert_from_inbound_search_model_to_search_model(
                 inbound_model
             )
         )
 
-        results: ItemList[UserModel] = self.manager.search_users(
+        results: ItemList[VenueModel] = self.manager.search_venues(
             search_model, paging_model, request_operators
         )
 
@@ -120,52 +114,19 @@ class UserController:
 
         return return_result
 
-    def update(
-        self,
-        id: UUID,
-        inbound_model: UserInboundUpdateModel,
-        headers: Headers,
-    ):
+    def delete(self, id: UUID, headers: dict[str, str]) -> VenueOutboundModel | None:
         request_operators = self.common_adapter.convert_from_headers_to_operators(
             headers
         )
 
-        model: UserUpdateModel = (
-            self.adapter.convert_from_inbound_update_model_to_update_model(
-                inbound_model
-            )
-        )
-
-        result: None | UserModel = self.manager.update_user(
-            id, model, request_operators
-        )
+        result = self.manager.delete_venue(id, request_operators)
 
         if result is None:
             raise HTTPException(
-                status_code=404,
-                detail=f"User with id {id} not found.",
+                status_code=404, detail=f"Venue with id {id} not found."
             )
 
-        response_model: UserOutboundModel = (
-            self.adapter.convert_from_model_to_outbound_model(result)
-        )
-
-        return response_model
-
-    def delete(self, id: UUID, headers: Headers) -> UserOutboundModel | None:
-        request_operators = self.common_adapter.convert_from_headers_to_operators(
-            headers
-        )
-
-        result = self.manager.delete_user(id, request_operators)
-
-        if result is None:
-            raise HTTPException(
-                status_code=404,
-                detail=f"User with id {id} not found.",
-            )
-
-        response_model: UserOutboundModel = (
+        response_model: VenueOutboundModel = (
             self.adapter.convert_from_model_to_outbound_model(result)
         )
 

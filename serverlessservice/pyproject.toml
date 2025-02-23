@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "dics-core-data-service"
+name = "mnfp-core-data-service"
 version = "0.1.0"
 description = ""
 authors = ["Clayton <clayton.stetz@gmail.com>"]

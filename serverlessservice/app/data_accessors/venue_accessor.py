@@ -1,11 +1,10 @@
 from typing import Any
 from uuid import UUID
-from adapters.user_adapters import UserAdapter
-from models.user_model import (
-    UserCreateModel,
-    UserModel,
-    UserSearchModel,
-    UserUpdateModel,
+from adapters.venue_adapters import VenueAdapter
+from models.venue_model import (
+    VenueCreateModel,
+    VenueModel,
+    VenueSearchModel,
 )
 from models.common_model import ItemList
 from util.common import RequestOperators
@@ -14,18 +13,15 @@ from util.database import PagingModel, SearchTerm
 from util.db_connection import SelectQueryResults
 
 
-class UserAccessor:
-    def __init__(
-        self,
-        adapter: UserAdapter = UserAdapter(),
-    ) -> None:
+class VenueAccessor:
+    def __init__(self, adapter: VenueAdapter = VenueAdapter()) -> None:
         self.adapter = adapter
 
     def insert(
         self,
-        model: UserCreateModel,
+        model: VenueCreateModel,
         request_operators: RequestOperators | None = None,
-    ) -> UserModel:
+    ) -> VenueModel:
         connection = get_global_configuration().pg_connection
 
         db_model: dict[str, Any] = (
@@ -33,7 +29,7 @@ class UserAccessor:
         )
 
         db_result: dict[str, Any] = connection.insert(
-            "users", db_model, request_operators
+            "venues", db_model, request_operators
         )
 
         result_model = self.adapter.convert_from_database_model_to_model(db_result)
@@ -42,10 +38,10 @@ class UserAccessor:
 
     def select_by_id(
         self, id: UUID, request_operators: RequestOperators | None = None
-    ) -> UserModel:
+    ) -> VenueModel:
         connection = get_global_configuration().pg_connection
 
-        db_result = connection.select_by_id("users", id, request_operators)
+        db_result = connection.select_by_id("venues", id, request_operators)
 
         if db_result is None:
             return None
@@ -56,10 +52,10 @@ class UserAccessor:
 
     def select(
         self,
-        model: UserSearchModel,
+        model: VenueSearchModel,
         paging_model: PagingModel | None = None,
         request_operators: RequestOperators | None = None,
-    ) -> ItemList[UserModel]:
+    ) -> ItemList[VenueModel]:
         connection = get_global_configuration().pg_connection
 
         search_terms: list[SearchTerm] = (
@@ -67,10 +63,10 @@ class UserAccessor:
         )
 
         db_result: SelectQueryResults = connection.select(
-            "users", search_terms, paging_model, request_operators
+            "venues", search_terms, paging_model, request_operators
         )
 
-        results: ItemList[UserModel] = ItemList[UserModel](db_result.paging)
+        results: ItemList[VenueModel] = ItemList[VenueModel](db_result.paging)
 
         if db_result is None:
             return results
@@ -81,33 +77,12 @@ class UserAccessor:
 
         return results
 
-    def update(
-        self,
-        id: UUID,
-        model: UserUpdateModel,
-        request_operators: RequestOperators | None = None,
-    ) -> UserModel:
-        connection = get_global_configuration().pg_connection
-
-        db_model: dict[str, Any] = (
-            self.adapter.convert_from_update_model_to_database_model(model)
-        )
-
-        db_result = connection.update("users", id, db_model, request_operators)
-
-        if db_result is None:
-            return None
-
-        result_model = self.adapter.convert_from_database_model_to_model(db_result)
-
-        return result_model
-
     def delete(
         self, id: UUID, request_operators: RequestOperators | None = None
-    ) -> UserModel:
+    ) -> VenueModel:
         connection = get_global_configuration().pg_connection
 
-        db_result = connection.delete("users", id, request_operators)
+        db_result = connection.delete("venues", id, request_operators)
 
         if db_result is None:
             return None

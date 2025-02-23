@@ -12,24 +12,25 @@ from util.database import ResultantPagingModel
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
 
-class DicsPhoneNumber(PhoneNumber):
-    default_region_code = 'US'
-    phone_format = 'E164'
+class MnfpPhoneNumber(PhoneNumber):
+    default_region_code = "US"
+    phone_format = "E164"
 
 
 def validate_ids(value: str | list[str] | None):
     if value is not None:
-        
         common_utilities: CommonUtilities = CommonUtilities()
-        results: dict[int, str] | None = common_utilities.validate_comma_delimited_ids(value)
+        results: dict[int, str] | None = common_utilities.validate_comma_delimited_ids(
+            value
+        )
 
         if results is not None:
-            message = (common_utilities.generate_invalid_comma_delimited_ids_message(results))
+            message = common_utilities.generate_invalid_comma_delimited_ids_message(
+                results
+            )
 
             raise PydanticCustomError(
-                'invalid_id_list', 
-                '{message}', 
-                dict(message=message)
+                "invalid_id_list", "{message}", dict(message=message)
             )
 
         return value
@@ -42,47 +43,34 @@ class CommonOutboundResponseModel(BaseModel):
 
 
 class CommonSearchModel:
-
     def __init__(self, ids: list[UUID] | None) -> None:
-
         self.ids: list[UUID] | None = ids
 
 
 class CommonDatabaseModel:
-
     def __init__(
-        self, 
-        id: UUID, 
-        created_at: datetime,
-        updated_at: datetime | None
+        self, id: UUID, created_at: datetime, updated_at: datetime | None
     ) -> None:
-
         self.id = id
         self.created_at = created_at
         self.updated_at = updated_at
 
 
 class CommonModel:
-
     def __init__(
-        self, 
-        id: UUID, 
-        created_at: datetime,
-        updated_at: datetime | None
+        self, id: UUID, created_at: datetime, updated_at: datetime | None
     ) -> None:
-
         self.id = id
         self.created_at = created_at
         self.updated_at = updated_at
 
 
-T = TypeVar('T')
-TResponse = TypeVar('TResponse', bound=CommonOutboundResponseModel)
+T = TypeVar("T")
+TResponse = TypeVar("TResponse", bound=CommonOutboundResponseModel)
 
 
 # Pydantic causes these class variables to safely be instance variables.
 class CommonInboundPagedModel(BaseModel):
-
     page: Optional[int] = Query(default=None)
     page_length: Optional[int] = Query(default=None)
     sort_by: Optional[str] = Query(default=None)
@@ -95,13 +83,9 @@ class CommonInboundSearchModel(CommonInboundPagedModel):
 
 
 class ItemList(Generic[T]):
-
     def __init__(
-        self,
-        paging: ResultantPagingModel,
-        items: list[T] | None = None
+        self, paging: ResultantPagingModel, items: list[T] | None = None
     ) -> None:
-        
         super().__init__()
 
         self.items = items or []

@@ -11,4 +11,12 @@ CREATE INDEX IF NOT EXISTS idx_league_teams_home_venue_id ON public.league_teams
 CREATE INDEX IF NOT EXISTS idx_league_teams_name ON public.league_teams(name); 
 CREATE INDEX IF NOT EXISTS idx_league_teams_short_name ON public.league_teams(short_name); 
 CREATE INDEX IF NOT EXISTS idx_league_teams_created_at ON public.league_teams(created_at); 
- 
+
+-- FKs
+
+ALTER TABLE public.league_teams DROP CONSTRAINT IF EXISTS fk_league_teams_home_venue_id;
+
+ALTER TABLE public.league_teams
+  ADD CONSTRAINT fk_league_teams_home_venue_id
+  FOREIGN KEY (home_venue_id)
+  REFERENCES public.venues(id);

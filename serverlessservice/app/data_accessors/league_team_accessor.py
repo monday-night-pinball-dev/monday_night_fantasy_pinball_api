@@ -1,11 +1,11 @@
 from typing import Any
 from uuid import UUID
-from adapters.user_adapters import UserAdapter
-from models.user_model import (
-    UserCreateModel,
-    UserModel,
-    UserSearchModel,
-    UserUpdateModel,
+from adapters.league_team_adapters import LeagueTeamAdapter, LeagueTeamAdapter
+from models.league_team_model import (
+    LeagueTeamCreateModel,
+    LeagueTeamModel,
+    LeagueTeamSearchModel,
+    LeagueTeamUpdateModel,
 )
 from models.common_model import ItemList
 from util.common import RequestOperators
@@ -14,18 +14,18 @@ from util.database import PagingModel, SearchTerm
 from util.db_connection import SelectQueryResults
 
 
-class UserAccessor:
+class LeagueTeamAccessor:
     def __init__(
         self,
-        adapter: UserAdapter = UserAdapter(),
+        adapter: LeagueTeamAdapter = LeagueTeamAdapter(),
     ) -> None:
         self.adapter = adapter
 
     def insert(
         self,
-        model: UserCreateModel,
+        model: LeagueTeamCreateModel,
         request_operators: RequestOperators | None = None,
-    ) -> UserModel:
+    ) -> LeagueTeamModel:
         connection = get_global_configuration().pg_connection
 
         db_model: dict[str, Any] = (
@@ -33,7 +33,7 @@ class UserAccessor:
         )
 
         db_result: dict[str, Any] = connection.insert(
-            "users", db_model, request_operators
+            "league_teams", db_model, request_operators
         )
 
         result_model = self.adapter.convert_from_database_model_to_model(db_result)
@@ -42,10 +42,10 @@ class UserAccessor:
 
     def select_by_id(
         self, id: UUID, request_operators: RequestOperators | None = None
-    ) -> UserModel:
+    ) -> LeagueTeamModel:
         connection = get_global_configuration().pg_connection
 
-        db_result = connection.select_by_id("users", id, request_operators)
+        db_result = connection.select_by_id("league_teams", id, request_operators)
 
         if db_result is None:
             return None
@@ -56,10 +56,10 @@ class UserAccessor:
 
     def select(
         self,
-        model: UserSearchModel,
+        model: LeagueTeamSearchModel,
         paging_model: PagingModel | None = None,
         request_operators: RequestOperators | None = None,
-    ) -> ItemList[UserModel]:
+    ) -> ItemList[LeagueTeamModel]:
         connection = get_global_configuration().pg_connection
 
         search_terms: list[SearchTerm] = (
@@ -67,10 +67,10 @@ class UserAccessor:
         )
 
         db_result: SelectQueryResults = connection.select(
-            "users", search_terms, paging_model, request_operators
+            "league_teams", search_terms, paging_model, request_operators
         )
 
-        results: ItemList[UserModel] = ItemList[UserModel](db_result.paging)
+        results: ItemList[LeagueTeamModel] = ItemList[LeagueTeamModel](db_result.paging)
 
         if db_result is None:
             return results
@@ -84,16 +84,16 @@ class UserAccessor:
     def update(
         self,
         id: UUID,
-        model: UserUpdateModel,
+        model: LeagueTeamUpdateModel,
         request_operators: RequestOperators | None = None,
-    ) -> UserModel:
+    ) -> LeagueTeamModel:
         connection = get_global_configuration().pg_connection
 
         db_model: dict[str, Any] = (
             self.adapter.convert_from_update_model_to_database_model(model)
         )
 
-        db_result = connection.update("users", id, db_model, request_operators)
+        db_result = connection.update("league_teams", id, db_model, request_operators)
 
         if db_result is None:
             return None
@@ -104,10 +104,10 @@ class UserAccessor:
 
     def delete(
         self, id: UUID, request_operators: RequestOperators | None = None
-    ) -> UserModel:
+    ) -> LeagueTeamModel:
         connection = get_global_configuration().pg_connection
 
-        db_result = connection.delete("users", id, request_operators)
+        db_result = connection.delete("league_teams", id, request_operators)
 
         if db_result is None:
             return None
