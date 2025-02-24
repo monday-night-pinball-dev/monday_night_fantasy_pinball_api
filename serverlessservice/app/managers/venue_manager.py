@@ -24,10 +24,10 @@ class VenueManager:
             model=inbound_model, request_operators=request_operators
         )
 
-        # from managers.hydrator import Hydrator
+        from managers.hydrator import Hydrator
 
-        # hydrator = Hydrator()
-        # hydrator.hydrate_venues([result], request_operators)
+        hydrator = Hydrator()
+        hydrator.hydrate_venues([result], request_operators)
 
         return result
 
@@ -38,10 +38,10 @@ class VenueManager:
             id=id, request_operators=request_operators
         )
 
-        # from managers.hydrator import Hydrator
+        from managers.hydrator import Hydrator
 
-        # hydrator = Hydrator()
-        # hydrator.hydrate_venues([result], request_operators)
+        hydrator = Hydrator()
+        hydrator.hydrate_venues([result], request_operators)
 
         return result
 
@@ -55,27 +55,10 @@ class VenueManager:
             model=model, paging_model=paging_model, request_operators=request_operators
         )
 
-        # from managers.hydrator import Hydrator
+        from managers.hydrator import Hydrator
 
-        # hydrator = Hydrator()
-        # hydrator.hydrate_venues([result], request_operators)
-
-        return result
-
-    def update_venue(
-        self,
-        id: UUID,
-        model: VenueCreateModel,
-        request_operators: RequestOperators | None = None,
-    ) -> VenueModel | None:
-        result = self.venue_accessor.update(
-            id, model, request_operators=request_operators
-        )
-
-        # from managers.hydrator import Hydrator
-
-        # hydrator = Hydrator()
-        # hydrator.hydrate_venues([result], request_operators)
+        hydrator = Hydrator()
+        hydrator.hydrate_venues(result.items, request_operators)
 
         return result
 

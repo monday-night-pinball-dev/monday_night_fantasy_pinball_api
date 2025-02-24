@@ -46,7 +46,7 @@ def transform_operators_to_headers(request_operators: RequestOperators):
         headers["Authorization"] = f"Bearer {request_operators.token}"
 
     if request_operators.hydration_properties is not None:
-        headers["Samson-Hydration"] = ",".join(request_operators.hydration_properties)
+        headers["MNFP-Hydration"] = ",".join(request_operators.hydration_properties)
 
     if request_operators.added_headers is not None:
         for key in request_operators.added_headers:

@@ -29,10 +29,10 @@ class UserManager:
             model=inbound_model, request_operators=request_operators
         )
 
-        # from managers.hydrator import Hydrator
+        from managers.hydrator import Hydrator
 
-        # hydrator = Hydrator()
-        # hydrator.hydrate_users([result], request_operators)
+        hydrator = Hydrator()
+        hydrator.hydrate_users([result], request_operators)
 
         return result
 
@@ -43,10 +43,10 @@ class UserManager:
             id=id, request_operators=request_operators
         )
 
-        # from managers.hydrator import Hydrator
+        from managers.hydrator import Hydrator
 
-        # hydrator = Hydrator()
-        # hydrator.hydrate_users([result], request_operators)
+        hydrator = Hydrator()
+        hydrator.hydrate_users([result], request_operators)
 
         return result
 
@@ -60,10 +60,10 @@ class UserManager:
             model=model, paging_model=paging_model, request_operators=request_operators
         )
 
-        # from managers.hydrator import Hydrator
+        from managers.hydrator import Hydrator
 
-        # hydrator = Hydrator()
-        # hydrator.hydrate_users([result], request_operators)
+        hydrator = Hydrator()
+        hydrator.hydrate_users(result.items, request_operators)
 
         return result
 
@@ -75,10 +75,10 @@ class UserManager:
     ) -> UserModel | None:
         result = self.user_accessor.update(id, model, request_operators)
 
-        # from managers.hydrator import Hydrator
+        from managers.hydrator import Hydrator
 
-        # hydrator = Hydrator()
-        # hydrator.hydrate_users([result], request_operators)
+        hydrator = Hydrator()
+        hydrator.hydrate_users([result], request_operators)
 
         return result
 

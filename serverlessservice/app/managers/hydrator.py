@@ -1,17 +1,29 @@
-from typing import Any
-from uuid import UUID
+from managers.league_player_manager import LeaguePlayerManager
+from managers.league_team_manager import LeagueTeamManager
+from managers.user_manager import UserManager
 from managers.venue_manager import VenueManager
-from models.league_team_model import LeagueTeamModel
+from models.league_player_model import LeaguePlayerModel, LeaguePlayerSearchModel
+from models.league_team_model import LeagueTeamModel, LeagueTeamSearchModel
+from models.user_model import UserModel
 from models.venue_model import VenueModel, VenueSearchModel
 from util.common import RequestOperators
+from util.hydration import HydrationUtil
 
 
 class Hydrator:
     def __init__(
         self,
+        hydration_util: HydrationUtil = HydrationUtil(),
         venue_manager: VenueManager = VenueManager(),
+        league_team_manager: LeagueTeamManager = LeagueTeamManager(),
+        league_player_manager: LeaguePlayerManager = LeaguePlayerManager(),
+        user_manager: UserManager = UserManager(),
     ) -> None:
         self.venue_manager = venue_manager
+        self.hydration_util = hydration_util
+        self.league_team_manager = league_team_manager
+        self.league_player_manager = league_player_manager
+        self.user_manager = user_manager
 
     def hydrate_venues(
         self,
@@ -26,8 +38,8 @@ class Hydrator:
         result_list: list[LeagueTeamModel],
         request_operators: RequestOperators | None = None,
     ):
-        # Hydrate retailer
-        self.hydrate_target(
+        # Hydrate home venue
+        self.hydration_util.hydrate_target(
             "home_venue",
             result_list,
             VenueSearchModel(),
@@ -35,49 +47,30 @@ class Hydrator:
             request_operators.hydration if request_operators is not None else None,
         )
 
-    def hydrate_target(
+    def hydrate_league_players(
         self,
-        target_name: str,
-        parent_models: list[Any],
-        search_model: Any,
-        search_function: callable,
-        hydration: list[str],
-    ) -> None:
-        if hydration is None:
-            return
+        result_list: list[LeaguePlayerModel],
+        request_operators: RequestOperators | None = None,
+    ):
+        # Hydrate league team
+        self.hydration_util.hydrate_target(
+            "league_team",
+            result_list,
+            LeagueTeamSearchModel(),
+            self.league_team_manager.search_league_teams,
+            request_operators.hydration if request_operators is not None else None,
+        )
 
-        sub_hydration_list = self.seek_hydration_and_reduce(target_name, hydration)
-
-        if len(sub_hydration_list) > 0:
-            sub_hydration_list_with_root_removed = [
-                x for x in sub_hydration_list if x != target_name
-            ]
-
-            sub_operators: RequestOperators = RequestOperators(skip_paging=True)
-
-            if len(sub_hydration_list_with_root_removed) > 0:
-                sub_operators.hydration = [
-                    x for x in sub_hydration_list_with_root_removed
-                ]
-
-            target_ids = [
-                parent_model.__dict__[f"{target_name}_id"]
-                for parent_model in parent_models
-                if parent_model.__dict__[f"{target_name}_id"] is not None
-            ]
-
-            search_model.ids = target_ids
-
-            existing_children = search_function(search_model, None, sub_operators)
-
-            existing_children_dict: dict[UUID, Any] = {
-                child.id: child for child in existing_children.items
-            }
-
-            for parent_model in parent_models:
-                existing_child = (
-                    existing_children_dict[parent_model.__dict__[f"{target_name}_id"]]
-                    if parent_model.__dict__[f"{target_name}_id"] is not None
-                    else None
-                )
-                parent_model.__dict__[target_name] = existing_child
+    def hydrate_users(
+        self,
+        result_list: list[UserModel],
+        request_operators: RequestOperators | None = None,
+    ):
+        # Hydrate league player
+        self.hydration_util.hydrate_target(
+            "league_player",
+            result_list,
+            LeaguePlayerSearchModel(),
+            self.league_player_manager.search_league_players,
+            request_operators.hydration if request_operators is not None else None,
+        )

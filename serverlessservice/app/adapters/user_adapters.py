@@ -1,4 +1,5 @@
 from typing import Any
+from adapters.league_player_adapters import LeaguePlayerAdapter
 from models.user_model import (
     UserCreateModel,
     UserInboundCreateModel,
@@ -20,8 +21,13 @@ from util.database import (
 
 
 class UserAdapter:
-    def __init__(self, common_utilities: CommonUtilities = CommonUtilities()) -> None:
+    def __init__(
+        self,
+        common_utilities: CommonUtilities = CommonUtilities(),
+        league_player_adapter: LeaguePlayerAdapter = LeaguePlayerAdapter(),
+    ) -> None:
         self.common_utilities = common_utilities
+        self.league_player_adapter = league_player_adapter
 
     def convert_from_inbound_create_model_to_create_model(
         self,
@@ -102,16 +108,14 @@ class UserAdapter:
 
         if model.name_like is not None:
             search_terms.append(
-                LikeSearchTerm(
-                    "full_name", model.name_like, LikeComparatorModes.Like, True
-                )
+                LikeSearchTerm("name", model.name_like, LikeComparatorModes.Like, True)
             )
 
         if model.name is not None:
             search_terms.append(ExactMatchSearchTerm("name", model.name))
 
         if model.username is not None:
-            search_terms.append(ExactMatchSearchTerm("username", model.name, True))
+            search_terms.append(ExactMatchSearchTerm("username", model.username, True))
 
         if model.username_like is not None:
             search_terms.append(

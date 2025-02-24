@@ -124,5 +124,6 @@ class LeagueTeamModel(CommonModel):
 # Pydantic causes these class variables to safely be instance variables.
 class LeagueTeamOutboundModel(CommonOutboundResponseModel):
     name: str
+    short_name: str
     home_venue_id: UUID
     home_venue: VenueOutboundModel | None = None

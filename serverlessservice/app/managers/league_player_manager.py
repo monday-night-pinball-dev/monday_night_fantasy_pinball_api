@@ -29,10 +29,10 @@ class LeaguePlayerManager:
             model=inbound_model, request_operators=request_operators
         )
 
-        # from managers.hydrator import Hydrator
+        from managers.hydrator import Hydrator
 
-        # hydrator = Hydrator()
-        # hydrator.hydrate_league_players([result], request_operators)
+        hydrator = Hydrator()
+        hydrator.hydrate_league_players([result], request_operators)
 
         return result
 
@@ -43,10 +43,10 @@ class LeaguePlayerManager:
             id=id, request_operators=request_operators
         )
 
-        # from managers.hydrator import Hydrator
+        from managers.hydrator import Hydrator
 
-        # hydrator = Hydrator()
-        # hydrator.hydrate_league_players([result], request_operators)
+        hydrator = Hydrator()
+        hydrator.hydrate_league_players([result], request_operators)
 
         return result
 
@@ -60,10 +60,10 @@ class LeaguePlayerManager:
             model=model, paging_model=paging_model, request_operators=request_operators
         )
 
-        # from managers.hydrator import Hydrator
+        from managers.hydrator import Hydrator
 
-        # hydrator = Hydrator()
-        # hydrator.hydrate_league_players([result], request_operators)
+        hydrator = Hydrator()
+        hydrator.hydrate_league_players(result.items, request_operators)
 
         return result
 
@@ -75,10 +75,10 @@ class LeaguePlayerManager:
     ) -> LeaguePlayerModel | None:
         result = self.league_player_accessor.update(id, model, request_operators)
 
-        # from managers.hydrator import Hydrator
+        from managers.hydrator import Hydrator
 
-        # hydrator = Hydrator()
-        # hydrator.hydrate_league_players([result], request_operators)
+        hydrator = Hydrator()
+        hydrator.hydrate_league_players([result], request_operators)
 
         return result
 
