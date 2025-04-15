@@ -1,13 +1,6 @@
 import datetime
-import string
-import uuid
 
 from requests import Response
-from tests.qdk.operators.venues import (
-    VenueCreateModel,
-    VenueModel,
-    create_venue,
-)
 from tests.qdk.qa_requests import qa_get, qa_patch, qa_post
 from tests.qdk.types import (
     PagedResponseItemList,
@@ -24,54 +17,35 @@ from tests.qdk.utils import (
 )
 
 
-class LeagueTeamCreateModel:
+class FantasyLeagueCreateModel:
     def __init__(
         self,
-        home_venue_id: str | None = None,
-        home_venue: VenueCreateModel | None = None,
-        global_mnp_id: str | None = None,
         name: str | None = None,
-        short_name: str | None = None,
     ) -> None:
-        self.home_venue_id = home_venue_id
-        self.home_venue = home_venue
         self.name = name
-        self.short_name = short_name
-        self.global_mnp_id = global_mnp_id
 
 
-class LeagueTeamModel:
+class FantasyLeagueModel:
     def __init__(
         self,
         id: str,
-        home_venue_id: str,
-        global_mnp_id: str,
         name: str,
-        short_name: str,
         created_at: datetime.datetime,
-        home_venue: VenueModel | None = None,
         updated_at: datetime.datetime | None = None,
     ) -> None:
         self.id = id
         self.created_at = created_at
         self.updated_at = updated_at
-        self.home_venue_id = home_venue_id
-        self.global_mnp_id = global_mnp_id
-        self.home_venue = VenueModel(**home_venue) if home_venue is not None else None
 
         self.name = name
-        self.short_name = short_name
 
 
-class LeagueTeamSearchModel(PagingRequestModel):
+class FantasyLeagueSearchModel(PagingRequestModel):
     def __init__(
         self,
         ids: str | None = None,
-        home_venue_ids: str | None = None,
-        global_mnp_ids: str | None = None,
         name: str | None = None,
         name_like: str | None = None,
-        short_name: str | None = None,
         page: int | None = None,
         page_length: int | None = None,
         is_sort_descending: bool | None = None,
@@ -85,63 +59,49 @@ class LeagueTeamSearchModel(PagingRequestModel):
         )
 
         self.ids = ids
-        self.home_venue_ids = home_venue_ids
-        self.global_mnp_ids = global_mnp_ids
         self.name = name
         self.name_like = name_like
-        self.short_name = short_name
 
 
-class LeagueTeamUpdateModel:
+class FantasyLeagueUpdateModel:
     def __init__(
         self,
-        home_venue_id: str | None = None,
         name: str | None = None,
-        short_name: str | None = None,
     ) -> None:
-        self.home_venue_id = home_venue_id
         self.name = name
-        self.short_name = short_name
 
 
-def mint_default_league_team(
+def mint_default_fantasy_league(
     context: TestContext,
-    overrides: LeagueTeamCreateModel | None = None,
+    overrides: FantasyLeagueCreateModel | None = None,
     request_operators: RequestOperators | None = None,
-) -> LeagueTeamCreateModel:
-    overrides = overrides or LeagueTeamCreateModel()
+) -> FantasyLeagueCreateModel:
+    overrides = overrides or FantasyLeagueCreateModel()
 
     random_string = generate_random_string()
-    random_short_name = generate_random_string(len=3, charset=string.ascii_uppercase)
 
-    default_league_team: LeagueTeamCreateModel = LeagueTeamCreateModel(
-        name=random_string + "_league_team_name",
-        short_name=random_short_name,
-        global_mnp_id=str(uuid.uuid4()),
+    default_fantasy_league: FantasyLeagueCreateModel = FantasyLeagueCreateModel(
+        name=random_string + "_fantasy_league_name",
     )
 
-    if overrides.home_venue_id is None:
-        new_home_venue = create_venue(context, overrides.home_venue)
-        overrides.home_venue_id = new_home_venue.id
+    copy_object_when_appropriate(default_fantasy_league, overrides)
 
-        del overrides.home_venue
-
-    copy_object_when_appropriate(default_league_team, overrides)
-
-    return default_league_team
+    return default_fantasy_league
 
 
-def create_league_team(
+def create_fantasy_league(
     context: TestContext,
-    overrides: LeagueTeamCreateModel | None = None,
+    overrides: FantasyLeagueCreateModel | None = None,
     request_operators: RequestOperators | None = None,
     allow_failures: bool = False,
 ):
-    post_object = mint_default_league_team(
+    post_object = mint_default_fantasy_league(
         context=context, overrides=overrides, request_operators=request_operators
     )
 
-    result = qa_post(context.api_url + "/league_teams", post_object, request_operators)
+    result = qa_post(
+        context.api_url + "/fantasy_leagues", post_object, request_operators
+    )
 
     if allow_failures == False:
         assert result.status_code == 201
@@ -151,39 +111,39 @@ def create_league_team(
         assert_objects_are_equal(
             result_dict,
             post_object.__dict__,
-            ["id", "home_venue", "created_at", "updated_at"],
+            ["id", "created_at", "updated_at"],
         )
 
         assert result_dict["id"] is not None
         assert result_dict["created_at"] is not None
         assert result_dict["updated_at"] is None
 
-    return_object = LeagueTeamModel(**result.json())
+    return_object = FantasyLeagueModel(**result.json())
 
     return return_object
 
 
-def get_league_team_by_id(
+def get_fantasy_league_by_id(
     context: TestContext,
     id: str,
     request_operators: RequestOperators | None = None,
     allow_failures: bool = False,
 ):
-    url = f"{context.api_url}/league_teams/{id}"
+    url = f"{context.api_url}/fantasy_leagues/{id}"
 
     result = qa_get(url, request_operators=request_operators)
 
-    return_object = LeagueTeamModel(**result.json())
+    return_object = FantasyLeagueModel(**result.json())
 
     return return_object
 
 
-def get_league_teams(
+def get_fantasy_leagues(
     context: TestContext,
-    search_model: LeagueTeamSearchModel | None,
+    search_model: FantasyLeagueSearchModel | None,
     request_operators: RequestOperators | None = None,
-) -> PagedResponseItemList[LeagueTeamModel]:
-    url: str = f"{context.api_url}/league_teams"
+) -> PagedResponseItemList[FantasyLeagueModel]:
+    url: str = f"{context.api_url}/fantasy_leagues"
 
     result: Response = qa_get(
         url=url,
@@ -195,30 +155,30 @@ def get_league_teams(
 
     return_paging_object = PagingResponseModel(**result_dict["paging"])
 
-    return_items: list[LeagueTeamModel] = [
-        LeagueTeamModel(**obj) for obj in result_dict["items"]
+    return_items: list[FantasyLeagueModel] = [
+        FantasyLeagueModel(**obj) for obj in result_dict["items"]
     ]
 
-    return_object = PagedResponseItemList[LeagueTeamModel](
+    return_object = PagedResponseItemList[FantasyLeagueModel](
         items=return_items, paging=return_paging_object
     )
 
     return return_object
 
 
-def update_league_team(
+def update_fantasy_league(
     context: TestContext,
     id: str,
-    update_model: LeagueTeamUpdateModel | None = None,
+    update_model: FantasyLeagueUpdateModel | None = None,
     request_operators: RequestOperators | None = None,
     allow_failures: bool = False,
 ):
-    original_object: LeagueTeamModel = get_league_team_by_id(
+    original_object: FantasyLeagueModel = get_fantasy_league_by_id(
         context, id, request_operators
     )
 
     result = qa_patch(
-        f"{context.api_url}/league_teams/{id}", update_model, request_operators
+        f"{context.api_url}/fantasy_leagues/{id}", update_model, request_operators
     )
 
     if allow_failures == False:
@@ -235,12 +195,6 @@ def update_league_team(
 
         assert result_dict["updated_at"] is not None
 
-    return_object = LeagueTeamModel(**result.json())
+    return_object = FantasyLeagueModel(**result.json())
 
     return return_object
-
-
-def league_team_hydration_check(league_team: LeagueTeamModel) -> None:
-    assert league_team.home_venue is not None
-    assert league_team.home_venue.id is not None
-    assert league_team.home_venue.id == league_team.home_venue_id

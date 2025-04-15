@@ -16,17 +16,9 @@ from models.common_model import (
 from models.league_player_model import LeaguePlayerModel, LeaguePlayerOutboundModel
 
 
-class UserRoles(StrEnum):
-    MnfpAdmin = "MnfpAdmin"
-    FantasyCommissioner = "FantasyCommissioner"
-    TeamOwner = "TeamOwner"
-    LeaguePlayer = "LeaguePlayer"
-
-
 # Pydantic causes these class variables to safely be instance variables.
 class UserInboundCreateModel(BaseModel):
     league_player_id: Optional[Annotated[UUID4, Strict(False)]] = Field(default=None)
-    role: UserRoles = Field(...)
     name: str = Field(..., max_length=255)
     username: EmailStr = Field(..., max_length=320)
 
@@ -34,7 +26,6 @@ class UserInboundCreateModel(BaseModel):
 # Pydantic causes these class variables to safely be instance variables.
 class UserInboundUpdateModel(BaseModel):
     name: Optional[str] = Field(default=None, max_length=255)
-    role: Optional[UserRoles] = Field(default=None)
 
 
 # Pydantic causes these class variables to safely be instance variables.
@@ -43,7 +34,6 @@ class UserInboundSearchModel(CommonInboundSearchModel):
     username: Optional[str] = Query(default=None)
     name: Optional[str] = Query(default=None)
     name_like: Optional[str] = Query(default=None)
-    role: Optional[UserRoles] = Query(default=None)
     league_player_ids: Annotated[Optional[str], BeforeValidator(validate_ids)] = Query(
         default=None
     )
@@ -54,23 +44,19 @@ class UserCreateModel:
         self,
         username: str,
         name: str,
-        role: UserRoles,
         league_player_id: UUID | None = None,
     ) -> None:
         self.league_player_id = league_player_id
         self.username = username
         self.name = name
-        self.role = role
 
 
 class UserUpdateModel:
     def __init__(
         self,
         name: str,
-        role: UserRoles,
     ) -> None:
         self.name = name
-        self.role = role
 
 
 class UserSearchModel(CommonSearchModel):
@@ -82,7 +68,6 @@ class UserSearchModel(CommonSearchModel):
         name_like: str | None = None,
         username_like: str | None = None,
         username: str | None = None,
-        role: UserRoles | None = None,
     ) -> None:
         super().__init__(ids)
         self.league_player_ids = league_player_ids
@@ -90,7 +75,6 @@ class UserSearchModel(CommonSearchModel):
         self.name_like = name_like
         self.username = username
         self.username_like = username_like
-        self.role = role
 
 
 class UserDatabaseModel(CommonDatabaseModel):
@@ -99,7 +83,6 @@ class UserDatabaseModel(CommonDatabaseModel):
         id: UUID,
         username: str,
         name: str,
-        role: UserRoles,
         created_at: datetime,
         league_player_id: UUID | None = None,
         updated_at: datetime | None = None,
@@ -108,7 +91,6 @@ class UserDatabaseModel(CommonDatabaseModel):
 
         self.name = name
         self.username = username
-        self.role = role
         self.league_player_id = league_player_id
 
 
@@ -118,7 +100,6 @@ class UserModel(CommonModel):
         id: UUID,
         username: str,
         name: str,
-        role: UserRoles,
         created_at: datetime,
         league_player_id: UUID | None = None,
         league_player: LeaguePlayerModel | None = None,
@@ -128,7 +109,6 @@ class UserModel(CommonModel):
 
         self.username = username
         self.name = name
-        self.role = role
         self.league_player_id = league_player_id
         self.league_player = league_player
 
@@ -140,4 +120,3 @@ class UserOutboundModel(CommonOutboundResponseModel):
 
     username: str
     name: str
-    role: UserRoles

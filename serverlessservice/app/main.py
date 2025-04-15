@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from routes.league_player_routes import set_league_player_routes
+from routes.fantasy_league_routes import set_fantasy_league_routes
 from routes.league_team_routes import set_league_team_routes
 from routes.venue_routes import set_venue_routes
 from routes.user_routes import set_user_routes
@@ -46,6 +47,7 @@ set_league_team_routes(app)
 set_utility_routes(app)
 set_user_routes(app)
 set_venue_routes(app)
+set_fantasy_league_routes(app)
 
 
 if __name__ == "__main__" and enviroment.configuration.STAGE == "local":

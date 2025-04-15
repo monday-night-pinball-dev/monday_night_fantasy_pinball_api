@@ -25,7 +25,7 @@ def test_posts_invalid_user_missing_fields() -> None:
 
     errors = result.json()
 
-    assert len(errors["detail"]) == 3
+    assert len(errors["detail"]) == 2
 
     error: list[Any] = [
         error
@@ -47,16 +47,6 @@ def test_posts_invalid_user_missing_fields() -> None:
     assert error[0]["type"] == "missing"
     assert error[0]["msg"] == "Field required"
 
-    error: list[Any] = [
-        error
-        for error in errors["detail"]
-        if "body" in error["loc"] and "role" in error["loc"]
-    ]
-
-    assert len(error) == 1
-    assert error[0]["type"] == "missing"
-    assert error[0]["msg"] == "Field required"
-
 
 def test_posts_invalid_user_bad_inputs() -> None:
     populate_configuration_if_not_exists()
@@ -69,7 +59,6 @@ def test_posts_invalid_user_bad_inputs() -> None:
             "name": generate_random_string(256),
             "league_player_id": "not an id",
             "username": "not an email",
-            "role": "invalid role",
         },
     )
 
@@ -77,7 +66,7 @@ def test_posts_invalid_user_bad_inputs() -> None:
 
     errors = result.json()
 
-    assert len(errors["detail"]) == 4
+    assert len(errors["detail"]) == 3
 
     error: list[Any] = [
         error
@@ -110,18 +99,6 @@ def test_posts_invalid_user_bad_inputs() -> None:
     assert (
         error[0]["msg"]
         == "value is not a valid email address: An email address must have an @-sign."
-    )
-
-    error: list[Any] = [
-        error
-        for error in errors["detail"]
-        if "body" in error["loc"] and "role" in error["loc"]
-    ]
-    assert len(error) == 1
-    assert error[0]["type"] == "enum"
-    assert (
-        error[0]["msg"]
-        == "Input should be 'MnfpAdmin', 'FantasyCommissioner', 'TeamOwner' or 'LeaguePlayer'"
     )
 
 

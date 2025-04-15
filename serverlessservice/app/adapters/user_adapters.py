@@ -36,7 +36,6 @@ class UserAdapter:
         model = UserCreateModel(
             name=inbound_create_model.name,
             username=inbound_create_model.username,
-            role=inbound_create_model.role,
             league_player_id=inbound_create_model.league_player_id,
         )
 
@@ -48,7 +47,6 @@ class UserAdapter:
     ) -> UserUpdateModel:
         model = UserUpdateModel(
             name=inbound_update_model.name,
-            role=inbound_update_model.role,
         )
 
         return model
@@ -71,7 +69,6 @@ class UserAdapter:
                 if inbound_search_model.league_player_ids is not None
                 else None
             ),
-            role=inbound_search_model.role,
             name=inbound_search_model.name,
             name_like=inbound_search_model.name_like,
             username_like=inbound_search_model.username_like,
@@ -103,9 +100,6 @@ class UserAdapter:
                 )
             )
 
-        if model.role is not None:
-            search_terms.append(ExactMatchSearchTerm("role", model.role.value, True))
-
         if model.name_like is not None:
             search_terms.append(
                 LikeSearchTerm("name", model.name_like, LikeComparatorModes.Like, True)
@@ -132,7 +126,6 @@ class UserAdapter:
         database_model: dict[str, Any] = {
             "name": model.name,
             "username": model.username,
-            "role": model.role.value if model.role is not None else None,
             "league_player_id": str(model.league_player_id)
             if model.league_player_id is not None
             else None,
@@ -145,7 +138,6 @@ class UserAdapter:
     ) -> dict[str, Any]:
         database_model: dict[str, Any] = {
             "name": model.name,
-            "role": model.role.value if model.role is not None else None,
         }
 
         return database_model
@@ -156,7 +148,6 @@ class UserAdapter:
         model = UserModel(
             id=database_model["id"],
             name=database_model["name"],
-            role=database_model["role"],
             username=database_model["username"],
             league_player_id=database_model["league_player_id"],
             created_at=database_model["created_at"],
@@ -172,7 +163,6 @@ class UserAdapter:
             id=model.id,
             name=model.name,
             username=model.username,
-            role=model.role,
             league_player_id=model.league_player_id,
             league_player=self.league_player_adapter.convert_from_model_to_outbound_model(
                 model.league_player

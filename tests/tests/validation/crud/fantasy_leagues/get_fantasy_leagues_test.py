@@ -1,14 +1,14 @@
 from time import sleep
 from typing import Any
 
-from tests.qdk.operators.league_teams import (
-    LeagueTeamCreateModel,
-    LeagueTeamModel,
-    LeagueTeamSearchModel,
-    create_league_team,
-    get_league_team_by_id,
-    get_league_teams,
-    league_team_hydration_check,
+
+from tests.qdk.operators.fanatasy_leagues import (
+    FantasyLeagueCreateModel,
+    FantasyLeagueModel,
+    FantasyLeagueSearchModel,
+    create_fantasy_league,
+    get_fantasy_league_by_id,
+    get_fantasy_leagues,
 )
 from tests.qdk.qa_requests import qa_get
 from tests.qdk.types import PagedResponseItemList, RequestOperators, TestContext
@@ -19,48 +19,28 @@ from util.configuration import (
 )
 
 
-def test_gets_league_team_by_id() -> None:
+def test_gets_fantasy_league_by_id() -> None:
     populate_configuration_if_not_exists()
 
     context: TestContext = TestContext(api_url=get_global_configuration().API_URL)
 
-    posted_object = create_league_team(context)
+    posted_object = create_fantasy_league(context)
 
-    result = get_league_team_by_id(context, posted_object.id)
+    result = get_fantasy_league_by_id(context, posted_object.id)
 
     assert result is not None
     assert result.id == posted_object.id
 
 
-def test_gets_league_team_by_id_with_hydration() -> None:
-    populate_configuration_if_not_exists()
-
-    context: TestContext = TestContext(api_url=get_global_configuration().API_URL)
-
-    posted_object = create_league_team(context)
-
-    result = get_league_team_by_id(
-        context,
-        posted_object.id,
-        request_operators=RequestOperators(hydration_properties=["home_venue"]),
-    )
-
-    assert result is not None
-    assert result.id == posted_object.id
-
-    league_team_hydration_check(result)
-
-
-def test_gets_league_teams_invalid_inputs() -> None:
+def test_gets_fantasy_leagues_invalid_inputs() -> None:
     populate_configuration_if_not_exists()
 
     context: TestContext = TestContext(api_url=get_global_configuration().API_URL)
 
     result = qa_get(
-        f"{context.api_url}/league_teams",
+        f"{context.api_url}/fantasy_leagues",
         query_params={
             "ids": "not an id,also not an id",
-            "home_venue_ids": "not valid,at all,cmon man",
             "page": "not a page num",
             "page_length": "not a length num",
             "is_sort_descending": "not a bool",
@@ -71,7 +51,7 @@ def test_gets_league_teams_invalid_inputs() -> None:
 
     errors = result.json()
 
-    assert len(errors["detail"]) == 5
+    assert len(errors["detail"]) == 4
 
     error: list[Any] = [
         error
@@ -83,18 +63,6 @@ def test_gets_league_teams_invalid_inputs() -> None:
     assert (
         error[0]["msg"]
         == "Property must be a valid list of v4 uuids. Invalid values received: [\n\t0: not an id,\n\t1: also not an id\n]."
-    )
-
-    error: list[Any] = [
-        error
-        for error in errors["detail"]
-        if "query" in error["loc"] and "home_venue_ids" in error["loc"]
-    ]
-    assert len(error) == 1
-    assert error[0]["type"] == "invalid_id_list"
-    assert (
-        error[0]["msg"]
-        == "Property must be a valid list of v4 uuids. Invalid values received: [\n\t0: not valid,\n\t1: at all,\n\t2: cmon man\n]."
     )
 
     error: list[Any] = [
@@ -133,22 +101,24 @@ def test_gets_league_teams_invalid_inputs() -> None:
     )
 
 
-def test_gets_league_teams_with_ids_filter() -> None:
+def test_gets_fantasy_leagues_with_ids_filter() -> None:
     populate_configuration_if_not_exists()
 
     context: TestContext = TestContext(api_url=get_global_configuration().API_URL)
 
-    posted_object_1: LeagueTeamModel = create_league_team(context)
-    posted_object_2: LeagueTeamModel = create_league_team(context)
-    posted_object_3: LeagueTeamModel = create_league_team(context)
-    posted_object_4: LeagueTeamModel = create_league_team(context)
-    create_league_team(context)
+    posted_object_1: FantasyLeagueModel = create_fantasy_league(context)
+    posted_object_2: FantasyLeagueModel = create_fantasy_league(context)
+    posted_object_3: FantasyLeagueModel = create_fantasy_league(context)
+    posted_object_4: FantasyLeagueModel = create_fantasy_league(context)
+    create_fantasy_league(context)
 
-    filters: LeagueTeamSearchModel = LeagueTeamSearchModel(
+    filters: FantasyLeagueSearchModel = FantasyLeagueSearchModel(
         ids=f"{posted_object_1.id},{posted_object_2.id},{posted_object_3.id},{posted_object_4.id}"
     )
 
-    result: PagedResponseItemList[LeagueTeamModel] = get_league_teams(context, filters)
+    result: PagedResponseItemList[FantasyLeagueModel] = get_fantasy_leagues(
+        context, filters
+    )
 
     assert result is not None
     assert result.items is not None
@@ -161,47 +131,47 @@ def test_gets_league_teams_with_ids_filter() -> None:
 
     assert len(result.items) == 4
 
-    posted_item_1: list[LeagueTeamModel] = [
+    posted_item_1: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
     assert len(posted_item_1) == 1
     assert_objects_are_equal(posted_item_1[0], posted_object_1)
 
-    posted_item_2: list[LeagueTeamModel] = [
+    posted_item_2: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
     assert len(posted_item_2) == 1
     assert_objects_are_equal(posted_item_2[0], posted_object_2)
 
-    posted_item_3: list[LeagueTeamModel] = [
+    posted_item_3: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
     assert len(posted_item_3) == 1
     assert_objects_are_equal(posted_item_3[0], posted_object_3)
 
-    posted_item_4: list[LeagueTeamModel] = [
+    posted_item_4: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
     assert len(posted_item_4) == 1
     assert_objects_are_equal(posted_item_4[0], posted_object_4)
 
 
-def test_gets_league_teams_with_ids_filter_with_hydration() -> None:
+def test_gets_fantasy_leagues_with_ids_filter_with_hydration() -> None:
     populate_configuration_if_not_exists()
 
     context: TestContext = TestContext(api_url=get_global_configuration().API_URL)
 
-    posted_object_1: LeagueTeamModel = create_league_team(context)
-    posted_object_2: LeagueTeamModel = create_league_team(context)
-    posted_object_3: LeagueTeamModel = create_league_team(context)
-    posted_object_4: LeagueTeamModel = create_league_team(context)
-    create_league_team(context)
+    posted_object_1: FantasyLeagueModel = create_fantasy_league(context)
+    posted_object_2: FantasyLeagueModel = create_fantasy_league(context)
+    posted_object_3: FantasyLeagueModel = create_fantasy_league(context)
+    posted_object_4: FantasyLeagueModel = create_fantasy_league(context)
+    create_fantasy_league(context)
 
-    filters: LeagueTeamSearchModel = LeagueTeamSearchModel(
+    filters: FantasyLeagueSearchModel = FantasyLeagueSearchModel(
         ids=f"{posted_object_1.id},{posted_object_2.id},{posted_object_3.id},{posted_object_4.id}"
     )
 
-    result: PagedResponseItemList[LeagueTeamModel] = get_league_teams(
+    result: PagedResponseItemList[FantasyLeagueModel] = get_fantasy_leagues(
         context,
         filters,
         request_operators=RequestOperators(hydration_properties=["home_venue"]),
@@ -218,7 +188,7 @@ def test_gets_league_teams_with_ids_filter_with_hydration() -> None:
 
     assert len(result.items) == 4
 
-    posted_item_1: list[LeagueTeamModel] = [
+    posted_item_1: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
     assert len(posted_item_1) == 1
@@ -228,7 +198,7 @@ def test_gets_league_teams_with_ids_filter_with_hydration() -> None:
     assert posted_item_1[0].home_venue.id is not None
     assert posted_item_1[0].home_venue.id == posted_item_1[0].home_venue_id
 
-    posted_item_2: list[LeagueTeamModel] = [
+    posted_item_2: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
     assert len(posted_item_2) == 1
@@ -238,7 +208,7 @@ def test_gets_league_teams_with_ids_filter_with_hydration() -> None:
     assert posted_item_2[0].home_venue.id is not None
     assert posted_item_2[0].home_venue.id == posted_item_2[0].home_venue_id
 
-    posted_item_3: list[LeagueTeamModel] = [
+    posted_item_3: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
     assert len(posted_item_3) == 1
@@ -248,7 +218,7 @@ def test_gets_league_teams_with_ids_filter_with_hydration() -> None:
     assert posted_item_3[0].home_venue.id is not None
     assert posted_item_3[0].home_venue.id == posted_item_3[0].home_venue_id
 
-    posted_item_4: list[LeagueTeamModel] = [
+    posted_item_4: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
     assert len(posted_item_4) == 1
@@ -259,35 +229,35 @@ def test_gets_league_teams_with_ids_filter_with_hydration() -> None:
     assert posted_item_4[0].home_venue.id == posted_item_4[0].home_venue_id
 
 
-def test_gets_league_teams_with_paging() -> None:
+def test_gets_fantasy_leagues_with_paging() -> None:
     populate_configuration_if_not_exists()
 
     context: TestContext = TestContext(api_url=get_global_configuration().API_URL)
 
-    posted_object_1: LeagueTeamModel = create_league_team(context)
-    posted_object_2: LeagueTeamModel = create_league_team(context)
+    posted_object_1: FantasyLeagueModel = create_fantasy_league(context)
+    posted_object_2: FantasyLeagueModel = create_fantasy_league(context)
 
     sleep(1)
 
-    posted_object_3: LeagueTeamModel = create_league_team(context)
-    posted_object_4: LeagueTeamModel = create_league_team(context)
+    posted_object_3: FantasyLeagueModel = create_fantasy_league(context)
+    posted_object_4: FantasyLeagueModel = create_fantasy_league(context)
 
-    filters_1: LeagueTeamSearchModel = LeagueTeamSearchModel(
+    filters_1: FantasyLeagueSearchModel = FantasyLeagueSearchModel(
         ids=f"{posted_object_1.id},{posted_object_2.id},{posted_object_3.id},{posted_object_4.id}",
         page=1,
         page_length=2,
     )
 
-    filters_2: LeagueTeamSearchModel = LeagueTeamSearchModel(
+    filters_2: FantasyLeagueSearchModel = FantasyLeagueSearchModel(
         ids=f"{posted_object_1.id},{posted_object_2.id},{posted_object_3.id},{posted_object_4.id}",
         page=2,
         page_length=2,
     )
 
-    result_page_1: PagedResponseItemList[LeagueTeamModel] = get_league_teams(
+    result_page_1: PagedResponseItemList[FantasyLeagueModel] = get_fantasy_leagues(
         context, filters_1
     )
-    result_page_2: PagedResponseItemList[LeagueTeamModel] = get_league_teams(
+    result_page_2: PagedResponseItemList[FantasyLeagueModel] = get_fantasy_leagues(
         context, filters_2
     )
 
@@ -302,13 +272,13 @@ def test_gets_league_teams_with_paging() -> None:
     assert result_page_1.paging.sort_by == "created_at"
     assert result_page_1.paging.is_sort_descending == False
 
-    posted_item_page_1_item_1: list[LeagueTeamModel] = [
+    posted_item_page_1_item_1: list[FantasyLeagueModel] = [
         item for item in result_page_1.items if item.id == posted_object_1.id
     ]
     assert len(posted_item_page_1_item_1) == 1
     assert_objects_are_equal(posted_item_page_1_item_1[0], posted_object_1)
 
-    posted_item_page_1_item_2: list[LeagueTeamModel] = [
+    posted_item_page_1_item_2: list[FantasyLeagueModel] = [
         item for item in result_page_1.items if item.id == posted_object_2.id
     ]
     assert len(posted_item_page_1_item_2) == 1
@@ -327,62 +297,66 @@ def test_gets_league_teams_with_paging() -> None:
 
     assert len(result_page_1.items) == 2
 
-    posted_item_page_2_item_1: list[LeagueTeamModel] = [
+    posted_item_page_2_item_1: list[FantasyLeagueModel] = [
         item for item in result_page_2.items if item.id == posted_object_3.id
     ]
     assert len(posted_item_page_2_item_1) == 1
     assert_objects_are_equal(posted_item_page_2_item_1[0], posted_object_3)
 
-    posted_item_page_2_item_2: list[LeagueTeamModel] = [
+    posted_item_page_2_item_2: list[FantasyLeagueModel] = [
         item for item in result_page_2.items if item.id == posted_object_4.id
     ]
     assert len(posted_item_page_2_item_2) == 1
     assert_objects_are_equal(posted_item_page_2_item_2[0], posted_object_4)
 
 
-def test_gets_league_teams_with_name_exact_filter() -> None:
+def test_gets_fantasy_leagues_with_name_exact_filter() -> None:
     populate_configuration_if_not_exists()
 
     context: TestContext = TestContext(api_url=get_global_configuration().API_URL)
 
     matching_random_string = generate_random_string(16)
 
-    posted_object_1: LeagueTeamModel = create_league_team(
+    posted_object_1: FantasyLeagueModel = create_fantasy_league(
         context,
-        LeagueTeamCreateModel(name=f"prefix-{matching_random_string}-matches"),
+        FantasyLeagueCreateModel(name=f"prefix-{matching_random_string}-matches"),
     )
-    posted_object_2: LeagueTeamModel = create_league_team(
-        context, LeagueTeamCreateModel(name=f"{matching_random_string}-matches")
+    posted_object_2: FantasyLeagueModel = create_fantasy_league(
+        context, FantasyLeagueCreateModel(name=f"{matching_random_string}-matches")
     )
-    posted_object_3: LeagueTeamModel = create_league_team(
+    posted_object_3: FantasyLeagueModel = create_fantasy_league(
         context,
-        LeagueTeamCreateModel(name=f"{matching_random_string}-matches-suffix"),
+        FantasyLeagueCreateModel(name=f"{matching_random_string}-matches-suffix"),
     )
-    posted_object_4: LeagueTeamModel = create_league_team(
+    posted_object_4: FantasyLeagueModel = create_fantasy_league(
         context,
-        LeagueTeamCreateModel(name=f"prefix-{matching_random_string}-matches-suffix"),
+        FantasyLeagueCreateModel(
+            name=f"prefix-{matching_random_string}-matches-suffix"
+        ),
     )
 
-    filters: LeagueTeamSearchModel = LeagueTeamSearchModel(
+    filters: FantasyLeagueSearchModel = FantasyLeagueSearchModel(
         ids=f"{posted_object_1.id},{posted_object_2.id},{posted_object_3.id},{posted_object_4.id}",
         name=f"{matching_random_string}-matches",
     )
 
-    result: PagedResponseItemList[LeagueTeamModel] = get_league_teams(context, filters)
+    result: PagedResponseItemList[FantasyLeagueModel] = get_fantasy_leagues(
+        context, filters
+    )
 
     assert result is not None
     assert result.items is not None
 
     assert len(result.items) == 1
 
-    posted_item_2: list[LeagueTeamModel] = [
+    posted_item_2: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
     assert len(posted_item_2) == 1
     assert_objects_are_equal(posted_item_2[0], posted_object_2)
 
 
-def test_gets_league_teams_with_name_like_filter() -> None:
+def test_gets_fantasy_leagues_with_name_like_filter() -> None:
     populate_configuration_if_not_exists()
 
     context: TestContext = TestContext(api_url=get_global_configuration().API_URL)
@@ -390,89 +364,48 @@ def test_gets_league_teams_with_name_like_filter() -> None:
     matching_random_string = generate_random_string(16).upper()
     non_matching_random_string = generate_random_string(16)
 
-    posted_object_1: LeagueTeamModel = create_league_team(
+    posted_object_1: FantasyLeagueModel = create_fantasy_league(
         context,
-        LeagueTeamCreateModel(name=f"prefix-{matching_random_string}-suffix"),
+        FantasyLeagueCreateModel(name=f"prefix-{matching_random_string}-suffix"),
     )
-    posted_object_2: LeagueTeamModel = create_league_team(
-        context, LeagueTeamCreateModel(name=f"{matching_random_string}-suffix")
+    posted_object_2: FantasyLeagueModel = create_fantasy_league(
+        context, FantasyLeagueCreateModel(name=f"{matching_random_string}-suffix")
     )
-    posted_object_3: LeagueTeamModel = create_league_team(
+    posted_object_3: FantasyLeagueModel = create_fantasy_league(
         context,
-        LeagueTeamCreateModel(name=f"not a match-{non_matching_random_string}"),
+        FantasyLeagueCreateModel(name=f"not a match-{non_matching_random_string}"),
     )
-    posted_object_4: LeagueTeamModel = create_league_team(
-        context, LeagueTeamCreateModel(name=f"prefix-{matching_random_string}")
+    posted_object_4: FantasyLeagueModel = create_fantasy_league(
+        context, FantasyLeagueCreateModel(name=f"prefix-{matching_random_string}")
     )
 
-    filters: LeagueTeamSearchModel = LeagueTeamSearchModel(
+    filters: FantasyLeagueSearchModel = FantasyLeagueSearchModel(
         ids=f"{posted_object_1.id},{posted_object_2.id},{posted_object_3.id},{posted_object_4.id}",
         name_like=f"{matching_random_string.lower()}",
     )
 
-    result: PagedResponseItemList[LeagueTeamModel] = get_league_teams(context, filters)
+    result: PagedResponseItemList[FantasyLeagueModel] = get_fantasy_leagues(
+        context, filters
+    )
 
     assert result is not None
     assert result.items is not None
 
     assert len(result.items) == 3
 
-    posted_item_1: list[LeagueTeamModel] = [
+    posted_item_1: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
     assert len(posted_item_1) == 1
     assert_objects_are_equal(posted_item_1[0], posted_object_1)
 
-    posted_item_2: list[LeagueTeamModel] = [
+    posted_item_2: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
     assert len(posted_item_2) == 1
     assert_objects_are_equal(posted_item_2[0], posted_object_2)
 
-    posted_item_4: list[LeagueTeamModel] = [
-        item for item in result.items if item.id == posted_object_4.id
-    ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
-
-
-def test_gets_league_teams_with_home_venue_ids_filter() -> None:
-    populate_configuration_if_not_exists()
-
-    context: TestContext = TestContext(api_url=get_global_configuration().API_URL)
-
-    posted_object_1: LeagueTeamModel = create_league_team(context)
-    posted_object_2: LeagueTeamModel = create_league_team(context)
-    posted_object_3: LeagueTeamModel = create_league_team(
-        context, LeagueTeamCreateModel(home_venue_id=posted_object_1.home_venue_id)
-    )
-    posted_object_4: LeagueTeamModel = create_league_team(context)
-
-    filters: LeagueTeamSearchModel = LeagueTeamSearchModel(
-        ids=f"{posted_object_1.id},{posted_object_2.id},{posted_object_3.id},{posted_object_4.id}",
-        home_venue_ids=f"{posted_object_1.home_venue_id},{posted_object_4.home_venue_id}",
-    )
-
-    result: PagedResponseItemList[LeagueTeamModel] = get_league_teams(context, filters)
-
-    assert result is not None
-    assert result.items is not None
-
-    assert len(result.items) == 3
-
-    posted_item_1: list[LeagueTeamModel] = [
-        item for item in result.items if item.id == posted_object_1.id
-    ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
-
-    posted_item_3: list[LeagueTeamModel] = [
-        item for item in result.items if item.id == posted_object_3.id
-    ]
-    assert len(posted_item_3) == 1
-    assert_objects_are_equal(posted_item_3[0], posted_object_3)
-
-    posted_item_4: list[LeagueTeamModel] = [
+    posted_item_4: list[FantasyLeagueModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
     assert len(posted_item_4) == 1

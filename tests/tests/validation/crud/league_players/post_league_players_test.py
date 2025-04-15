@@ -25,12 +25,22 @@ def test_posts_invalid_league_player_missing_fields() -> None:
 
     errors = result.json()
 
-    assert len(errors["detail"]) == 1
+    assert len(errors["detail"]) == 2
 
     error: list[Any] = [
         error
         for error in errors["detail"]
         if "body" in error["loc"] and "name" in error["loc"]
+    ]
+
+    assert len(error) == 1
+    assert error[0]["type"] == "missing"
+    assert error[0]["msg"] == "Field required"
+
+    error: list[Any] = [
+        error
+        for error in errors["detail"]
+        if "body" in error["loc"] and "global_mnp_id" in error["loc"]
     ]
 
     assert len(error) == 1
@@ -48,6 +58,7 @@ def test_posts_invalid_league_player_bad_inputs() -> None:
         {
             "name": generate_random_string(256),
             "league_team_id": "not an id",
+            "global_mnp_id": "not an id",
         },
     )
 
@@ -55,7 +66,7 @@ def test_posts_invalid_league_player_bad_inputs() -> None:
 
     errors = result.json()
 
-    assert len(errors["detail"]) == 2
+    assert len(errors["detail"]) == 3
 
     error: list[Any] = [
         error
@@ -70,6 +81,18 @@ def test_posts_invalid_league_player_bad_inputs() -> None:
         error
         for error in errors["detail"]
         if "body" in error["loc"] and "league_team_id" in error["loc"]
+    ]
+    assert len(error) == 1
+    assert error[0]["type"] == "uuid_parsing"
+    assert (
+        error[0]["msg"]
+        == "Input should be a valid UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `n` at 1"
+    )
+
+    error: list[Any] = [
+        error
+        for error in errors["detail"]
+        if "body" in error["loc"] and "global_mnp_id" in error["loc"]
     ]
     assert len(error) == 1
     assert error[0]["type"] == "uuid_parsing"

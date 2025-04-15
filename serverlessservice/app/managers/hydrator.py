@@ -2,6 +2,7 @@ from managers.league_player_manager import LeaguePlayerManager
 from managers.league_team_manager import LeagueTeamManager
 from managers.user_manager import UserManager
 from managers.venue_manager import VenueManager
+from models.fantasy_league_model import FantasyLeagueModel
 from models.league_player_model import LeaguePlayerModel, LeaguePlayerSearchModel
 from models.league_team_model import LeagueTeamModel, LeagueTeamSearchModel
 from models.user_model import UserModel
@@ -38,7 +39,7 @@ class Hydrator:
         result_list: list[LeagueTeamModel],
         request_operators: RequestOperators | None = None,
     ):
-        # Hydrate home venue
+        # Hydrate league team
         self.hydration_util.hydrate_target(
             "home_venue",
             result_list,

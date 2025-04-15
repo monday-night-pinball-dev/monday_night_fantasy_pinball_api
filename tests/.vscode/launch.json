@@ -10,6 +10,12 @@
             "request": "launch",
             "module": "pytest",
             "args": ["${file}"]
+        }, 
+        {
+            "name": "Test Debugger: All",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest", 
         }
     ]
 }

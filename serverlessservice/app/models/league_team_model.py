@@ -23,6 +23,7 @@ class LeagueTeamInboundCreateModel(BaseModel):
     home_venue_id: Annotated[UUID4, Strict(False)] = Field(...)
     short_name: str = Field(..., max_length=3)
     name: str = Field(..., max_length=64)
+    global_mnp_id: Annotated[UUID4, Strict(False)] = Field(...)
 
 
 # Pydantic causes these class variables to safely be instance variables.
@@ -42,6 +43,9 @@ class LeagueTeamInboundSearchModel(CommonInboundSearchModel):
     home_venue_ids: Annotated[Optional[str], BeforeValidator(validate_ids)] = Query(
         default=None
     )
+    global_mnp_ids: Annotated[Optional[str], BeforeValidator(validate_ids)] = Query(
+        default=None
+    )
 
 
 class LeagueTeamCreateModel:
@@ -50,10 +54,12 @@ class LeagueTeamCreateModel:
         name: str,
         short_name: str,
         home_venue_id: UUID,
+        global_mnp_id: UUID,
     ) -> None:
         self.name = name
         self.short_name = short_name
         self.home_venue_id = home_venue_id
+        self.global_mnp_id = global_mnp_id
 
 
 class LeagueTeamUpdateModel:
@@ -73,6 +79,7 @@ class LeagueTeamSearchModel(CommonSearchModel):
         self,
         ids: list[UUID] | None = None,
         home_venue_ids: list[UUID] | None = None,
+        global_mnp_ids: list[UUID] | None = None,
         name: str | None = None,
         name_like: str | None = None,
         short_name: str | None = None,
@@ -83,6 +90,7 @@ class LeagueTeamSearchModel(CommonSearchModel):
         self.name_like = name_like
         self.home_venue_ids = home_venue_ids
         self.short_name = short_name
+        self.global_mnp_ids = global_mnp_ids
 
 
 class LeagueTeamDatabaseModel(CommonDatabaseModel):
@@ -90,6 +98,7 @@ class LeagueTeamDatabaseModel(CommonDatabaseModel):
         self,
         id: UUID,
         home_venue_id: UUID,
+        global_mnp_id: UUID,
         name: str,
         short_name: str,
         created_at: datetime,
@@ -100,6 +109,7 @@ class LeagueTeamDatabaseModel(CommonDatabaseModel):
         self.name = name
         self.short_name = short_name
         self.home_venue_id = home_venue_id
+        self.global_mnp_id = global_mnp_id
 
 
 class LeagueTeamModel(CommonModel):
@@ -107,6 +117,7 @@ class LeagueTeamModel(CommonModel):
         self,
         id: UUID,
         home_venue_id: UUID,
+        global_mnp_id: UUID,
         name: str,
         short_name: str,
         created_at: datetime,
@@ -119,6 +130,7 @@ class LeagueTeamModel(CommonModel):
         self.short_name = short_name
         self.home_venue_id = home_venue_id
         self.home_venue = home_venue
+        self.global_mnp_id = global_mnp_id
 
 
 # Pydantic causes these class variables to safely be instance variables.
@@ -127,3 +139,4 @@ class LeagueTeamOutboundModel(CommonOutboundResponseModel):
     short_name: str
     home_venue_id: UUID
     home_venue: VenueOutboundModel | None = None
+    global_mnp_id: UUID

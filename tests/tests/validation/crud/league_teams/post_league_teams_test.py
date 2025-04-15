@@ -25,7 +25,7 @@ def test_posts_invalid_league_team_missing_fields() -> None:
 
     errors = result.json()
 
-    assert len(errors["detail"]) == 3
+    assert len(errors["detail"]) == 4
 
     error: list[Any] = [
         error
@@ -57,6 +57,16 @@ def test_posts_invalid_league_team_missing_fields() -> None:
     assert error[0]["type"] == "missing"
     assert error[0]["msg"] == "Field required"
 
+    error: list[Any] = [
+        error
+        for error in errors["detail"]
+        if "body" in error["loc"] and "global_mnp_id" in error["loc"]
+    ]
+
+    assert len(error) == 1
+    assert error[0]["type"] == "missing"
+    assert error[0]["msg"] == "Field required"
+
 
 def test_posts_invalid_league_team_bad_inputs() -> None:
     populate_configuration_if_not_exists()
@@ -69,6 +79,7 @@ def test_posts_invalid_league_team_bad_inputs() -> None:
             "name": generate_random_string(65),
             "short_name": generate_random_string(4),
             "home_venue_id": "not an id",
+            "global_mnp_id": "also not an id",
         },
     )
 
@@ -76,7 +87,7 @@ def test_posts_invalid_league_team_bad_inputs() -> None:
 
     errors = result.json()
 
-    assert len(errors["detail"]) == 3
+    assert len(errors["detail"]) == 4
 
     error: list[Any] = [
         error
@@ -107,6 +118,18 @@ def test_posts_invalid_league_team_bad_inputs() -> None:
     assert len(error) == 1
     assert error[0]["type"] == "string_too_long"
     assert error[0]["msg"] == "String should have at most 3 characters"
+
+    error: list[Any] = [
+        error
+        for error in errors["detail"]
+        if "body" in error["loc"] and "global_mnp_id" in error["loc"]
+    ]
+    assert len(error) == 1
+    assert error[0]["type"] == "uuid_parsing"
+    assert (
+        error[0]["msg"]
+        == "Input should be a valid UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `l` at 2"
+    )
 
 
 def test_posts_valid_league_team() -> None:

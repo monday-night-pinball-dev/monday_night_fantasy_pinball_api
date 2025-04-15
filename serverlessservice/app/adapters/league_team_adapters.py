@@ -35,6 +35,7 @@ class LeagueTeamAdapter:
         model = LeagueTeamCreateModel(
             name=inbound_create_model.name,
             home_venue_id=inbound_create_model.home_venue_id,
+            global_mnp_id=inbound_create_model.global_mnp_id,
             short_name=inbound_create_model.short_name,
         )
 
@@ -69,6 +70,13 @@ class LeagueTeamAdapter:
                 if inbound_search_model.home_venue_ids is not None
                 else None
             ),
+            global_mnp_ids=(
+                self.common_utilities.convert_comma_delimited_ids_to_uuid_list(
+                    inbound_search_model.global_mnp_ids
+                )
+                if inbound_search_model.global_mnp_ids is not None
+                else None
+            ),
             name=inbound_search_model.name,
             name_like=inbound_search_model.name_like,
             short_name=inbound_search_model.short_name,
@@ -99,6 +107,16 @@ class LeagueTeamAdapter:
                 )
             )
 
+        if model.global_mnp_ids is not None:
+            search_terms.append(
+                InListSearchTerm(
+                    "global_mnp_id",
+                    self.common_utilities.convert_uuid_list_to_string_list(
+                        model.global_mnp_ids
+                    ),
+                )
+            )
+
         if model.name is not None:
             search_terms.append(ExactMatchSearchTerm("name", model.name, True))
 
@@ -121,6 +139,9 @@ class LeagueTeamAdapter:
             "name": model.name,
             "home_venue_id": str(model.home_venue_id)
             if model.home_venue_id is not None
+            else None,
+            "global_mnp_id": str(model.global_mnp_id)
+            if model.global_mnp_id is not None
             else None,
             "short_name": model.short_name,
         }
@@ -147,6 +168,7 @@ class LeagueTeamAdapter:
             id=database_model["id"],
             name=database_model["name"],
             home_venue_id=database_model["home_venue_id"],
+            global_mnp_id=database_model["global_mnp_id"],
             short_name=database_model["short_name"],
             created_at=database_model["created_at"],
             updated_at=database_model["updated_at"],
@@ -160,6 +182,7 @@ class LeagueTeamAdapter:
         outbound_model = LeagueTeamOutboundModel(
             id=model.id,
             home_venue_id=model.home_venue_id,
+            global_mnp_id=model.global_mnp_id,
             home_venue=self.venue_adapter.convert_from_model_to_outbound_model(
                 model.home_venue
             )

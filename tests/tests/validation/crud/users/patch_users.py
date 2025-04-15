@@ -30,7 +30,6 @@ def test_posts_invalid_user_bad_inputs() -> None:
         f"{context.api_url}/users/{posted_object.id}",
         {
             "name": generate_random_string(256),
-            "role": "not a role",
         },
     )
 
@@ -49,18 +48,6 @@ def test_posts_invalid_user_bad_inputs() -> None:
     assert error[0]["type"] == "string_too_long"
     assert error[0]["msg"] == "String should have at most 255 characters"
 
-    error: list[Any] = [
-        error
-        for error in errors["detail"]
-        if "body" in error["loc"] and "role" in error["loc"]
-    ]
-    assert len(error) == 1
-    assert error[0]["type"] == "enum"
-    assert (
-        error[0]["msg"]
-        == "Input should be 'MnfpAdmin', 'FantasyCommissioner', 'TeamOwner' or 'LeaguePlayer'"
-    )
-
 
 def test_patches_valid_user() -> None:
     populate_configuration_if_not_exists()
@@ -71,9 +58,7 @@ def test_patches_valid_user() -> None:
 
     posted_object: UserModel = create_user(context)
 
-    update_object: UserUpdateModel = UserUpdateModel(
-        name=random_string + "_name", role="FantasyCommissioner"
-    )
+    update_object: UserUpdateModel = UserUpdateModel(name=random_string + "_name")
 
     update_user(context, posted_object.id or "", update_object)
 
@@ -91,7 +76,6 @@ def test_patches_valid_user_with_hydration() -> None:
 
     update_object: UserUpdateModel = UserUpdateModel(
         name=random_string + "_name",
-        role="FantasyCommissioner",
     )
 
     result = update_user(

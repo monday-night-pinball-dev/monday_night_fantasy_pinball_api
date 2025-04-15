@@ -1,9 +1,8 @@
 from datetime import datetime
-from enum import Enum
 from typing import Optional
 from uuid import UUID
 from fastapi import Query
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
 
 from models.common_model import (
     CommonDatabaseModel,
@@ -15,17 +14,22 @@ from models.common_model import (
 
 
 # Pydantic causes these class variables to safely be instance variables.
-class VenueInboundCreateModel(BaseModel):
-    name: str = Field(..., max_length=255)
+class FantasyLeagueInboundCreateModel(BaseModel):
+    name: str = Field(..., max_length=64)
 
 
 # Pydantic causes these class variables to safely be instance variables.
-class VenueInboundSearchModel(CommonInboundSearchModel):
+class FantasyLeagueInboundUpdateModel(BaseModel):
+    name: str = Field(..., max_length=64)
+
+
+# Pydantic causes these class variables to safely be instance variables.
+class FantasyLeagueInboundSearchModel(CommonInboundSearchModel):
     name: Optional[str] = Query(default=None)
     name_like: Optional[str] = Query(default=None)
 
 
-class VenueCreateModel:
+class FantasyLeagueCreateModel:
     def __init__(
         self,
         name: str,
@@ -33,7 +37,15 @@ class VenueCreateModel:
         self.name = name
 
 
-class VenueSearchModel(CommonSearchModel):
+class FantasyLeagueUpdateModel:
+    def __init__(
+        self,
+        name: str,
+    ) -> None:
+        self.name = name
+
+
+class FantasyLeagueSearchModel(CommonSearchModel):
     def __init__(
         self,
         ids: list[UUID] | None = None,
@@ -46,7 +58,7 @@ class VenueSearchModel(CommonSearchModel):
         self.name_like = name_like
 
 
-class VenueDatabaseModel(CommonDatabaseModel):
+class FantasyLeagueDatabaseModel(CommonDatabaseModel):
     def __init__(
         self,
         id: UUID,
@@ -59,7 +71,7 @@ class VenueDatabaseModel(CommonDatabaseModel):
         self.name = name
 
 
-class VenueModel(CommonModel):
+class FantasyLeagueModel(CommonModel):
     def __init__(
         self,
         id: UUID,
@@ -73,5 +85,5 @@ class VenueModel(CommonModel):
 
 
 # Pydantic causes these class variables to safely be instance variables.
-class VenueOutboundModel(CommonOutboundResponseModel):
+class FantasyLeagueOutboundModel(CommonOutboundResponseModel):
     name: str

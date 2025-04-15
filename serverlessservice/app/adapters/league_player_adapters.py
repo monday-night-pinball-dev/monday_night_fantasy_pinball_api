@@ -35,6 +35,7 @@ class LeaguePlayerAdapter:
         model = LeaguePlayerCreateModel(
             name=inbound_create_model.name,
             league_team_id=inbound_create_model.league_team_id,
+            global_mnp_id=inbound_create_model.global_mnp_id,
         )
 
         return model
@@ -67,6 +68,13 @@ class LeaguePlayerAdapter:
                 if inbound_search_model.league_team_ids is not None
                 else None
             ),
+            global_mnp_ids=(
+                self.common_utilities.convert_comma_delimited_ids_to_uuid_list(
+                    inbound_search_model.global_mnp_ids
+                )
+                if inbound_search_model.global_mnp_ids is not None
+                else None
+            ),
             name=inbound_search_model.name,
             name_like=inbound_search_model.name_like,
         )
@@ -96,6 +104,16 @@ class LeaguePlayerAdapter:
                 )
             )
 
+        if model.global_mnp_ids is not None:
+            search_terms.append(
+                InListSearchTerm(
+                    "global_mnp_id",
+                    self.common_utilities.convert_uuid_list_to_string_list(
+                        model.global_mnp_ids
+                    ),
+                )
+            )
+
         if model.name is not None:
             search_terms.append(ExactMatchSearchTerm("name", model.name, True))
 
@@ -111,6 +129,7 @@ class LeaguePlayerAdapter:
     ) -> dict[str, Any]:
         database_model: dict[str, Any] = {
             "name": model.name,
+            "global_mnp_id": str(model.global_mnp_id),
             "league_team_id": str(model.league_team_id)
             if model.league_team_id is not None
             else None,
@@ -136,6 +155,7 @@ class LeaguePlayerAdapter:
         model = LeaguePlayerModel(
             id=database_model["id"],
             name=database_model["name"],
+            global_mnp_id=database_model["global_mnp_id"],
             league_team_id=database_model["league_team_id"],
             created_at=database_model["created_at"],
             updated_at=database_model["updated_at"],
@@ -154,6 +174,7 @@ class LeaguePlayerAdapter:
             )
             if model.league_team is not None
             else None,
+            global_mnp_id=model.global_mnp_id,
             name=model.name,
             created_at=model.created_at.isoformat(timespec="milliseconds").replace(
                 "+00:00", "Z"

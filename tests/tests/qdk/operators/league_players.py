@@ -1,5 +1,5 @@
 import datetime
-import string
+import uuid
 
 from requests import Response
 from tests.qdk.operators.league_teams import (
@@ -7,11 +7,7 @@ from tests.qdk.operators.league_teams import (
     LeagueTeamModel,
     create_league_team,
 )
-from tests.qdk.operators.venues import (
-    VenueCreateModel,
-    VenueModel,
-    create_venue,
-)
+
 from tests.qdk.qa_requests import qa_get, qa_patch, qa_post
 from tests.qdk.types import (
     PagedResponseItemList,
@@ -34,11 +30,13 @@ class LeaguePlayerCreateModel:
         league_team_id: str | None = None,
         league_team: LeagueTeamCreateModel | None = None,
         create_league_team_if_null: bool | None = False,
+        global_mnp_id: str | None = None,
         name: str | None = None,
     ) -> None:
         self.league_team_id = league_team_id
         self.league_team = league_team
         self.name = name
+        self.global_mnp_id = global_mnp_id
         self.create_league_team_if_null = create_league_team_if_null
 
 
@@ -48,6 +46,7 @@ class LeaguePlayerModel:
         id: str,
         name: str,
         created_at: datetime.datetime,
+        global_mnp_id: str,
         league_team_id: str | None = None,
         league_team: LeagueTeamModel | None = None,
         updated_at: datetime.datetime | None = None,
@@ -59,6 +58,7 @@ class LeaguePlayerModel:
         self.league_team = (
             LeagueTeamModel(**league_team) if league_team is not None else None
         )
+        self.global_mnp_id = global_mnp_id
 
         self.name = name
 
@@ -70,6 +70,7 @@ class LeaguePlayerSearchModel(PagingRequestModel):
         league_team_ids: str | None = None,
         name: str | None = None,
         name_like: str | None = None,
+        global_mnp_ids: str | None = None,
         page: int | None = None,
         page_length: int | None = None,
         is_sort_descending: bool | None = None,
@@ -86,16 +87,19 @@ class LeaguePlayerSearchModel(PagingRequestModel):
         self.league_team_ids = league_team_ids
         self.name = name
         self.name_like = name_like
+        self.global_mnp_ids = global_mnp_ids
 
 
 class LeaguePlayerUpdateModel:
     def __init__(
         self,
         league_team_id: str | None = None,
+        global_mnp_id: str | None = None,
         name: str | None = None,
     ) -> None:
         self.league_team_id = league_team_id
         self.name = name
+        self.global_mnp_id = global_mnp_id
 
 
 def mint_default_league_player(
@@ -108,7 +112,8 @@ def mint_default_league_player(
     random_string = generate_random_string()
 
     default_league_player: LeaguePlayerCreateModel = LeaguePlayerCreateModel(
-        name=random_string + "_name"
+        name=random_string + "_name",
+        global_mnp_id=str(uuid.uuid4()),
     )
 
     if overrides.league_team_id is None and overrides.create_league_team_if_null:
@@ -145,7 +150,13 @@ def create_league_player(
         assert_objects_are_equal(
             result_dict,
             post_object.__dict__,
-            ["id", "league_team_id", "league_team", "created_at", "updated_at"],
+            [
+                "id",
+                "league_team_id",
+                "league_team",
+                "created_at",
+                "updated_at",
+            ],
         )
 
         assert result_dict["id"] is not None

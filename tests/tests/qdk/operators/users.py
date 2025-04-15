@@ -31,24 +31,20 @@ class UserCreateModel:
         create_league_player_if_null: bool | None = False,
         name: str | None = None,
         username: str | None = None,
-        role: str | None = None,
     ) -> None:
         self.league_player_id = league_player_id
         self.league_player = league_player
         self.create_league_player_if_null = create_league_player_if_null
         self.name = name
         self.username = username
-        self.role = role
 
 
 class UserUpdateModel:
     def __init__(
         self,
         name: str | None = None,
-        role: str | None = None,
     ) -> None:
         self.first_name = name
-        self.role = role
 
 
 class UserModel:
@@ -57,7 +53,6 @@ class UserModel:
         id: str,
         name: str,
         username: str,
-        role: str,
         created_at: datetime.datetime,
         league_player_id: str | None = None,
         league_player: LeaguePlayerModel | None = None,
@@ -66,7 +61,6 @@ class UserModel:
         self.id = id
         self.name = name
         self.username = username
-        self.role = role
         self.league_player_id = league_player_id
         self.league_player = (
             LeaguePlayerModel(**league_player) if league_player is not None else None
@@ -85,7 +79,6 @@ class UserSearchModel(PagingRequestModel):
         name: str | None = None,
         username_like: str | None = None,
         username: str | None = None,
-        role: str | None = None,
         page: int | None = None,
         page_length: int | None = None,
         is_sort_descending: bool | None = None,
@@ -101,7 +94,6 @@ class UserSearchModel(PagingRequestModel):
         self.ids = ids
         self.name = name
         self.league_player_ids = league_player_ids
-        self.role = role
         self.name_like = name_like
         self.username_like = username_like
         self.username = username
@@ -119,7 +111,6 @@ def mint_default_user(
     default_user: UserCreateModel = UserCreateModel(
         name=random_string + "_name",
         username=random_string + "_username@example.com",
-        role="MnfpAdmin",
     )
 
     if overrides.league_player_id is None and overrides.create_league_player_if_null:
