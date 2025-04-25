@@ -1,5 +1,3 @@
-from typing import Any
-
 from fastapi.datastructures import Headers
 
 from models.common_model import (

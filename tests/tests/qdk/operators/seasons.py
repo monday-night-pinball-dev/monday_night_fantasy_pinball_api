@@ -1,11 +1,12 @@
 import datetime
+import random
 
 from requests import Response
 from tests.qdk.qa_requests import qa_get, qa_patch, qa_post
 from tests.qdk.types import (
     PagedResponseItemList,
-    PagingRequestModel,
     PagingResponseModel,
+    PagingRequestModel,
     RequestOperators,
     TestContext,
 )
@@ -17,7 +18,17 @@ from tests.qdk.utils import (
 )
 
 
-class FantasyLeagueCreateModel:
+class SeasonCreateModel:
+    def __init__(
+        self,
+        name: str | None = None,
+        season_number: int | None = None,
+    ) -> None:
+        self.name = name
+        self.season_number = season_number
+
+
+class SeasonUpdateModel:
     def __init__(
         self,
         name: str | None = None,
@@ -25,27 +36,30 @@ class FantasyLeagueCreateModel:
         self.name = name
 
 
-class FantasyLeagueModel:
+class SeasonModel:
     def __init__(
         self,
         id: str,
         name: str,
+        season_number: int,
         created_at: datetime.datetime,
         updated_at: datetime.datetime | None = None,
     ) -> None:
         self.id = id
         self.created_at = created_at
         self.updated_at = updated_at
-
         self.name = name
+        self.season_number = season_number
 
 
-class FantasyLeagueSearchModel(PagingRequestModel):
+class SeasonSearchModel(PagingRequestModel):
     def __init__(
         self,
         ids: str | None = None,
         name: str | None = None,
         name_like: str | None = None,
+        season_number_min: int | None = None,
+        season_number_max: int | None = None,
         page: int | None = None,
         page_length: int | None = None,
         is_sort_descending: bool | None = None,
@@ -61,46 +75,42 @@ class FantasyLeagueSearchModel(PagingRequestModel):
         self.ids = ids
         self.name = name
         self.name_like = name_like
+        self.season_number_min = season_number_min
+        self.season_number_max = season_number_max
 
 
-class FantasyLeagueUpdateModel:
-    def __init__(
-        self,
-        name: str | None = None,
-    ) -> None:
-        self.name = name
-
-
-def mint_default_fantasy_league(
+def mint_default_season(
     context: TestContext,
-    overrides: FantasyLeagueCreateModel | None = None,
+    overrides: SeasonCreateModel | None = None,
     request_operators: RequestOperators | None = None,
-) -> FantasyLeagueCreateModel:
-    overrides = overrides or FantasyLeagueCreateModel()
-
+) -> SeasonCreateModel:
     random_string = generate_random_string()
 
-    default_fantasy_league: FantasyLeagueCreateModel = FantasyLeagueCreateModel(
-        name=random_string + "_fantasy_league_name",
+    random_int = random.randint(1, 1000000000)
+
+    overrides = overrides or SeasonCreateModel()
+
+    default_season: SeasonCreateModel = SeasonCreateModel(
+        name=random_string + "_season_name", season_number=random_int
     )
 
-    copy_object_when_appropriate(default_fantasy_league, overrides)
+    copy_object_when_appropriate(default_season, overrides)
 
-    return default_fantasy_league
+    return default_season
 
 
-def create_fantasy_league(
+def create_season(
     context: TestContext,
-    overrides: FantasyLeagueCreateModel | None = None,
+    overrides: SeasonCreateModel | None = None,
     request_operators: RequestOperators | None = None,
     allow_failures: bool = False,
-):
-    post_object = mint_default_fantasy_league(
+) -> SeasonModel:
+    post_object: SeasonCreateModel = mint_default_season(
         context=context, overrides=overrides, request_operators=request_operators
     )
 
-    result = qa_post(
-        context.api_url + "/fantasy_leagues", post_object, request_operators
+    result: Response = qa_post(
+        context.api_url + "/seasons", post_object, request_operators
     )
 
     if allow_failures == False:
@@ -109,41 +119,39 @@ def create_fantasy_league(
         result_dict = result.json()
 
         assert_objects_are_equal(
-            result_dict,
-            post_object.__dict__,
-            ["id", "created_at", "updated_at"],
+            result_dict, post_object.__dict__, ["id", "created_at", "updated_at"]
         )
 
         assert result_dict["id"] is not None
         assert result_dict["created_at"] is not None
         assert result_dict["updated_at"] is None
 
-    return_object = FantasyLeagueModel(**result.json())
+    return_object = SeasonModel(**result.json())
 
     return return_object
 
 
-def get_fantasy_league_by_id(
+def get_season_by_id(
     context: TestContext,
     id: str,
     request_operators: RequestOperators | None = None,
     allow_failures: bool = False,
-):
-    url = f"{context.api_url}/fantasy_leagues/{id}"
+) -> SeasonModel:
+    url: str = f"{context.api_url}/seasons/{id}"
 
-    result = qa_get(url, request_operators=request_operators)
+    result: Response = qa_get(url)
 
-    return_object = FantasyLeagueModel(**result.json())
+    return_object = SeasonModel(**result.json())
 
     return return_object
 
 
-def get_fantasy_leagues(
+def get_seasons(
     context: TestContext,
-    search_model: FantasyLeagueSearchModel | None,
+    search_model: SeasonSearchModel | None,
     request_operators: RequestOperators | None = None,
-) -> PagedResponseItemList[FantasyLeagueModel]:
-    url: str = f"{context.api_url}/fantasy_leagues"
+) -> PagedResponseItemList[SeasonModel]:
+    url: str = f"{context.api_url}/seasons"
 
     result: Response = qa_get(
         url=url,
@@ -155,30 +163,28 @@ def get_fantasy_leagues(
 
     return_paging_object = PagingResponseModel(**result_dict["paging"])
 
-    return_items: list[FantasyLeagueModel] = [
-        FantasyLeagueModel(**obj) for obj in result_dict["items"]
+    return_items: list[SeasonModel] = [
+        SeasonModel(**obj) for obj in result_dict["items"]
     ]
 
-    return_object = PagedResponseItemList[FantasyLeagueModel](
+    return_object = PagedResponseItemList[SeasonModel](
         items=return_items, paging=return_paging_object
     )
 
     return return_object
 
 
-def update_fantasy_league(
+def update_season(
     context: TestContext,
     id: str,
-    update_model: FantasyLeagueUpdateModel | None = None,
+    update_model: SeasonUpdateModel | None = None,
     request_operators: RequestOperators | None = None,
     allow_failures: bool = False,
 ):
-    original_object: FantasyLeagueModel = get_fantasy_league_by_id(
-        context, id, request_operators
-    )
+    original_object: SeasonModel = get_season_by_id(context, id, request_operators)
 
     result = qa_patch(
-        f"{context.api_url}/fantasy_leagues/{id}", update_model, request_operators
+        f"{context.api_url}/seasons/{id}", update_model, request_operators
     )
 
     if allow_failures == False:
@@ -190,11 +196,11 @@ def update_fantasy_league(
             original_object.__dict__,
             update_model.__dict__,
             result_dict,
-            ["home_venue", "updated_at"],
+            ["updated_at"],
         )
 
         assert result_dict["updated_at"] is not None
 
-    return_object = FantasyLeagueModel(**result.json())
+    return_object = SeasonModel(**result.json())
 
     return return_object

@@ -12,11 +12,11 @@ from models.common_model import (
     CommonSearchModel,
     validate_ids,
 )
-from models.fantasy_league_model import FantasyLeagueModel, FantasyLeagueOutboundModel
-from models.venue_model import (
-    VenueModel,
-    VenueOutboundModel,
+from models.fantasy_league_model import (
+    FantasyLeagueModel,
+    FantasyLeagueOutboundModel,
 )
+from models.user_model import UserModel, UserOutboundModel
 
 
 # Pydantic causes these class variables to safely be instance variables.
@@ -24,7 +24,6 @@ class FantasyTeamInboundCreateModel(BaseModel):
     owner_id: Annotated[UUID4, Strict(False)] = Field(...)
     fantasy_league_id: Annotated[UUID4, Strict(False)] = Field(...)
     name: str = Field(..., max_length=64)
-    global_mnp_id: Annotated[UUID4, Strict(False)] = Field(...)
 
 
 # Pydantic causes these class variables to safely be instance variables.
@@ -110,9 +109,8 @@ class FantasyTeamModel(CommonModel):
         owner_id: UUID,
         fantasy_league_id: UUID,
         name: str,
-        short_name: str,
         created_at: datetime,
-        owner: VenueModel | None = None,
+        owner: UserModel | None = None,
         fantasy_league: FantasyLeagueModel | None = None,
         updated_at: datetime | None = None,
     ):
@@ -129,6 +127,6 @@ class FantasyTeamModel(CommonModel):
 class FantasyTeamOutboundModel(CommonOutboundResponseModel):
     name: str
     owner_id: UUID
-    owner: VenueOutboundModel | None = None
+    owner: UserOutboundModel | None = None
     fantasy_league_id: UUID
     fantasy_league: FantasyLeagueOutboundModel | None = None

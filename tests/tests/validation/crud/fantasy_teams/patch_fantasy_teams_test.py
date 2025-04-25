@@ -1,15 +1,15 @@
 from typing import Any
 
 
-from tests.qdk.operators.fanatasy_leagues import (
-    FantasyLeagueModel,
-    FantasyLeagueUpdateModel,
-    create_fantasy_league,
-    update_fantasy_league,
+from tests.qdk.operators.fantasy_teams import (
+    FantasyTeamModel,
+    FantasyTeamUpdateModel,
+    create_fantasy_team,
+    update_fantasy_team,
 )
-from tests.qdk.operators.venues import VenueModel, create_venue
+from tests.qdk.operators.users import create_user
 from tests.qdk.qa_requests import qa_patch
-from tests.qdk.types import RequestOperators, TestContext
+from tests.qdk.types import TestContext
 from tests.qdk.utils import generate_random_string
 from util.configuration import (
     get_global_configuration,
@@ -17,17 +17,18 @@ from util.configuration import (
 )
 
 
-def test_posts_invalid_fantasy_league_bad_inputs() -> None:
+def test_posts_invalid_fantasy_team_bad_inputs() -> None:
     populate_configuration_if_not_exists()
 
     context: TestContext = TestContext(api_url=get_global_configuration().API_URL)
 
-    posted_object: FantasyLeagueModel = create_fantasy_league(context)
+    posted_object: FantasyTeamModel = create_fantasy_team(context)
 
     result = qa_patch(
-        f"{context.api_url}/fantasy_leagues/{posted_object.id}",
+        f"{context.api_url}/fantasy_teams/{posted_object.id}",
         {
             "name": generate_random_string(65),
+            "owner_id": "not an id",
         },
     )
 
@@ -35,7 +36,7 @@ def test_posts_invalid_fantasy_league_bad_inputs() -> None:
 
     errors = result.json()
 
-    assert len(errors["detail"]) == 1
+    assert len(errors["detail"]) == 2
 
     error: list[Any] = [
         error
@@ -46,18 +47,27 @@ def test_posts_invalid_fantasy_league_bad_inputs() -> None:
     assert error[0]["type"] == "string_too_long"
     assert error[0]["msg"] == "String should have at most 64 characters"
 
+    error: list[Any] = [
+        error
+        for error in errors["detail"]
+        if "body" in error["loc"] and "owner_id" in error["loc"]
+    ]
 
-def test_patches_valid_fantasy_league() -> None:
+
+def test_patches_valid_fantasy_team() -> None:
     populate_configuration_if_not_exists()
 
     context: TestContext = TestContext(api_url=get_global_configuration().API_URL)
 
     random_string = generate_random_string(14)
 
-    posted_object: FantasyLeagueModel = create_fantasy_league(context)
+    posted_object: FantasyTeamModel = create_fantasy_team(context)
 
-    update_object: FantasyLeagueUpdateModel = FantasyLeagueUpdateModel(
+    owner_to_patch_to = create_user(context)
+
+    update_object: FantasyTeamUpdateModel = FantasyTeamUpdateModel(
         name=random_string + "_name",
+        owner_id=owner_to_patch_to.id,
     )
 
-    update_fantasy_league(context, posted_object.id or "", update_object)
+    update_fantasy_team(context, posted_object.id, update_object)
