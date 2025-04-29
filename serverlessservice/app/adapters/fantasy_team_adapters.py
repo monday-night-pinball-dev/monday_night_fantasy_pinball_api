@@ -153,8 +153,8 @@ class FantasyTeamAdapter:
         model = FantasyTeamModel(
             id=UUID(database_model["id"]),
             fantasy_league_id=UUID(database_model["fantasy_league_id"]),
+            owner_id=UUID(database_model["owner_id"]),
             name=database_model["name"],
-            owner_id=database_model["owner_id"],
             created_at=database_model["created_at"],
             updated_at=database_model["updated_at"],
         )
