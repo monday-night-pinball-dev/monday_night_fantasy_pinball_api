@@ -134,29 +134,29 @@ def test_gets_seasons_with_ids_filter() -> None:
 
     assert len(result.items) == 4
 
-    posted_item_1: list[SeasonModel] = [
+    result_item_1: list[SeasonModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_2: list[SeasonModel] = [
+    result_item_2: list[SeasonModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
-    assert_objects_are_equal(posted_item_2[0], posted_object_2)
+    assert len(result_item_2) == 1
+    assert_objects_are_equal(result_item_2[0], posted_object_2)
 
-    posted_item_3: list[SeasonModel] = [
+    result_item_3: list[SeasonModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_3) == 1
-    assert_objects_are_equal(posted_item_3[0], posted_object_3)
+    assert len(result_item_3) == 1
+    assert_objects_are_equal(result_item_3[0], posted_object_3)
 
-    posted_item_4: list[SeasonModel] = [
+    result_item_4: list[SeasonModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)
 
 
 def test_gets_seasons_with_paging() -> None:
@@ -198,17 +198,17 @@ def test_gets_seasons_with_paging() -> None:
     assert result_page_1.paging.sort_by == "created_at"
     assert result_page_1.paging.is_sort_descending == False
 
-    posted_item_page_1_item_1: list[SeasonModel] = [
+    result_item_page_1_item_1: list[SeasonModel] = [
         item for item in result_page_1.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_page_1_item_1) == 1
-    assert_objects_are_equal(posted_item_page_1_item_1[0], posted_object_1)
+    assert len(result_item_page_1_item_1) == 1
+    assert_objects_are_equal(result_item_page_1_item_1[0], posted_object_1)
 
-    posted_item_page_1_item_2: list[SeasonModel] = [
+    result_item_page_1_item_2: list[SeasonModel] = [
         item for item in result_page_1.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_page_1_item_2) == 1
-    assert_objects_are_equal(posted_item_page_1_item_2[0], posted_object_2)
+    assert len(result_item_page_1_item_2) == 1
+    assert_objects_are_equal(result_item_page_1_item_2[0], posted_object_2)
 
     ## Page 2
 
@@ -223,17 +223,17 @@ def test_gets_seasons_with_paging() -> None:
 
     assert len(result_page_1.items) == 2
 
-    posted_item_page_2_item_1: list[SeasonModel] = [
+    result_item_page_2_item_1: list[SeasonModel] = [
         item for item in result_page_2.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_page_2_item_1) == 1
-    assert_objects_are_equal(posted_item_page_2_item_1[0], posted_object_3)
+    assert len(result_item_page_2_item_1) == 1
+    assert_objects_are_equal(result_item_page_2_item_1[0], posted_object_3)
 
-    posted_item_page_2_item_2: list[SeasonModel] = [
+    result_item_page_2_item_2: list[SeasonModel] = [
         item for item in result_page_2.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_page_2_item_2) == 1
-    assert_objects_are_equal(posted_item_page_2_item_2[0], posted_object_4)
+    assert len(result_item_page_2_item_2) == 1
+    assert_objects_are_equal(result_item_page_2_item_2[0], posted_object_4)
 
 
 def test_gets_seasons_with_name_exact_filter() -> None:
@@ -269,11 +269,11 @@ def test_gets_seasons_with_name_exact_filter() -> None:
 
     assert len(result.items) == 1
 
-    posted_item_2: list[SeasonModel] = [
+    result_item_2: list[SeasonModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
-    assert_objects_are_equal(posted_item_2[0], posted_object_2)
+    assert len(result_item_2) == 1
+    assert_objects_are_equal(result_item_2[0], posted_object_2)
 
 
 def test_gets_seasons_with_name_like_filter() -> None:
@@ -309,23 +309,23 @@ def test_gets_seasons_with_name_like_filter() -> None:
 
     assert len(result.items) == 3
 
-    posted_item_1: list[SeasonModel] = [
+    result_item_1: list[SeasonModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_2: list[SeasonModel] = [
+    result_item_2: list[SeasonModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
-    assert_objects_are_equal(posted_item_2[0], posted_object_2)
+    assert len(result_item_2) == 1
+    assert_objects_are_equal(result_item_2[0], posted_object_2)
 
-    posted_item_4: list[SeasonModel] = [
+    result_item_4: list[SeasonModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)
 
 
 def test_gets_seasons_with_season_number_min_max_filter() -> None:
@@ -374,23 +374,23 @@ def test_gets_seasons_with_season_number_min_max_filter() -> None:
 
     assert len(min_result.items) == 3
 
-    min_posted_item_2: list[SeasonModel] = [
+    min_result_item_2: list[SeasonModel] = [
         item for item in min_result.items if item.id == posted_object_2.id
     ]
-    assert len(min_posted_item_2) == 1
-    assert_objects_are_equal(min_posted_item_2[0], posted_object_2)
+    assert len(min_result_item_2) == 1
+    assert_objects_are_equal(min_result_item_2[0], posted_object_2)
 
-    min_posted_item_3: list[SeasonModel] = [
+    min_result_item_3: list[SeasonModel] = [
         item for item in min_result.items if item.id == posted_object_3.id
     ]
-    assert len(min_posted_item_3) == 1
-    assert_objects_are_equal(min_posted_item_3[0], posted_object_3)
+    assert len(min_result_item_3) == 1
+    assert_objects_are_equal(min_result_item_3[0], posted_object_3)
 
-    min_posted_item_4: list[SeasonModel] = [
+    min_result_item_4: list[SeasonModel] = [
         item for item in min_result.items if item.id == posted_object_4.id
     ]
-    assert len(min_posted_item_4) == 1
-    assert_objects_are_equal(min_posted_item_4[0], posted_object_4)
+    assert len(min_result_item_4) == 1
+    assert_objects_are_equal(min_result_item_4[0], posted_object_4)
 
     # assert max
     assert max_result is not None
@@ -398,23 +398,23 @@ def test_gets_seasons_with_season_number_min_max_filter() -> None:
 
     assert len(max_result.items) == 3
 
-    max_posted_item_1: list[SeasonModel] = [
+    max_result_item_1: list[SeasonModel] = [
         item for item in max_result.items if item.id == posted_object_1.id
     ]
-    assert len(max_posted_item_1) == 1
-    assert_objects_are_equal(max_posted_item_1[0], posted_object_1)
+    assert len(max_result_item_1) == 1
+    assert_objects_are_equal(max_result_item_1[0], posted_object_1)
 
-    max_posted_item_2: list[SeasonModel] = [
+    max_result_item_2: list[SeasonModel] = [
         item for item in max_result.items if item.id == posted_object_2.id
     ]
-    assert len(max_posted_item_2) == 1
-    assert_objects_are_equal(max_posted_item_2[0], posted_object_2)
+    assert len(max_result_item_2) == 1
+    assert_objects_are_equal(max_result_item_2[0], posted_object_2)
 
-    max_posted_item_3: list[SeasonModel] = [
+    max_result_item_3: list[SeasonModel] = [
         item for item in max_result.items if item.id == posted_object_3.id
     ]
-    assert len(max_posted_item_3) == 1
-    assert_objects_are_equal(max_posted_item_3[0], posted_object_3)
+    assert len(max_result_item_3) == 1
+    assert_objects_are_equal(max_result_item_3[0], posted_object_3)
 
     # assert both
     assert both_result is not None
@@ -422,14 +422,14 @@ def test_gets_seasons_with_season_number_min_max_filter() -> None:
 
     assert len(both_result.items) == 2
 
-    both_posted_item_2: list[SeasonModel] = [
+    both_result_item_2: list[SeasonModel] = [
         item for item in both_result.items if item.id == posted_object_2.id
     ]
-    assert len(both_posted_item_2) == 1
-    assert_objects_are_equal(both_posted_item_2[0], posted_object_2)
+    assert len(both_result_item_2) == 1
+    assert_objects_are_equal(both_result_item_2[0], posted_object_2)
 
-    both_posted_item_3: list[SeasonModel] = [
+    both_result_item_3: list[SeasonModel] = [
         item for item in both_result.items if item.id == posted_object_3.id
     ]
-    assert len(both_posted_item_3) == 1
-    assert_objects_are_equal(both_posted_item_3[0], posted_object_3)
+    assert len(both_result_item_3) == 1
+    assert_objects_are_equal(both_result_item_3[0], posted_object_3)

@@ -165,29 +165,29 @@ def test_gets_league_players_with_ids_filter() -> None:
 
     assert len(result.items) == 4
 
-    posted_item_1: list[LeaguePlayerModel] = [
+    result_item_1: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_2: list[LeaguePlayerModel] = [
+    result_item_2: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
-    assert_objects_are_equal(posted_item_2[0], posted_object_2)
+    assert len(result_item_2) == 1
+    assert_objects_are_equal(result_item_2[0], posted_object_2)
 
-    posted_item_3: list[LeaguePlayerModel] = [
+    result_item_3: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_3) == 1
-    assert_objects_are_equal(posted_item_3[0], posted_object_3)
+    assert len(result_item_3) == 1
+    assert_objects_are_equal(result_item_3[0], posted_object_3)
 
-    posted_item_4: list[LeaguePlayerModel] = [
+    result_item_4: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)
 
 
 def test_gets_league_players_with_ids_filter_with_hydration() -> None:
@@ -230,45 +230,45 @@ def test_gets_league_players_with_ids_filter_with_hydration() -> None:
 
     assert len(result.items) == 4
 
-    posted_item_1: list[LeaguePlayerModel] = [
+    result_item_1: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1, ["league_team"])
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1, ["league_team"])
 
-    assert posted_item_1[0].league_team is not None
-    assert posted_item_1[0].league_team.id is not None
-    assert posted_item_1[0].league_team.id == posted_item_1[0].league_team_id
+    assert result_item_1[0].league_team is not None
+    assert result_item_1[0].league_team.id is not None
+    assert result_item_1[0].league_team.id == result_item_1[0].league_team_id
 
-    posted_item_2: list[LeaguePlayerModel] = [
+    result_item_2: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
-    assert_objects_are_equal(posted_item_2[0], posted_object_2, ["league_team"])
+    assert len(result_item_2) == 1
+    assert_objects_are_equal(result_item_2[0], posted_object_2, ["league_team"])
 
-    assert posted_item_2[0].league_team is not None
-    assert posted_item_2[0].league_team.id is not None
-    assert posted_item_2[0].league_team.id == posted_item_2[0].league_team_id
+    assert result_item_2[0].league_team is not None
+    assert result_item_2[0].league_team.id is not None
+    assert result_item_2[0].league_team.id == result_item_2[0].league_team_id
 
-    posted_item_3: list[LeaguePlayerModel] = [
+    result_item_3: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_3) == 1
-    assert_objects_are_equal(posted_item_3[0], posted_object_3, ["league_team"])
+    assert len(result_item_3) == 1
+    assert_objects_are_equal(result_item_3[0], posted_object_3, ["league_team"])
 
-    assert posted_item_3[0].league_team is not None
-    assert posted_item_3[0].league_team.id is not None
-    assert posted_item_3[0].league_team.id == posted_item_3[0].league_team_id
+    assert result_item_3[0].league_team is not None
+    assert result_item_3[0].league_team.id is not None
+    assert result_item_3[0].league_team.id == result_item_3[0].league_team_id
 
-    posted_item_4: list[LeaguePlayerModel] = [
+    result_item_4: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4, ["league_team"])
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4, ["league_team"])
 
-    assert posted_item_4[0].league_team is not None
-    assert posted_item_4[0].league_team.id is not None
-    assert posted_item_4[0].league_team.id == posted_item_4[0].league_team_id
+    assert result_item_4[0].league_team is not None
+    assert result_item_4[0].league_team.id is not None
+    assert result_item_4[0].league_team.id == result_item_4[0].league_team_id
 
 
 def test_gets_league_players_with_paging() -> None:
@@ -314,17 +314,17 @@ def test_gets_league_players_with_paging() -> None:
     assert result_page_1.paging.sort_by == "created_at"
     assert result_page_1.paging.is_sort_descending == False
 
-    posted_item_page_1_item_1: list[LeaguePlayerModel] = [
+    result_item_page_1_item_1: list[LeaguePlayerModel] = [
         item for item in result_page_1.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_page_1_item_1) == 1
-    assert_objects_are_equal(posted_item_page_1_item_1[0], posted_object_1)
+    assert len(result_item_page_1_item_1) == 1
+    assert_objects_are_equal(result_item_page_1_item_1[0], posted_object_1)
 
-    posted_item_page_1_item_2: list[LeaguePlayerModel] = [
+    result_item_page_1_item_2: list[LeaguePlayerModel] = [
         item for item in result_page_1.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_page_1_item_2) == 1
-    assert_objects_are_equal(posted_item_page_1_item_2[0], posted_object_2)
+    assert len(result_item_page_1_item_2) == 1
+    assert_objects_are_equal(result_item_page_1_item_2[0], posted_object_2)
 
     ## Page 2
 
@@ -339,17 +339,17 @@ def test_gets_league_players_with_paging() -> None:
 
     assert len(result_page_1.items) == 2
 
-    posted_item_page_2_item_1: list[LeaguePlayerModel] = [
+    result_item_page_2_item_1: list[LeaguePlayerModel] = [
         item for item in result_page_2.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_page_2_item_1) == 1
-    assert_objects_are_equal(posted_item_page_2_item_1[0], posted_object_3)
+    assert len(result_item_page_2_item_1) == 1
+    assert_objects_are_equal(result_item_page_2_item_1[0], posted_object_3)
 
-    posted_item_page_2_item_2: list[LeaguePlayerModel] = [
+    result_item_page_2_item_2: list[LeaguePlayerModel] = [
         item for item in result_page_2.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_page_2_item_2) == 1
-    assert_objects_are_equal(posted_item_page_2_item_2[0], posted_object_4)
+    assert len(result_item_page_2_item_2) == 1
+    assert_objects_are_equal(result_item_page_2_item_2[0], posted_object_4)
 
 
 def test_gets_league_players_with_name_exact_filter() -> None:
@@ -389,11 +389,11 @@ def test_gets_league_players_with_name_exact_filter() -> None:
 
     assert len(result.items) == 1
 
-    posted_item_2: list[LeaguePlayerModel] = [
+    result_item_2: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
-    assert_objects_are_equal(posted_item_2[0], posted_object_2)
+    assert len(result_item_2) == 1
+    assert_objects_are_equal(result_item_2[0], posted_object_2)
 
 
 def test_gets_league_players_with_name_like_filter() -> None:
@@ -433,23 +433,23 @@ def test_gets_league_players_with_name_like_filter() -> None:
 
     assert len(result.items) == 3
 
-    posted_item_1: list[LeaguePlayerModel] = [
+    result_item_1: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_2: list[LeaguePlayerModel] = [
+    result_item_2: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
-    assert_objects_are_equal(posted_item_2[0], posted_object_2)
+    assert len(result_item_2) == 1
+    assert_objects_are_equal(result_item_2[0], posted_object_2)
 
-    posted_item_4: list[LeaguePlayerModel] = [
+    result_item_4: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)
 
 
 def test_gets_league_players_with_league_team_ids_filter() -> None:
@@ -484,20 +484,20 @@ def test_gets_league_players_with_league_team_ids_filter() -> None:
 
     assert len(result.items) == 3
 
-    posted_item_1: list[LeaguePlayerModel] = [
+    result_item_1: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_3: list[LeaguePlayerModel] = [
+    result_item_3: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_3) == 1
-    assert_objects_are_equal(posted_item_3[0], posted_object_3)
+    assert len(result_item_3) == 1
+    assert_objects_are_equal(result_item_3[0], posted_object_3)
 
-    posted_item_4: list[LeaguePlayerModel] = [
+    result_item_4: list[LeaguePlayerModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)

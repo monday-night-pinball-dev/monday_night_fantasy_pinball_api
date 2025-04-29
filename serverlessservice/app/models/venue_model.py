@@ -45,19 +45,6 @@ class VenueSearchModel(CommonSearchModel):
         self.name_like = name_like
 
 
-class VenueDatabaseModel(CommonDatabaseModel):
-    def __init__(
-        self,
-        id: UUID,
-        name: str,
-        created_at: datetime,
-        updated_at: datetime | None = None,
-    ):
-        super().__init__(id, created_at, updated_at)
-
-        self.name = name
-
-
 class VenueModel(CommonModel):
     def __init__(
         self,

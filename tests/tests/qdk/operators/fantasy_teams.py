@@ -107,25 +107,25 @@ def mint_default_fantasy_team(
 
     random_name = generate_random_string()
 
-    default_team = FantasyTeamCreateModel(
+    default_obj = FantasyTeamCreateModel(
         name=random_name + "_fantasy_team",
     )
 
-    copy_object_when_appropriate(default_team, overrides)
-
     if overrides.owner_id is None:
         new_owner = create_user(context, overrides.owner)
-        default_team.owner_id = new_owner.id
+        default_obj.owner_id = new_owner.id
 
         del overrides.owner
 
     if overrides.fantasy_league_id is None:
         new_fantasy_league = create_fantasy_league(context, overrides.fantasy_league)
-        default_team.fantasy_league_id = new_fantasy_league.id
+        default_obj.fantasy_league_id = new_fantasy_league.id
 
         del overrides.fantasy_league
 
-    return default_team
+    copy_object_when_appropriate(default_obj, overrides)
+
+    return default_obj
 
 
 def create_fantasy_team(

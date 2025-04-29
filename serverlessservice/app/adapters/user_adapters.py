@@ -1,4 +1,5 @@
 from typing import Any
+from uuid import UUID
 from adapters.league_player_adapters import LeaguePlayerAdapter
 from models.user_model import (
     UserCreateModel,
@@ -146,10 +147,12 @@ class UserAdapter:
         self, database_model: dict[str, Any]
     ) -> UserModel:
         model = UserModel(
-            id=database_model["id"],
+            id=UUID(database_model["id"]),
+            league_player_id=UUID(database_model["league_player_id"])
+            if database_model.get("league_player_id") is not None
+            else None,
             name=database_model["name"],
             username=database_model["username"],
-            league_player_id=database_model["league_player_id"],
             created_at=database_model["created_at"],
             updated_at=database_model["updated_at"],
         )

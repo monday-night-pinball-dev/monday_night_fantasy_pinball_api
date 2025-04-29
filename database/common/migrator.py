@@ -2,7 +2,7 @@ from genericpath import isfile
 import os
 from typing import Any
 
-from database.db_environment import Environment
+from db_environment import Environment
 
 
 class Migrator:

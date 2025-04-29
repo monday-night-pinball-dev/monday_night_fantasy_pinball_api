@@ -79,23 +79,6 @@ class LeaguePlayerSearchModel(CommonSearchModel):
         self.global_mnp_ids = global_mnp_ids
 
 
-class LeaguePlayerDatabaseModel(CommonDatabaseModel):
-    def __init__(
-        self,
-        id: UUID,
-        league_team_id: UUID,
-        global_mnp_id: UUID,
-        name: str,
-        created_at: datetime,
-        updated_at: datetime | None = None,
-    ):
-        super().__init__(id, created_at, updated_at)
-
-        self.name = name
-        self.league_team_id = league_team_id
-        self.global_mnp_id = global_mnp_id
-
-
 class LeaguePlayerModel(CommonModel):
     def __init__(
         self,

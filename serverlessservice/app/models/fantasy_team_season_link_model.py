@@ -73,25 +73,6 @@ class FantasyTeamSeasonLinkSearchModel(CommonSearchModel):
         self.fantasy_league_ids = fantasy_league_ids
 
 
-class FantasyTeamSeasonLinkDatabaseModel(CommonDatabaseModel):
-    def __init__(
-        self,
-        id: UUID,
-        season_id: UUID,
-        fantasy_team_id: UUID,
-        fantasy_team_owner_id: UUID,
-        fantasy_league_id: UUID,
-        created_at: datetime,
-        updated_at: datetime | None = None,
-    ):
-        super().__init__(id, created_at, updated_at)
-
-        self.season_id = season_id
-        self.fantasy_team_id = fantasy_team_id
-        self.fantasy_team_owner_id = fantasy_team_owner_id
-        self.fantasy_league_id = fantasy_league_id
-
-
 class FantasyTeamSeasonLinkModel(CommonModel):
     def __init__(
         self,

@@ -104,23 +104,23 @@ def mint_default_fantasy_team_season_link(
 ) -> FantasyTeamSeasonLinkCreateModel:
     overrides = overrides or FantasyTeamSeasonLinkCreateModel()
 
-    default_team = FantasyTeamSeasonLinkCreateModel()
-
-    copy_object_when_appropriate(default_team, overrides)
+    default_obj = FantasyTeamSeasonLinkCreateModel()
 
     if overrides.fantasy_team_id is None:
         new_fantasy_team = create_fantasy_team(context, overrides.fantasy_team)
-        default_team.fantasy_team_id = new_fantasy_team.id
+        default_obj.fantasy_team_id = new_fantasy_team.id
 
         del overrides.fantasy_team
 
     if overrides.season_id is None:
         new_season = create_season(context, overrides.season)
-        default_team.season_id = new_season.id
+        default_obj.season_id = new_season.id
 
         del overrides.season
 
-    return default_team
+    copy_object_when_appropriate(default_obj, overrides)
+
+    return default_obj
 
 
 def create_fantasy_team_season_link(

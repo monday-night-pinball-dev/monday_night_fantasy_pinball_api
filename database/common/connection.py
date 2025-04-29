@@ -1,6 +1,6 @@
 import psycopg2
 
-from database.common.db_types import ForeignKeyMetadata, TableMetadata
+from common.db_types import ForeignKeyMetadata, TableMetadata
 
 
 class PGConnection:

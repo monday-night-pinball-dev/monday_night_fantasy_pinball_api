@@ -1,4 +1,5 @@
 from typing import Any
+from uuid import UUID
 from adapters.league_team_adapters import LeagueTeamAdapter
 from models.league_player_model import (
     LeaguePlayerCreateModel,
@@ -153,10 +154,12 @@ class LeaguePlayerAdapter:
         self, database_model: dict[str, Any]
     ) -> LeaguePlayerModel:
         model = LeaguePlayerModel(
-            id=database_model["id"],
+            id=UUID(database_model["id"]),
+            league_team_id=UUID(database_model["league_team_id"])
+            if database_model.get("league_team_id") is not None
+            else None,
+            global_mnp_id=UUID(database_model["global_mnp_id"]),
             name=database_model["name"],
-            global_mnp_id=database_model["global_mnp_id"],
-            league_team_id=database_model["league_team_id"],
             created_at=database_model["created_at"],
             updated_at=database_model["updated_at"],
         )

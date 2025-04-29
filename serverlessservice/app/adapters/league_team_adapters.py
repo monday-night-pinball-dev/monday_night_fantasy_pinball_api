@@ -1,4 +1,5 @@
 from typing import Any
+from uuid import UUID
 from adapters.venue_adapters import VenueAdapter
 from models.league_team_model import (
     LeagueTeamCreateModel,
@@ -165,10 +166,10 @@ class LeagueTeamAdapter:
         self, database_model: dict[str, Any]
     ) -> LeagueTeamModel:
         model = LeagueTeamModel(
-            id=database_model["id"],
+            id=UUID(database_model["id"]),
+            home_venue_id=UUID(database_model["home_venue_id"]),
+            global_mnp_id=UUID(database_model["global_mnp_id"]),
             name=database_model["name"],
-            home_venue_id=database_model["home_venue_id"],
-            global_mnp_id=database_model["global_mnp_id"],
             short_name=database_model["short_name"],
             created_at=database_model["created_at"],
             updated_at=database_model["updated_at"],

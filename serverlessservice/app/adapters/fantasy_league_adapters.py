@@ -1,4 +1,5 @@
 from typing import Any
+from uuid import UUID
 
 from models.fantasy_league_model import (
     FantasyLeagueCreateModel,
@@ -105,7 +106,7 @@ class FantasyLeagueAdapter:
         self, database_model: dict[str, Any]
     ) -> FantasyLeagueModel:
         model = FantasyLeagueModel(
-            id=database_model["id"],
+            id=UUID(database_model["id"]),
             name=database_model["name"],
             created_at=database_model["created_at"],
             updated_at=database_model["updated_at"],

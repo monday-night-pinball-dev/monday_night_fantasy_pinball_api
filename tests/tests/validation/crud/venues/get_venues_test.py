@@ -133,29 +133,29 @@ def test_gets_venues_with_ids_filter() -> None:
 
     assert len(result.items) == 4
 
-    posted_item_1: list[VenueModel] = [
+    result_item_1: list[VenueModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_2: list[VenueModel] = [
+    result_item_2: list[VenueModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
-    assert_objects_are_equal(posted_item_2[0], posted_object_2)
+    assert len(result_item_2) == 1
+    assert_objects_are_equal(result_item_2[0], posted_object_2)
 
-    posted_item_3: list[VenueModel] = [
+    result_item_3: list[VenueModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_3) == 1
-    assert_objects_are_equal(posted_item_3[0], posted_object_3)
+    assert len(result_item_3) == 1
+    assert_objects_are_equal(result_item_3[0], posted_object_3)
 
-    posted_item_4: list[VenueModel] = [
+    result_item_4: list[VenueModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)
 
 
 def test_gets_venues_with_paging() -> None:
@@ -197,17 +197,17 @@ def test_gets_venues_with_paging() -> None:
     assert result_page_1.paging.sort_by == "created_at"
     assert result_page_1.paging.is_sort_descending == False
 
-    posted_item_page_1_item_1: list[VenueModel] = [
+    result_item_page_1_item_1: list[VenueModel] = [
         item for item in result_page_1.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_page_1_item_1) == 1
-    assert_objects_are_equal(posted_item_page_1_item_1[0], posted_object_1)
+    assert len(result_item_page_1_item_1) == 1
+    assert_objects_are_equal(result_item_page_1_item_1[0], posted_object_1)
 
-    posted_item_page_1_item_2: list[VenueModel] = [
+    result_item_page_1_item_2: list[VenueModel] = [
         item for item in result_page_1.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_page_1_item_2) == 1
-    assert_objects_are_equal(posted_item_page_1_item_2[0], posted_object_2)
+    assert len(result_item_page_1_item_2) == 1
+    assert_objects_are_equal(result_item_page_1_item_2[0], posted_object_2)
 
     ## Page 2
 
@@ -222,17 +222,17 @@ def test_gets_venues_with_paging() -> None:
 
     assert len(result_page_1.items) == 2
 
-    posted_item_page_2_item_1: list[VenueModel] = [
+    result_item_page_2_item_1: list[VenueModel] = [
         item for item in result_page_2.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_page_2_item_1) == 1
-    assert_objects_are_equal(posted_item_page_2_item_1[0], posted_object_3)
+    assert len(result_item_page_2_item_1) == 1
+    assert_objects_are_equal(result_item_page_2_item_1[0], posted_object_3)
 
-    posted_item_page_2_item_2: list[VenueModel] = [
+    result_item_page_2_item_2: list[VenueModel] = [
         item for item in result_page_2.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_page_2_item_2) == 1
-    assert_objects_are_equal(posted_item_page_2_item_2[0], posted_object_4)
+    assert len(result_item_page_2_item_2) == 1
+    assert_objects_are_equal(result_item_page_2_item_2[0], posted_object_4)
 
 
 def test_gets_venues_with_name_exact_filter() -> None:
@@ -268,11 +268,11 @@ def test_gets_venues_with_name_exact_filter() -> None:
 
     assert len(result.items) == 1
 
-    posted_item_2: list[VenueModel] = [
+    result_item_2: list[VenueModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
-    assert_objects_are_equal(posted_item_2[0], posted_object_2)
+    assert len(result_item_2) == 1
+    assert_objects_are_equal(result_item_2[0], posted_object_2)
 
 
 def test_gets_venues_with_name_like_filter() -> None:
@@ -308,20 +308,20 @@ def test_gets_venues_with_name_like_filter() -> None:
 
     assert len(result.items) == 3
 
-    posted_item_1: list[VenueModel] = [
+    result_item_1: list[VenueModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_2: list[VenueModel] = [
+    result_item_2: list[VenueModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
-    assert_objects_are_equal(posted_item_2[0], posted_object_2)
+    assert len(result_item_2) == 1
+    assert_objects_are_equal(result_item_2[0], posted_object_2)
 
-    posted_item_4: list[VenueModel] = [
+    result_item_4: list[VenueModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)

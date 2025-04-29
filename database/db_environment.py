@@ -1,5 +1,5 @@
 from pprint import pprint
-from database.common.db_configuration import Configuration
+from common.db_configuration import Configuration
 
 from common.connection import PGConnection
 

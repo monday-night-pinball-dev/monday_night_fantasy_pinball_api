@@ -77,23 +77,6 @@ class UserSearchModel(CommonSearchModel):
         self.username_like = username_like
 
 
-class UserDatabaseModel(CommonDatabaseModel):
-    def __init__(
-        self,
-        id: UUID,
-        username: str,
-        name: str,
-        created_at: datetime,
-        league_player_id: UUID | None = None,
-        updated_at: datetime | None = None,
-    ):
-        super().__init__(id, created_at, updated_at)
-
-        self.name = name
-        self.username = username
-        self.league_player_id = league_player_id
-
-
 class UserModel(CommonModel):
     def __init__(
         self,

@@ -1,4 +1,5 @@
 from typing import Any
+from uuid import UUID
 
 from models.venue_model import (
     VenueCreateModel,
@@ -85,7 +86,7 @@ class VenueAdapter:
         self, database_model: dict[str, Any]
     ) -> VenueModel:
         model = VenueModel(
-            id=database_model["id"],
+            id=UUID(database_model["id"]),
             name=database_model["name"],
             created_at=database_model["created_at"],
             updated_at=database_model["updated_at"],

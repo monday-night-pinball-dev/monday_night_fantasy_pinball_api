@@ -111,7 +111,7 @@ def mint_default_league_player(
 
     random_string = generate_random_string()
 
-    default_league_player: LeaguePlayerCreateModel = LeaguePlayerCreateModel(
+    default_obj: LeaguePlayerCreateModel = LeaguePlayerCreateModel(
         name=random_string + "_name",
         global_mnp_id=str(uuid.uuid4()),
     )
@@ -121,11 +121,10 @@ def mint_default_league_player(
         overrides.league_team_id = new_team_league.id
 
         del overrides.league_team
-        del overrides.create_league_team_if_null
 
-    copy_object_when_appropriate(default_league_player, overrides)
+    copy_object_when_appropriate(default_obj, overrides)
 
-    return default_league_player
+    return default_obj
 
 
 def create_league_player(

@@ -2,7 +2,7 @@ import os
 from pprint import pprint
 from common.bighammer import BigHammer
 
-from database.db_environment import Environment
+from db_environment import Environment
 
 environment: Environment = Environment()
 

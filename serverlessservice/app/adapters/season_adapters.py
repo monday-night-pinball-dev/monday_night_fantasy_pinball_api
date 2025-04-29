@@ -1,4 +1,5 @@
 from typing import Any
+from uuid import UUID
 from models.season_model import (
     SeasonCreateModel,
     SeasonInboundCreateModel,
@@ -112,7 +113,7 @@ class SeasonAdapter:
         self, database_model: dict[str, Any]
     ) -> SeasonModel:
         model = SeasonModel(
-            id=database_model["id"],
+            id=UUID(database_model["id"]),
             name=database_model["name"],
             season_number=database_model["season_number"],
             created_at=database_model["created_at"],

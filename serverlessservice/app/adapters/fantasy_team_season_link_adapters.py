@@ -1,4 +1,5 @@
 from typing import Any
+from uuid import UUID
 from models.fantasy_team_season_link_model import (
     FantasyTeamSeasonLinkCreateModel,
     FantasyTeamSeasonLinkInboundCreateModel,
@@ -150,11 +151,11 @@ class FantasyTeamSeasonLinkAdapter:
         self, database_model: dict[str, Any]
     ) -> FantasyTeamSeasonLinkModel:
         model = FantasyTeamSeasonLinkModel(
-            id=database_model["id"],
-            season_id=database_model["season_id"],
-            fantasy_team_id=database_model["fantasy_team_id"],
-            fantasy_team_owner_id=database_model["fantasy_team_owner_id_dn"],
-            fantasy_league_id=database_model["fantasy_league_id_dn"],
+            id=UUID(database_model["id"]),
+            season_id=UUID(database_model["season_id"]),
+            fantasy_team_id=UUID(database_model["fantasy_team_id"]),
+            fantasy_team_owner_id=UUID(database_model["fantasy_team_owner_id_dn"]),
+            fantasy_league_id=UUID(database_model["fantasy_league_id_dn"]),
             created_at=database_model["created_at"],
             updated_at=database_model["updated_at"],
         )

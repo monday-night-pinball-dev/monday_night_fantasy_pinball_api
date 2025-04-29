@@ -3,7 +3,7 @@ import os
 from typing import Any, cast
 import psycopg2
 
-from database.db_environment import Environment
+from db_environment import Environment
 
 
 class BigHammer:

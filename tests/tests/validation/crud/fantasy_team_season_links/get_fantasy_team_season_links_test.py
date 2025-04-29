@@ -174,29 +174,29 @@ def test_gets_fantasy_team_season_links_with_ids_filter() -> None:
 
     assert len(result.items) == 4
 
-    posted_item_1: list[FantasyTeamSeasonLinkModel] = [
+    result_item_1: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_2: list[FantasyTeamSeasonLinkModel] = [
+    result_item_2: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
-    assert_objects_are_equal(posted_item_2[0], posted_object_2)
+    assert len(result_item_2) == 1
+    assert_objects_are_equal(result_item_2[0], posted_object_2)
 
-    posted_item_3: list[FantasyTeamSeasonLinkModel] = [
+    result_item_3: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_3) == 1
-    assert_objects_are_equal(posted_item_3[0], posted_object_3)
+    assert len(result_item_3) == 1
+    assert_objects_are_equal(result_item_3[0], posted_object_3)
 
-    posted_item_4: list[FantasyTeamSeasonLinkModel] = [
+    result_item_4: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)
 
 
 def test_gets_league_players_with_ids_filter_with_hydration() -> None:
@@ -247,53 +247,53 @@ def test_gets_league_players_with_ids_filter_with_hydration() -> None:
 
     assert len(result.items) == 4
 
-    posted_item_1: list[FantasyTeamSeasonLinkModel] = [
+    result_item_1: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
+    assert len(result_item_1) == 1
     assert_objects_are_equal(
-        posted_item_1[0],
+        result_item_1[0],
         posted_object_1,
         ["fantasy_team", "season", "fantasy_team_owner", "fantasy_league"],
     )
 
-    fantasy_team_season_link_hydration_check(posted_item_1[0])
+    fantasy_team_season_link_hydration_check(result_item_1[0])
 
-    posted_item_2: list[FantasyTeamSeasonLinkModel] = [
+    result_item_2: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_2) == 1
+    assert len(result_item_2) == 1
     assert_objects_are_equal(
-        posted_item_2[0],
+        result_item_2[0],
         posted_object_2,
         ["fantasy_team", "season", "fantasy_team_owner", "fantasy_league"],
     )
 
-    fantasy_team_season_link_hydration_check(posted_item_2[0])
+    fantasy_team_season_link_hydration_check(result_item_2[0])
 
-    posted_item_3: list[FantasyTeamSeasonLinkModel] = [
+    result_item_3: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_3) == 1
+    assert len(result_item_3) == 1
     assert_objects_are_equal(
-        posted_item_3[0],
+        result_item_3[0],
         posted_object_3,
         ["fantasy_team", "season", "fantasy_team_owner", "fantasy_league"],
     )
 
-    fantasy_team_season_link_hydration_check(posted_item_3[0])
+    fantasy_team_season_link_hydration_check(result_item_3[0])
 
-    posted_item_4: list[FantasyTeamSeasonLinkModel] = [
+    result_item_4: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
+    assert len(result_item_4) == 1
     assert_objects_are_equal(
-        posted_item_4[0],
+        result_item_4[0],
         posted_object_4,
         ["fantasy_team", "season", "fantasy_team_owner", "fantasy_league"],
     )
 
-    fantasy_team_season_link_hydration_check(posted_item_4[0])
+    fantasy_team_season_link_hydration_check(result_item_4[0])
 
 
 def test_gets_fantasy_team_season_links_with_paging() -> None:
@@ -347,17 +347,17 @@ def test_gets_fantasy_team_season_links_with_paging() -> None:
     assert result_page_1.paging.sort_by == "created_at"
     assert result_page_1.paging.is_sort_descending == False
 
-    posted_item_page_1_item_1: list[FantasyTeamSeasonLinkModel] = [
+    result_item_page_1_item_1: list[FantasyTeamSeasonLinkModel] = [
         item for item in result_page_1.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_page_1_item_1) == 1
-    assert_objects_are_equal(posted_item_page_1_item_1[0], posted_object_1)
+    assert len(result_item_page_1_item_1) == 1
+    assert_objects_are_equal(result_item_page_1_item_1[0], posted_object_1)
 
-    posted_item_page_1_item_2: list[FantasyTeamSeasonLinkModel] = [
+    result_item_page_1_item_2: list[FantasyTeamSeasonLinkModel] = [
         item for item in result_page_1.items if item.id == posted_object_2.id
     ]
-    assert len(posted_item_page_1_item_2) == 1
-    assert_objects_are_equal(posted_item_page_1_item_2[0], posted_object_2)
+    assert len(result_item_page_1_item_2) == 1
+    assert_objects_are_equal(result_item_page_1_item_2[0], posted_object_2)
 
     ## Page 2
 
@@ -372,17 +372,17 @@ def test_gets_fantasy_team_season_links_with_paging() -> None:
 
     assert len(result_page_1.items) == 2
 
-    posted_item_page_2_item_1: list[FantasyTeamSeasonLinkModel] = [
+    result_item_page_2_item_1: list[FantasyTeamSeasonLinkModel] = [
         item for item in result_page_2.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_page_2_item_1) == 1
-    assert_objects_are_equal(posted_item_page_2_item_1[0], posted_object_3)
+    assert len(result_item_page_2_item_1) == 1
+    assert_objects_are_equal(result_item_page_2_item_1[0], posted_object_3)
 
-    posted_item_page_2_item_2: list[FantasyTeamSeasonLinkModel] = [
+    result_item_page_2_item_2: list[FantasyTeamSeasonLinkModel] = [
         item for item in result_page_2.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_page_2_item_2) == 1
-    assert_objects_are_equal(posted_item_page_2_item_2[0], posted_object_4)
+    assert len(result_item_page_2_item_2) == 1
+    assert_objects_are_equal(result_item_page_2_item_2[0], posted_object_4)
 
 
 def test_gets_fantasy_team_season_links_with_season_filter() -> None:
@@ -418,23 +418,23 @@ def test_gets_fantasy_team_season_links_with_season_filter() -> None:
 
     assert len(result.items) == 3
 
-    posted_item_1: list[FantasyTeamSeasonLinkModel] = [
+    result_item_1: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_3: list[FantasyTeamSeasonLinkModel] = [
+    result_item_3: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_3) == 1
-    assert_objects_are_equal(posted_item_3[0], posted_object_3)
+    assert len(result_item_3) == 1
+    assert_objects_are_equal(result_item_3[0], posted_object_3)
 
-    posted_item_4: list[FantasyTeamSeasonLinkModel] = [
+    result_item_4: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)
 
 
 def test_gets_fantasy_team_season_links_with_fantasy_team_ids_filter() -> None:
@@ -472,23 +472,23 @@ def test_gets_fantasy_team_season_links_with_fantasy_team_ids_filter() -> None:
 
     assert len(result.items) == 3
 
-    posted_item_1: list[FantasyTeamSeasonLinkModel] = [
+    result_item_1: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_3: list[FantasyTeamSeasonLinkModel] = [
+    result_item_3: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_3) == 1
-    assert_objects_are_equal(posted_item_3[0], posted_object_3)
+    assert len(result_item_3) == 1
+    assert_objects_are_equal(result_item_3[0], posted_object_3)
 
-    posted_item_4: list[FantasyTeamSeasonLinkModel] = [
+    result_item_4: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)
 
 
 def test_gets_fantasy_team_season_links_with_fantasy_league_ids_filter() -> None:
@@ -526,23 +526,23 @@ def test_gets_fantasy_team_season_links_with_fantasy_league_ids_filter() -> None
 
     assert len(result.items) == 3
 
-    posted_item_1: list[FantasyTeamSeasonLinkModel] = [
+    result_item_1: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_3: list[FantasyTeamSeasonLinkModel] = [
+    result_item_3: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_3) == 1
-    assert_objects_are_equal(posted_item_3[0], posted_object_3)
+    assert len(result_item_3) == 1
+    assert_objects_are_equal(result_item_3[0], posted_object_3)
 
-    posted_item_4: list[FantasyTeamSeasonLinkModel] = [
+    result_item_4: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)
 
 
 def test_gets_fantasy_team_season_links_with_fantasy_team_owner_ids_filter() -> None:
@@ -580,20 +580,20 @@ def test_gets_fantasy_team_season_links_with_fantasy_team_owner_ids_filter() -> 
 
     assert len(result.items) == 3
 
-    posted_item_1: list[FantasyTeamSeasonLinkModel] = [
+    result_item_1: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_1.id
     ]
-    assert len(posted_item_1) == 1
-    assert_objects_are_equal(posted_item_1[0], posted_object_1)
+    assert len(result_item_1) == 1
+    assert_objects_are_equal(result_item_1[0], posted_object_1)
 
-    posted_item_3: list[FantasyTeamSeasonLinkModel] = [
+    result_item_3: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_3.id
     ]
-    assert len(posted_item_3) == 1
-    assert_objects_are_equal(posted_item_3[0], posted_object_3)
+    assert len(result_item_3) == 1
+    assert_objects_are_equal(result_item_3[0], posted_object_3)
 
-    posted_item_4: list[FantasyTeamSeasonLinkModel] = [
+    result_item_4: list[FantasyTeamSeasonLinkModel] = [
         item for item in result.items if item.id == posted_object_4.id
     ]
-    assert len(posted_item_4) == 1
-    assert_objects_are_equal(posted_item_4[0], posted_object_4)
+    assert len(result_item_4) == 1
+    assert_objects_are_equal(result_item_4[0], posted_object_4)

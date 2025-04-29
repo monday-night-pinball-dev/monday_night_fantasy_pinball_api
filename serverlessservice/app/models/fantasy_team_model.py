@@ -85,23 +85,6 @@ class FantasyTeamSearchModel(CommonSearchModel):
         self.fantasy_league_ids = fantasy_league_ids
 
 
-class FantasyTeamDatabaseModel(CommonDatabaseModel):
-    def __init__(
-        self,
-        id: UUID,
-        owner_id: UUID,
-        fantasy_league_id: UUID,
-        name: str,
-        created_at: datetime,
-        updated_at: datetime | None = None,
-    ):
-        super().__init__(id, created_at, updated_at)
-
-        self.name = name
-        self.fantasy_league_id = fantasy_league_id
-        self.owner_id = owner_id
-
-
 class FantasyTeamModel(CommonModel):
     def __init__(
         self,

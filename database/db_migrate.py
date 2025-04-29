@@ -1,7 +1,7 @@
 import os
 
 from common.migrator import Migrator
-from database.db_environment import Environment
+from db_environment import Environment
 
 enviroment: Environment = Environment()
 

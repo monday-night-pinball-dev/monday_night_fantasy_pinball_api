@@ -68,21 +68,6 @@ class SeasonSearchModel(CommonSearchModel):
         self.season_number_max = season_number_max
 
 
-class SeasonDatabaseModel(CommonDatabaseModel):
-    def __init__(
-        self,
-        id: UUID,
-        name: str,
-        season_number: int,
-        created_at: datetime,
-        updated_at: datetime | None = None,
-    ):
-        super().__init__(id, created_at, updated_at)
-
-        self.name = name
-        self.season_number = season_number
-
-
 class SeasonModel(CommonModel):
     def __init__(
         self,

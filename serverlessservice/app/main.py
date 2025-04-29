@@ -10,6 +10,9 @@ from routes.fantasy_team_routes import set_fantasy_team_routes
 from routes.fantasy_team_season_link_routes import (
     set_fantasy_team_season_link_routes,
 )
+from routes.league_player_fantasy_team_season_link_routes import (
+    set_league_player_fantasy_team_season_link_routes,
+)
 from routes.league_player_routes import set_league_player_routes
 from routes.fantasy_league_routes import set_fantasy_league_routes
 from routes.league_team_routes import set_league_team_routes
@@ -56,6 +59,7 @@ set_season_routes(app)
 set_fantasy_league_routes(app)
 set_fantasy_team_routes(app)
 set_fantasy_team_season_link_routes(app)
+set_league_player_fantasy_team_season_link_routes(app)
 
 if __name__ == "__main__" and enviroment.configuration.STAGE == "local":
     uvicorn.run(app, host="0.0.0.0", port=8001)
