@@ -164,3 +164,4 @@ cython_debug/
 .DS_Store
 .DS_Store
 database/.DS_Store
+/mnfp_app/node_modules
