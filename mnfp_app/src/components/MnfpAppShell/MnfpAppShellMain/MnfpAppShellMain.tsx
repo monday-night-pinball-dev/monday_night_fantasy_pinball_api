@@ -12,7 +12,7 @@ export function MnfpAppShellMain() {
         <Route path="*" element={<RouteNotFoundPage/>} />
         <Route path="/" element={<HomePage/>} />
         <Route path="/home" element={<HomePage/>} />
-        <Route path="/team" element={<TeamPage/>} />
+        <Route path="/team" element={<TeamPage/>} /> 
         {/* Add more routes as needed */}
       </Routes>
     </AppShell.Main>   
