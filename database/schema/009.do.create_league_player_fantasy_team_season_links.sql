@@ -37,12 +37,3 @@ ALTER TABLE public.league_player_fantasy_team_season_links
   ADD CONSTRAINT fk_league_player_fantasy_team_season_links_league_player_id
   FOREIGN KEY (league_player_id)
   REFERENCES public.league_players(id);
- 
-
- 
-  
-
-
- 
-
- 

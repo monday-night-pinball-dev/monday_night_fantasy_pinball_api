@@ -1,5 +1,5 @@
  
-import { AppShell, Button, Collapse, Divider,  } from '@mantine/core';
+import { AppShell, Divider,  } from '@mantine/core';
 import { FaHome } from 'react-icons/fa';
 import { RiTeamFill } from "react-icons/ri";
 import { NavLink } from 'react-router-dom';
@@ -22,12 +22,15 @@ export function MnfpAppShellNavBar() {
   ]
 
   const adminItems = [
+    { link: '/admin/users' , label: 'Users', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
     { link: '/admin/venues' , label: 'Venues', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
     { link: '/admin/leagueTeams' , label: 'League Teams', icon: <FaTableCellsRowLock className={classes.linkIcon} /> }, 
     { link: '/admin/leaguePlayers' , label: 'League Players', icon: <FaTableCellsRowLock className={classes.linkIcon} /> }, 
     { link: '/admin/fantasyLeagues' , label: 'Fantasy Leagues', icon: <FaTableCellsRowLock className={classes.linkIcon} /> }, 
-    { link: '/admin/fantasyTeams' , label: 'Fantasy Teams', icon: <FaTableCellsRowLock className={classes.linkIcon} /> }, 
-    { link: '/admin/fantasyPlayers' , label: 'Fantasy Players', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
+    { link: '/admin/fantasyTeams' , label: 'Fantasy Teams', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },  
+    { link: '/admin/seasons' , label: 'Seasons', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
+    { link: '/admin/fantasyTeamSeasonLinks' , label: 'Fantasy Team Seasons', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
+    { link: '/admin/leaguePlayerFantasyTeamSeasonLinks' , label: 'League Player Fantasy Team Seasons', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
   ]
 
   const links = items.map((item) => ( 

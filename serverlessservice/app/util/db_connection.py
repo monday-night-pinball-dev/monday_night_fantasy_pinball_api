@@ -170,10 +170,16 @@ class PGConnection:
             raise
 
         colnames: list[str] = [desc[0] for desc in columns]
+        total_count_index = colnames.index("_count_")
 
         returnitemlist: SelectQueryResults = SelectQueryResults(
             build_query_results.paging
         )
+
+        if rows is None or len(rows) == 0:
+            returnitemlist.paging.total_record_count = 0
+        else:
+            returnitemlist.paging.total_record_count = rows[0][total_count_index]
 
         for row in rows:
             returnitemlist.items.append(
@@ -364,7 +370,7 @@ class PGConnection:
             is_sort_descending=is_sort_descending,
         )
 
-        sqlstring: str = f"SELECT * FROM {table_name}\n"
+        sqlstring: str = f"SELECT *, count(*) over() as _count_ FROM {table_name}\n"
 
         if len(search_terms) > 0:
             sqlstring += f"WHERE\n(\n"

@@ -5,6 +5,7 @@ from models.venue_model import (
     VenueCreateModel,
     VenueModel,
     VenueSearchModel,
+    VenueUpdateModel,
 )
 from models.common_model import ItemList
 from util.common import RequestOperators
@@ -76,6 +77,26 @@ class VenueAccessor:
             results.items.append(result_model)
 
         return results
+
+    def update(
+        self,
+        id: UUID,
+        model: VenueUpdateModel,
+        request_operators: RequestOperators | None = None,
+    ) -> VenueModel:
+        connection = get_global_configuration().pg_connection
+
+        db_model: dict[str, Any] = (
+            self.adapter.convert_from_update_model_to_database_model(model)
+        )
+
+        db_result: dict[str, Any] = connection.update(
+            "venues", id, db_model, request_operators
+        )
+
+        result_model = self.adapter.convert_from_database_model_to_model(db_result)
+
+        return result_model
 
     def delete(
         self, id: UUID, request_operators: RequestOperators | None = None

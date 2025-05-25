@@ -4,6 +4,7 @@ from pydantic import UUID4
 from models.venue_model import (
     VenueInboundCreateModel,
     VenueInboundSearchModel,
+    VenueInboundUpdateModel,
     VenueOutboundModel,
 )
 from controllers.venue_controller import VenueController
@@ -36,6 +37,14 @@ def set_venue_routes(app: FastAPI):
     @app.get("/venues/{id}", response_model=VenueOutboundModel)
     def get_venue_by_id(id: UUID4, request: Request):
         result = controller.get_by_id(id, request.headers)
+
+        return result
+
+    @app.patch("/users/{id}", response_model=VenueOutboundModel)
+    def patch_user(
+        id: UUID4, inbound_update_model: VenueInboundUpdateModel, request: Request
+    ) -> VenueOutboundModel | None:
+        result = controller.update(id, inbound_update_model, request.headers)
 
         return result
 

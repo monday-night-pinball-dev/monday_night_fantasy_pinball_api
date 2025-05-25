@@ -1,5 +1,4 @@
 {
-  
   "compilerOptions": {
     "types": ["node", "@testing-library/jest-dom", "vitest/globals"],
     "target": "ESNext",

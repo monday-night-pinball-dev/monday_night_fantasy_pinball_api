@@ -7,6 +7,7 @@ from models.venue_model import (
     VenueCreateModel,
     VenueInboundCreateModel,
     VenueInboundSearchModel,
+    VenueInboundUpdateModel,
     VenueModel,
     VenueOutboundModel,
     VenueSearchModel,
@@ -64,6 +65,35 @@ class VenueController:
         if result is None:
             raise HTTPException(
                 status_code=404, detail=f"Venue with id {id} not found."
+            )
+
+        response_model: VenueOutboundModel = (
+            self.adapter.convert_from_model_to_outbound_model(result)
+        )
+
+        return response_model
+
+    def update(
+        self,
+        id: UUID,
+        inbound_model: VenueInboundUpdateModel,
+        headers: dict[str, str],
+    ) -> VenueOutboundModel | None:
+        request_operators = self.common_adapter.convert_from_headers_to_operators(
+            headers
+        )
+
+        model: VenueCreateModel = (
+            self.adapter.convert_from_inbound_update_model_to_create_model(
+                inbound_model
+            )
+        )
+
+        result = self.manager.update_season(id, model, request_operators)
+
+        if result is None:
+            raise HTTPException(
+                status_code=404, detail=f"Season with id {id} not found."
             )
 
         response_model: VenueOutboundModel = (

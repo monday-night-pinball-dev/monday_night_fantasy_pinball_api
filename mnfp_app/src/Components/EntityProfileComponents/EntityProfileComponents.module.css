@@ -1,0 +1,17 @@
+.entityProfileFieldBox 
+{
+    height: '48px';
+    margin: '4px';
+}
+
+.entityProfileFieldBoxPropertyLabelSection
+{
+  height: '20px';
+  margin: '0px 2px 0px 2px' 
+}
+
+.entityProfileFieldBoxPropertyValuesSection 
+{
+  height: '20px';
+  margin: '0px 2px 0px 2px' 
+}

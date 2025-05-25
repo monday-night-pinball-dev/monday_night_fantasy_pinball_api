@@ -5,9 +5,11 @@ from models.venue_model import (
     VenueCreateModel,
     VenueInboundCreateModel,
     VenueInboundSearchModel,
+    VenueInboundUpdateModel,
     VenueModel,
     VenueOutboundModel,
     VenueSearchModel,
+    VenueUpdateModel,
 )
 from util.common import CommonUtilities
 from util.database import (
@@ -31,6 +33,14 @@ class VenueAdapter:
             name=inbound_create_model.name,
         )
 
+        return model
+
+    def convert_from_inbound_update_model_to_create_model(
+        self, inbound_create_model: VenueInboundUpdateModel
+    ) -> VenueUpdateModel:
+        model = VenueUpdateModel(
+            name=inbound_create_model.name,
+        )
         return model
 
     def convert_from_inbound_search_model_to_search_model(
@@ -80,6 +90,14 @@ class VenueAdapter:
             "name": model.name,
         }
 
+        return database_model
+
+    def convert_from_update_model_to_database_model(
+        self, model: VenueUpdateModel
+    ) -> dict[str, Any]:
+        database_model: dict[str, Any] = {
+            "name": model.name,
+        }
         return database_model
 
     def convert_from_database_model_to_model(

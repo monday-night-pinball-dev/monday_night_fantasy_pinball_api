@@ -1,8 +1,8 @@
 import '@mantine/core/styles.css'; 
 import { AppShell } from '@mantine/core'; 
-import { MnfpAppShellHeader } from './components/MnfpAppShell/MnfpAppShellHeader/MnfpAppShellHeader';
-import { MnfpAppShellNavBar } from './components/MnfpAppShell/MnfpAppShellNavBar/MnfpAppShellNavBar';
-import { MnfpAppShellMain } from './components/MnfpAppShell/MnfpAppShellMain/MnfpAppShellMain';
+import { MnfpAppShellHeader } from './MnfpAppShell/MnfpAppShellHeader/MnfpAppShellHeader';
+import { MnfpAppShellNavBar } from './MnfpAppShell/MnfpAppShellNavBar/MnfpAppShellNavBar';
+import { MnfpAppShellMain } from './MnfpAppShell/MnfpAppShellMain/MnfpAppShellMain';
 import { useDisclosure } from '@mantine/hooks';
 
 export default function App() {

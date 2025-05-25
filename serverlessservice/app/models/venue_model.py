@@ -5,7 +5,6 @@ from fastapi import Query
 from pydantic import BaseModel, Field
 
 from models.common_model import (
-    CommonDatabaseModel,
     CommonInboundSearchModel,
     CommonModel,
     CommonOutboundResponseModel,
@@ -18,6 +17,10 @@ class VenueInboundCreateModel(BaseModel):
     name: str = Field(..., max_length=255)
 
 
+class VenueInboundUpdateModel(BaseModel):
+    name: Optional[str] = Field(default=None, max_length=255)
+
+
 # Pydantic causes these class variables to safely be instance variables.
 class VenueInboundSearchModel(CommonInboundSearchModel):
     name: Optional[str] = Query(default=None)
@@ -25,6 +28,14 @@ class VenueInboundSearchModel(CommonInboundSearchModel):
 
 
 class VenueCreateModel:
+    def __init__(
+        self,
+        name: str,
+    ) -> None:
+        self.name = name
+
+
+class VenueUpdateModel:
     def __init__(
         self,
         name: str,

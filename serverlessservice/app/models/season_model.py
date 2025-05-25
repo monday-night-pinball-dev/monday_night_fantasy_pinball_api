@@ -5,7 +5,6 @@ from fastapi import Query
 from pydantic import BaseModel, Field
 
 from models.common_model import (
-    CommonDatabaseModel,
     CommonInboundSearchModel,
     CommonModel,
     CommonOutboundResponseModel,

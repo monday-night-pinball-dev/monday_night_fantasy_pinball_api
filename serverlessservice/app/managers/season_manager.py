@@ -1,7 +1,12 @@
 from uuid import UUID
 from data_accessors.season_accessor import SeasonAccessor
 from models.common_model import ItemList
-from models.season_model import SeasonCreateModel, SeasonModel, SeasonSearchModel
+from models.season_model import (
+    SeasonCreateModel,
+    SeasonModel,
+    SeasonSearchModel,
+    SeasonUpdateModel,
+)
 from util.common import CommonUtilities, RequestOperators
 from util.database import PagingModel
 
@@ -65,7 +70,7 @@ class SeasonManager:
     def update_season(
         self,
         id: UUID,
-        model: SeasonCreateModel,
+        model: SeasonUpdateModel,
         request_operators: RequestOperators | None = None,
     ) -> SeasonModel | None:
         result = self.season_accessor.update(

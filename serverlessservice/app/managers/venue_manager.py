@@ -1,7 +1,12 @@
 from uuid import UUID
 from data_accessors.venue_accessor import VenueAccessor
 from models.common_model import ItemList
-from models.venue_model import VenueCreateModel, VenueModel, VenueSearchModel
+from models.venue_model import (
+    VenueCreateModel,
+    VenueModel,
+    VenueSearchModel,
+    VenueUpdateModel,
+)
 from util.common import CommonUtilities, RequestOperators
 from util.database import PagingModel
 
@@ -59,6 +64,23 @@ class VenueManager:
 
         hydrator = Hydrator()
         hydrator.hydrate_venues(result.items, request_operators)
+
+        return result
+
+    def update_season(
+        self,
+        id: UUID,
+        model: VenueUpdateModel,
+        request_operators: RequestOperators | None = None,
+    ) -> VenueModel | None:
+        result = self.season_accessor.update(
+            id=id, model=model, request_operators=request_operators
+        )
+
+        from managers.hydrator import Hydrator
+
+        hydrator = Hydrator()
+        hydrator.hydrate_seasons([result], request_operators)
 
         return result
 
