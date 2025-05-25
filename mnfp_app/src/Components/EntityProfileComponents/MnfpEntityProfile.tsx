@@ -399,6 +399,7 @@ export const MnfpProfilePage : React.FC<ProfilePageParams> = ({
                 title={columnDef.title} 
                 existingValue={value} 
                 params={params}
+                onChangeHandler={ProfileFieldValueChangedHandler}
             />
         )
       }

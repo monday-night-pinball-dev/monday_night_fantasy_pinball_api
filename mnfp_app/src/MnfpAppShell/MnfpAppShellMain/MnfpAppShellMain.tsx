@@ -17,6 +17,7 @@ import { RouteNotFoundPage } from '../../Pages/RouteNotFoundPage/RouteNotFoundPa
 import { AdminSeasonProfilePage } from '@/Pages/AdminSeasonsPage/AdminSeasonProfilePage';
 import { AdminVenueProfilePage } from '@/Pages/AdminVenuesPage/AdminVenueProfilePage';
 import { AdminLeagueTeamProfilePage } from '@/Pages/AdminLeagueTeamsPage/AdminLeagueTeamProfilePage';
+import { ProfileModes } from '@/Components/EntityProfileComponents/MnfpEntityProfile';
  
 export function MnfpAppShellMain() { 
   return (
@@ -39,15 +40,19 @@ export function MnfpAppShellMain() {
         <Route path="/admin/fantasyTeamSeasonLinks" element={ <AdminFantasyTeamSeasonLinksPage /> } />
         <Route path="/admin/leaguePlayerFantasyTeamSeasonLinks" element={ <AdminLeaguePlayerFantasyTeamSeasonLinksPage /> } />
 
-        <Route path="/admin/venues/:id" element={<AdminVenueProfilePage/>} />
-        <Route path="/admin/leagueTeams/:id" element={<AdminLeagueTeamProfilePage/>} />
+        <Route path="/admin/venues/:id" element={<AdminVenueProfilePage mode={ProfileModes.READ}/>} />
+        <Route path="/admin/leagueTeams/:id" element={<AdminLeagueTeamProfilePage mode={ProfileModes.READ}/>} />
         <Route path="/admin/leaguePlayers/:id" element={<AdminLeaguePlayersPage/>} />
         <Route path="/admin/fantasyLeagues/:id" element={<AdminFantasyLeaguesPage/>} />
         <Route path="/admin/fantasyTeams/:id" element={<AdminFantasyTeamsPage/>} />
-        <Route path="/admin/seasons/:id" element={<AdminSeasonProfilePage />} />
+        <Route path="/admin/seasons/:id" element={<AdminSeasonProfilePage mode={ProfileModes.READ}/>} />
         <Route path="/admin/fantasyTeamSeasonLinks/:id" element={<AdminFantasyTeamSeasonLinksPage/>} />
         <Route path="/admin/leaguePlayerFantasyTeamSeasonLinks/:id" element={<AdminLeaguePlayerFantasyTeamSeasonLinksPage/>} />
         <Route path="/admin/users/:id" element={<AdminUsersPage/>} /> 
+
+        <Route path="/admin/seasons/:id/edit" element={<AdminSeasonProfilePage mode={ProfileModes.EDIT}/>} />
+        <Route path="/admin/venues/:id/edit" element={<AdminVenueProfilePage mode={ProfileModes.EDIT}/>} />
+        <Route path="/admin/leagueTeams/:id/edit" element={<AdminLeagueTeamProfilePage mode={ProfileModes.EDIT}/>} />
         
         {/* Add more routes as needed */}
       </Routes>

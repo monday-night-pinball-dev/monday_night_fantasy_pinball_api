@@ -55,11 +55,12 @@ export const AdminLeagueTeamProfilePage : React.FC<AdminLeagueTeamProfilePagePro
             type: ProfileFieldEditTypes.FK_LINK,
             typeParams: {
               optionNameKey: 'name',
-              searchKey: 'home_venue_id',
+              searchKey: 'name_like',
               searchUrl: '/venues',
             } 
           } 
         }],
+      ['global_mnp_id', { title: 'MNP ID' }],
       ['created_at', { title: 'Created At' }], 
     ]),
   }
