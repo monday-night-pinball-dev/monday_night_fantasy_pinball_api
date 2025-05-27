@@ -11,7 +11,7 @@ export default function AdminLeaguePlayersPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: { 
         key: 'id',
-        profileUrl: '/league_players',
+        profileUrl: '/admin/league_players',
       },  
       sortable: true,
     },  
@@ -23,7 +23,7 @@ export default function AdminLeaguePlayersPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: {
         key: 'league_team_id',
-        profileUrl: '/league_teams',
+        profileUrl: '/admin/league_teams',
       },
     },
     created_at: {

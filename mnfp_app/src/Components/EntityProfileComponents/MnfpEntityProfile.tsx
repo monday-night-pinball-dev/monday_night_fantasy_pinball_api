@@ -69,6 +69,7 @@ export type ProfileFieldNumberCreateParams = {
 }
  
 export type FkLinkReadParams = {
+  displayKey: string; // Optional, if not provided, will use the propertyKey
   propertyKey: string;
   profileUrl: string;
 } 
@@ -80,7 +81,7 @@ export type ProfileFieldReadTypeAndParams = {
   type: ProfileFieldReadTypes.STRING 
 } | {
   type: ProfileFieldReadTypes.FK_LINK,
-  typeParams?: FkLinkReadParams
+  typeParams: FkLinkReadParams
 }
  
 export type ProfileFieldEditTypeAndParams = {
@@ -263,12 +264,7 @@ export const resolveEditType = (type: string) : ProfileFieldEditTypeAndParams =>
       return { type: ProfileFieldEditTypes.STRING};
   }
 }
-
-export const combineUniqueArrays = (...arrays: any) => {
-  const combinedArray = [].concat(...arrays);
-  return [...new Set(combinedArray)];
-}
-
+ 
 export const MnfpProfilePage : React.FC<ProfilePageParams> = ({
     mode,
     entityNameSingular,
@@ -367,11 +363,14 @@ export const MnfpProfilePage : React.FC<ProfilePageParams> = ({
  
         const params: FkLinkReadParams = {
           propertyKey: key,
-          profileUrl: columnDef.type.typeParams?.profileUrl || ''
+          profileUrl: columnDef.type.typeParams?.profileUrl || '',
+          displayKey: columnDef.type.typeParams?.displayKey || key, // Default to key if not provided
+
+          
         }
 
         return (
-            <FkLinkReadComponent propertyKey={key} title={columnDef.title} value={value} params={params}/>
+            <FkLinkReadComponent propertyKey={key} title={columnDef.title} value={value} params={params} displayValue="placeholder"/>
         )
       }
         
@@ -399,6 +398,7 @@ export const MnfpProfilePage : React.FC<ProfilePageParams> = ({
                 title={columnDef.title} 
                 existingValue={value} 
                 params={params}
+                isEnabled={columnDef.is_editable || false}
                 onChangeHandler={ProfileFieldValueChangedHandler}
             />
         )

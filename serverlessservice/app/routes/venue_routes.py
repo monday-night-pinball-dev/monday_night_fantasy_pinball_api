@@ -40,7 +40,7 @@ def set_venue_routes(app: FastAPI):
 
         return result
 
-    @app.patch("/users/{id}", response_model=VenueOutboundModel)
+    @app.patch("/venues/{id}", response_model=VenueOutboundModel)
     def patch_user(
         id: UUID4, inbound_update_model: VenueInboundUpdateModel, request: Request
     ) -> VenueOutboundModel | None:

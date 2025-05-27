@@ -67,13 +67,13 @@ class VenueManager:
 
         return result
 
-    def update_season(
+    def update_venue(
         self,
         id: UUID,
         model: VenueUpdateModel,
         request_operators: RequestOperators | None = None,
     ) -> VenueModel | None:
-        result = self.season_accessor.update(
+        result = self.venue_accessor.update(
             id=id, model=model, request_operators=request_operators
         )
 

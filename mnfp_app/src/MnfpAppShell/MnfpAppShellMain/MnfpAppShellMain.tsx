@@ -13,11 +13,21 @@ import AdminSeasonsPage from '@/Pages/AdminSeasonsPage/AdminSeasonsPage';
 import AdminFantasyTeamSeasonLinksPage from '@/Pages/AdminFantasyTeamSeasonLinksPage/AdminFantasyTeamSeasonLinksPage'; 
 import AdminLeaguePlayerFantasyTeamSeasonLinksPage from '@/Pages/AdminLeaguePlayerFantasyTeamSeasonLinksPage/AdminLeaguePlayerFantasyTeamSeasonLinkPages';
 import { Routes, Route } from 'react-router-dom';
-import { RouteNotFoundPage } from '../../Pages/RouteNotFoundPage/RouteNotFoundPage';  
-import { AdminSeasonProfilePage } from '@/Pages/AdminSeasonsPage/AdminSeasonProfilePage';
-import { AdminVenueProfilePage } from '@/Pages/AdminVenuesPage/AdminVenueProfilePage';
-import { AdminLeagueTeamProfilePage } from '@/Pages/AdminLeagueTeamsPage/AdminLeagueTeamProfilePage';
-import { ProfileModes } from '@/Components/EntityProfileComponents/MnfpEntityProfile';
+import { RouteNotFoundPage } from '../../Pages/RouteNotFoundPage/RouteNotFoundPage';    
+import { AdminSeasonProfileReadPage } from '@/Pages/AdminSeasonsPage/AdminSeasonProfileReadPage';
+import { AdminSeasonProfileEditPage } from '@/Pages/AdminSeasonsPage/AdminSeasonProfileEditPage';
+import {AdminLeagueTeamProfileEditPage} from '@/Pages/AdminLeagueTeamsPage/AdminLeagueTeamProfileEditPage';
+import { AdminVenueProfileReadPage } from '@/Pages/AdminVenuesPage/AdminVenueProfileReadPage';
+import { AdminLeagueTeamProfileReadPage } from '@/Pages/AdminLeagueTeamsPage/AdminLeagueTeamProfileReadPage';
+import { AdminVenueProfileEditPage } from '@/Pages/AdminVenuesPage/AdminVenueProfileEditPage';
+import { AdminLeaguePlayerProfileEditPage } from '@/Pages/AdminLeaguePlayersPage/AdminLeaguePlayerProfileEditPage';
+import { AdminLeaguePlayerProfileReadPage } from '@/Pages/AdminLeaguePlayersPage/AdminLeaguePlayerProfileReadPage';
+import { AdminFantasyLeagueProfileReadPage } from '@/Pages/AdminFantasyLeaguesPage/AdminFantasyLeagueProfileReadPage';
+import { AdminFantasyLeagueProfileEditPage } from '@/Pages/AdminFantasyLeaguesPage/AdminFantasyLeagueProfileEditPage';
+import { AdminUserProfileReadPage } from '@/Pages/AdminUsersPage/AdminUserProfileReadPage';
+import { AdminUserProfileEditPage } from '@/Pages/AdminUsersPage/AdminUserProfileEditPage';
+import { AdminFantasyTeamProfileReadPage } from '@/Pages/AdminFantasyTeamsPage/AdminFantasyTeamProfileReadPage';
+import { AdminFantasyTeamProfileEditPage } from '@/Pages/AdminFantasyTeamsPage/AdminFantasyTeamProfileEditPage';
  
 export function MnfpAppShellMain() { 
   return (
@@ -32,27 +42,33 @@ export function MnfpAppShellMain() {
         <Route path="/players" element={<PlayersPage/>} /> 
         <Route path="/admin/users" element={<AdminUsersPage/>} />
         <Route path="/admin/venues" element={<AdminVenuesPage/>} />
-        <Route path="/admin/leagueTeams" element={<AdminLeagueTeamsPage/>} />
-        <Route path="/admin/leaguePlayers" element={<AdminLeaguePlayersPage/>} />
-        <Route path="/admin/fantasyLeagues" element={<AdminFantasyLeaguesPage/>} />
-        <Route path="/admin/fantasyTeams" element={<AdminFantasyTeamsPage/>} /> 
+        <Route path="/admin/league_teams" element={<AdminLeagueTeamsPage/>} />
+        <Route path="/admin/league_players" element={<AdminLeaguePlayersPage/>} />
+        <Route path="/admin/fantasy_leagues" element={<AdminFantasyLeaguesPage/>} />
+        <Route path="/admin/fantasy_teams" element={<AdminFantasyTeamsPage/>} /> 
         <Route path="/admin/seasons" element={ <AdminSeasonsPage /> } />
-        <Route path="/admin/fantasyTeamSeasonLinks" element={ <AdminFantasyTeamSeasonLinksPage /> } />
-        <Route path="/admin/leaguePlayerFantasyTeamSeasonLinks" element={ <AdminLeaguePlayerFantasyTeamSeasonLinksPage /> } />
+        <Route path="/admin/fantasy_team_season_links" element={ <AdminFantasyTeamSeasonLinksPage /> } />
+        <Route path="/admin/league_player_fantasy_team_season_links" element={ <AdminLeaguePlayerFantasyTeamSeasonLinksPage /> } />
 
-        <Route path="/admin/venues/:id" element={<AdminVenueProfilePage mode={ProfileModes.READ}/>} />
-        <Route path="/admin/leagueTeams/:id" element={<AdminLeagueTeamProfilePage mode={ProfileModes.READ}/>} />
-        <Route path="/admin/leaguePlayers/:id" element={<AdminLeaguePlayersPage/>} />
-        <Route path="/admin/fantasyLeagues/:id" element={<AdminFantasyLeaguesPage/>} />
-        <Route path="/admin/fantasyTeams/:id" element={<AdminFantasyTeamsPage/>} />
-        <Route path="/admin/seasons/:id" element={<AdminSeasonProfilePage mode={ProfileModes.READ}/>} />
-        <Route path="/admin/fantasyTeamSeasonLinks/:id" element={<AdminFantasyTeamSeasonLinksPage/>} />
-        <Route path="/admin/leaguePlayerFantasyTeamSeasonLinks/:id" element={<AdminLeaguePlayerFantasyTeamSeasonLinksPage/>} />
-        <Route path="/admin/users/:id" element={<AdminUsersPage/>} /> 
+        <Route path="/admin/venues/:id" element={<AdminVenueProfileReadPage/>} />
+        <Route path="/admin/league_teams/:id" element={<AdminLeagueTeamProfileReadPage />} />
+        <Route path="/admin/league_players/:id" element={<AdminLeaguePlayerProfileReadPage/>} />
+        <Route path="/admin/fantasy_leagues/:id" element={<AdminFantasyLeagueProfileReadPage/>} />
+        <Route path="/admin/fantasy_teams/:id" element={<AdminFantasyTeamProfileReadPage/>} />
+        <Route path="/admin/seasons/:id" element={<AdminSeasonProfileReadPage />} />
+        <Route path="/admin/fantasy_team_season_links/:id" element={<AdminFantasyTeamSeasonLinksPage/>} />
+        <Route path="/admin/league_player_fantasy_team_season_links/:id" element={<AdminLeaguePlayerFantasyTeamSeasonLinksPage/>} />
+        <Route path="/admin/users/:id" element={<AdminUserProfileReadPage/>} /> 
 
-        <Route path="/admin/seasons/:id/edit" element={<AdminSeasonProfilePage mode={ProfileModes.EDIT}/>} />
-        <Route path="/admin/venues/:id/edit" element={<AdminVenueProfilePage mode={ProfileModes.EDIT}/>} />
-        <Route path="/admin/leagueTeams/:id/edit" element={<AdminLeagueTeamProfilePage mode={ProfileModes.EDIT}/>} />
+        <Route path="/admin/seasons/:id/edit" element={<AdminSeasonProfileEditPage />} />
+        <Route path="/admin/venues/:id/edit" element={<AdminVenueProfileEditPage />} />
+        <Route path="/admin/league_teams/:id/edit" element={<AdminLeagueTeamProfileEditPage />} />
+        <Route path="/admin/league_players/:id/edit" element={<AdminLeaguePlayerProfileEditPage/>} />
+        <Route path="/admin/fantasy_leagues/:id/edit" element={<AdminFantasyLeagueProfileEditPage/>} />  
+        <Route path="/admin/fantasy_teams/:id/edit" element={<AdminFantasyTeamProfileEditPage/>} />
+        <Route path="/admin/fantasy_team_season_links/:id/edit" element={<AdminFantasyTeamSeasonLinksPage/>} />
+        <Route path="/admin/league_player_fantasy_team_season_links/:id/edit" element={<AdminLeaguePlayerFantasyTeamSeasonLinksPage/>} />
+        <Route path="/admin/users/:id/edit" element={<AdminUserProfileEditPage/>} />
         
         {/* Add more routes as needed */}
       </Routes>

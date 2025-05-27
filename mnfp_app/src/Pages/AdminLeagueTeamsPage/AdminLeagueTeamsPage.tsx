@@ -11,7 +11,7 @@ export default function AdminLeagueTeamsPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: { 
         key: 'id',
-        profileUrl: '/admin/leagueTeams',
+        profileUrl: '/admin/league_teams',
       },  
       sortable: true,
     },  
@@ -50,7 +50,7 @@ export default function AdminLeagueTeamsPage() {
         columnTemplate={columnTemplate}
         defaultSortColumn="created_at"
         defaultSortDirection="desc" 
-        hydration={["venue"]}
+        hydration={["home_venue"]}
       />
     </div>
   );

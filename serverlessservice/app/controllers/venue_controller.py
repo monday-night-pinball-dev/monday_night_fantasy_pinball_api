@@ -89,7 +89,7 @@ class VenueController:
             )
         )
 
-        result = self.manager.update_season(id, model, request_operators)
+        result = self.manager.update_venue(id, model, request_operators)
 
         if result is None:
             raise HTTPException(

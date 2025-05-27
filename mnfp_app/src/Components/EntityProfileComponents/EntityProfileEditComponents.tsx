@@ -3,6 +3,7 @@
 import { Combobox, Input, InputBase, TextInput, useCombobox } from "@mantine/core"; 
 import { useEffect, useState } from "react";
 import classes from "./EntityProfileComponents.module.css";  
+import axios from "axios";
 
 export type FkLinkEditParams = {
   searchUrl: string; 
@@ -24,6 +25,7 @@ interface FkLinkEditComponentProps {
     title: string, 
     existingValue: string,
     params: FkLinkEditParams
+    isEnabled: boolean,
     onChangeHandler: (key: string, value: string, actualKey: string) => void
 }
 
@@ -70,22 +72,26 @@ export const FkLinkEditComponent: React.FC<FkLinkEditComponentProps> = ({
     title,
     existingValue,
     params,
+    isEnabled,
     onChangeHandler
 }) => { 
  
   const getAsyncData = async (existingValue? : string) => {
     const optionsArray: {id:string, name: string}[] = [];
 
+    console.log("getAsyncData called with existingValue:", existingValue);
+
     if(existingValue)
     {
         const retrieveUrl = new URL(`${import.meta.env.VITE_BASE_API_URL}${params.searchUrl}/${existingValue}`);
-        const retrieveResponse = await fetch(retrieveUrl);
+        const retrieveResponse = await axios.get(retrieveUrl.toString());
 
-        if(retrieveResponse.ok) {
-            const retrieveData = await retrieveResponse.json();
+        if(retrieveResponse.status === 200) { 
+            console.log("retrieveData.id:", retrieveResponse.data.id);
+
             optionsArray.push({
-                id: retrieveData["id"],
-                name: retrieveData[params.optionNameKey] 
+                id: retrieveResponse.data.id,
+                name: retrieveResponse.data[params.optionNameKey] 
             });
         }
     }
@@ -99,11 +105,9 @@ export const FkLinkEditComponent: React.FC<FkLinkEditComponentProps> = ({
         searchUrl.searchParams.set(params.searchKey, search);
     }
 
-    const response = await fetch(searchUrl);
-
-    const data = await response.json(); 
+    const response = await axios.get(searchUrl.toString());
   
-    data.items.forEach((item: Record<string,any>) => 
+    response.data.items.forEach((item: Record<string,any>) => 
         optionsArray.push({ 
             id: item["id"],
             name: item[params.optionNameKey]
@@ -155,6 +159,7 @@ export const FkLinkEditComponent: React.FC<FkLinkEditComponentProps> = ({
         </div>
         <div className={classes.entityProfileFieldBoxPropertyValueSection}> 
             <Combobox
+            disabled={!isEnabled}
             store={combobox}
             withinPortal={false}
             onOptionSubmit={(val) => {
@@ -171,7 +176,7 @@ export const FkLinkEditComponent: React.FC<FkLinkEditComponentProps> = ({
                 onClick={() => combobox.toggleDropdown()}
                 rightSectionPointerEvents="none"
                 >
-                {valueDisplay || <Input.Placeholder>Pick value</Input.Placeholder>}
+                {valueDisplay || <Input.Placeholder>------------</Input.Placeholder>}
                 </InputBase>
             </Combobox.Target>
 

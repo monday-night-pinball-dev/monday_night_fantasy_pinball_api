@@ -153,6 +153,10 @@ class PGConnection:
             request_operators=request_operators,
         )
 
+        print(
+            f"Executing SQL: {build_query_results.sql_string_and_parameters.sql_string}"
+        )
+
         try:
             self.cursor.execute(
                 build_query_results.sql_string_and_parameters.sql_string,
@@ -170,6 +174,9 @@ class PGConnection:
             raise
 
         colnames: list[str] = [desc[0] for desc in columns]
+
+        print(f"Column names for {table_name}: {colnames}")
+
         total_count_index = colnames.index("_count_")
 
         returnitemlist: SelectQueryResults = SelectQueryResults(

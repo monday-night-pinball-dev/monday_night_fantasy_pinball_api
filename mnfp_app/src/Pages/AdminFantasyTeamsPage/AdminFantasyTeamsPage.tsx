@@ -3,7 +3,7 @@ import { ColumnDefTemplateItem, ColumnTypes } from "@/Lib/tableFunctions";
 
 type ColumnDefTemplate = Record<string, ColumnDefTemplateItem> 
 
-export default function AdminLeagueTeamsPage() {
+export default function AdminFantasyTeamsPage() {
   const columnTemplate: ColumnDefTemplate = {
     
     name: {
@@ -11,7 +11,7 @@ export default function AdminLeagueTeamsPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: { 
         key: 'id',
-        profileUrl: '/league_teams',
+        profileUrl: '/admin/fantasy_teams',
       },  
       sortable: true,
     },  
@@ -21,7 +21,7 @@ export default function AdminLeagueTeamsPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: {
         key: 'owner_id',
-        profileUrl: '/users', 
+        profileUrl: '/admin/users', 
       },
     }, 
     "fantasy_league.name": {
@@ -29,7 +29,7 @@ export default function AdminLeagueTeamsPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: {
         key: 'fantasy_league_id',
-        profileUrl: '/fantasy_leagues', 
+        profileUrl: '/admin/fantasy_leagues', 
       },
     },
     created_at: {

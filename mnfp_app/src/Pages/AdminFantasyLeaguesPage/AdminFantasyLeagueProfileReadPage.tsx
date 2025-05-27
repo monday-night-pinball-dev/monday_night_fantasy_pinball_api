@@ -2,14 +2,13 @@ import {  useParams } from "react-router-dom";
 import { MnfpEntityReadProfile, ProfileReadTemplate } from "@/Components/EntityProfileComponents/MnfpEntityReadProfile";
      
 
-export const AdminSeasonProfileReadPage : React.FC = () => {
+export const AdminFantasyLeagueProfileReadPage : React.FC = () => {
      
   const { id } = useParams();  
    
 
   const profileTemplate: ProfileReadTemplate = new ProfileReadTemplate([
-      ['name', { title: 'Name' }],
-      ['season_number', { title: 'Season Number' }],
+      ['name', { title: 'Name' }], 
       ['created_at', { title: 'Created At' }], 
     ])
   
@@ -17,9 +16,9 @@ export const AdminSeasonProfileReadPage : React.FC = () => {
     <div>
       <MnfpEntityReadProfile 
         entityId={id || ''} 
-        entityApiName="seasons" 
-        entityNameSingular="Season"  
-        entityOutboundModelName="SeasonOutboundModel" 
+        entityApiName="fantasy_leagues" 
+        entityNameSingular="Fantasy League"  
+        entityOutboundModelName="FantasyLeagueOutboundModel" 
         profileFieldTemplate={profileTemplate}
         baseApiUrl={`${import.meta.env.VITE_BASE_API_URL}`}/>
     </div>

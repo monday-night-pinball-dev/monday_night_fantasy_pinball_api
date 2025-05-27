@@ -6,8 +6,6 @@ import { NavLink } from "react-router-dom";
 import classes from "./EntityProfileComponents.module.css";
 import { FkLinkReadParams } from "./MnfpEntityProfile";
 
- 
-
 interface DefaultReadComponentProps {
     propertyKey: string,
     title: string, 
@@ -18,6 +16,7 @@ interface FkLinkReadComponentProps {
     propertyKey: string,
     title: string, 
     value: string
+    displayValue: string,
     params: FkLinkReadParams
 }
 
@@ -42,6 +41,7 @@ export const FkLinkReadComponent: React.FC<FkLinkReadComponentProps> = ({
     propertyKey,
     title,
     value,
+    displayValue,
     params
 }) => { 
   return (
@@ -50,30 +50,38 @@ export const FkLinkReadComponent: React.FC<FkLinkReadComponentProps> = ({
             {title}:
         </div>
         <div className={classes.entityProfileFieldBoxPropertyValueSection}> 
+            {
+            value 
+            ? 
             <span>
-            <NavLink 
-                to={`${params.profileUrl}/${value}`}
-            >
-                {value}
-            </NavLink>    
-            { 
-                value &&
-                <CopyButton value={value}>
-                {({ copied, copy }) => (
-                    <Button 
-                    style={{ marginLeft: 5 }}   
-                    size='compact-xs' 
-                    color={copied ? 'teal' : 'blue'} 
-                    onClick={copy}
-                    variant="subtle"
-                    title="Copy id"
-                    >
-                    {copied ? <FaClipboard/> : <FaClipboard/>}
-                    </Button>
-                )}
-                </CopyButton> 
-            }
+                <NavLink 
+                    to={`${params.profileUrl}/${value}`}
+                >
+                    {displayValue}
+                </NavLink>    
+                { 
+                    value &&
+                    <CopyButton value={value}>
+                    {({ copied, copy }) => (
+                        <Button 
+                        style={{ marginLeft: 5 }}   
+                        size='compact-xs' 
+                        color={copied ? 'teal' : 'blue'} 
+                        onClick={copy}
+                        variant="subtle"
+                        title="Copy id"
+                        >
+                        {copied ? <FaClipboard/> : <FaClipboard/>}
+                        </Button>
+                    )}
+                    </CopyButton> 
+                }
             </span>
+            :
+            <span>
+                <label>------------</label>
+            </span>
+            }
         </div>
     </div>
   );  

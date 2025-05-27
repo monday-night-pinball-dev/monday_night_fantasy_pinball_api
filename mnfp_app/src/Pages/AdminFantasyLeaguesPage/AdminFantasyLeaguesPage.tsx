@@ -7,11 +7,11 @@ export default function AdminFantasyLeaguesPage() {
   const columnTemplate: ColumnDefTemplate = {
     
     name: {
-      title: 'Username',  
+      title: 'Name',  
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: { 
         key: 'id',
-        profileUrl: '/fantasy_leagues',
+        profileUrl: '/admin/fantasy_leagues',
       },  
       sortable: true,
     },  

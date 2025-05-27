@@ -24,13 +24,13 @@ export function MnfpAppShellNavBar() {
   const adminItems = [
     { link: '/admin/users' , label: 'Users', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
     { link: '/admin/venues' , label: 'Venues', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
-    { link: '/admin/leagueTeams' , label: 'League Teams', icon: <FaTableCellsRowLock className={classes.linkIcon} /> }, 
-    { link: '/admin/leaguePlayers' , label: 'League Players', icon: <FaTableCellsRowLock className={classes.linkIcon} /> }, 
-    { link: '/admin/fantasyLeagues' , label: 'Fantasy Leagues', icon: <FaTableCellsRowLock className={classes.linkIcon} /> }, 
-    { link: '/admin/fantasyTeams' , label: 'Fantasy Teams', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },  
+    { link: '/admin/league_teams' , label: 'League Teams', icon: <FaTableCellsRowLock className={classes.linkIcon} /> }, 
+    { link: '/admin/league_players' , label: 'League Players', icon: <FaTableCellsRowLock className={classes.linkIcon} /> }, 
+    { link: '/admin/fantasy_leagues' , label: 'Fantasy Leagues', icon: <FaTableCellsRowLock className={classes.linkIcon} /> }, 
+    { link: '/admin/fantasy_teams' , label: 'Fantasy Teams', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },  
     { link: '/admin/seasons' , label: 'Seasons', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
-    { link: '/admin/fantasyTeamSeasonLinks' , label: 'Fantasy Team Seasons', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
-    { link: '/admin/leaguePlayerFantasyTeamSeasonLinks' , label: 'League Player Fantasy Team Seasons', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
+    { link: '/admin/fantasy_team_season_links' , label: 'Fantasy Team Seasons', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
+    { link: '/admin/league_player_fantasy_team_season_links' , label: 'League Player Fantasy Team Seasons', icon: <FaTableCellsRowLock className={classes.linkIcon} /> },
   ]
 
   const links = items.map((item) => ( 

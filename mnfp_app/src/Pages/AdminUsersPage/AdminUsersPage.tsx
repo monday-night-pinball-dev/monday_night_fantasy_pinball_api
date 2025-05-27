@@ -13,7 +13,7 @@ export default function AdminVenuesPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: { 
         key: 'id',
-        profileUrl: '/users',
+        profileUrl: '/admin/users',
       },  
       sortable: true,
     },
@@ -26,7 +26,7 @@ export default function AdminVenuesPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: { 
         key: 'league_player_id',
-        profileUrl: '/league_players',
+        profileUrl: '/admin/league_players',
       }, 
     },
     created_at: {
