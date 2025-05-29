@@ -46,7 +46,8 @@ export default function AdminVenuesPage() {
       <h1>Admin Users</h1>
       <MnfpDataTable
         outboundModelName="UserOutboundModel"
-        entityUrl={`${import.meta.env.VITE_BASE_API_URL}/users`}
+        baseApiUrl={import.meta.env.VITE_BASE_API_URL}
+        entityApiName="users"
         columnTemplate={columnTemplate}
         defaultSortColumn="created_at"
         defaultSortDirection="desc"

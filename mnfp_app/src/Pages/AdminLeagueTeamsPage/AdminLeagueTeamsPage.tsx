@@ -46,7 +46,8 @@ export default function AdminLeagueTeamsPage() {
       <h1>Admin League Teams</h1>
       <MnfpDataTable
         outboundModelName="LeagueTeamOutboundModel"
-        entityUrl={`${import.meta.env.VITE_BASE_API_URL}/league_teams`}
+        baseApiUrl={import.meta.env.VITE_BASE_API_URL}
+        entityApiName="league_teams"
         columnTemplate={columnTemplate}
         defaultSortColumn="created_at"
         defaultSortDirection="desc" 

@@ -5,7 +5,7 @@ import axios, { AxiosResponse } from "axios";
 import { JSX, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { FaArrowLeft, FaClipboard } from "react-icons/fa6";  
-import { FkLinkReadComponent, DefaultReadComponent } from "./EntityProfileReadComponents";
+import { FkLinkReadComponent, DefaultReadComponent, FkLinkReadParams } from "./EntityProfileReadComponents";
  
 export enum ProfileFieldReadTypes {
   STRING = 'STRING',
@@ -22,12 +22,6 @@ export type ProfileFieldEnumOption = {
     displayName: string;
     value: string;
 }  
- 
-export type FkLinkReadParams = {
-  propertyKey: string;
-  profileUrl: string;
-  displayKey: string; // Optional, if not provided, will use the propertyKey
-} 
 
 export type ProfileFieldReadTypeAndParams = {
   type: ProfileFieldReadTypes.DATE,
@@ -57,6 +51,7 @@ export interface ProfileReadPageParams {
   baseApiUrl: string;
   entityOutboundModelName: string; 
   profileFieldTemplate: ProfileReadTemplate; 
+  hideEditButton?: boolean; 
 }
  
 export class ProfileReadTemplate extends Map<string, ProfileTemplateReadItem> {}
@@ -93,7 +88,8 @@ export const MnfpEntityReadProfile : React.FC<ProfileReadPageParams> = ({
     entityId,
     baseApiUrl,
     entityOutboundModelName, 
-    profileFieldTemplate
+    profileFieldTemplate,
+    hideEditButton
 }) => {
    
   function determinePropertyDefs(
@@ -253,12 +249,15 @@ export const MnfpEntityReadProfile : React.FC<ProfileReadPageParams> = ({
         </Button>
       </NavLink>
 
-      <NavLink to={`/admin/${entityApiName}/${entityId}/edit`}>
-        <Button color="blue" size="s">
-           Edit
-        </Button>
-      </NavLink>
-      
+      {
+        !hideEditButton && 
+        <NavLink to={`/admin/${entityApiName}/${entityId}/edit`}>
+          <Button color="blue" size="s">
+            Edit
+          </Button>
+        </NavLink>
+      }
+
       <div>
         Admin Profile Page for {entityNameSingular}: {entityId} 
           <CopyButton value={entityId!}>

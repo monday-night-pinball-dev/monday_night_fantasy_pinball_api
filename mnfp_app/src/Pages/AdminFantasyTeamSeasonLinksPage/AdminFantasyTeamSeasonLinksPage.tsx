@@ -11,7 +11,7 @@ export default function AdminFantasyTeamSeasonLinksPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: { 
         key: 'id',
-        profileUrl: '/fantasy_team_season_links',
+        profileUrl: '/admin/fantasy_team_season_links',
       },  
       sortable: true,
     },   
@@ -20,7 +20,7 @@ export default function AdminFantasyTeamSeasonLinksPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: {
         key: 'fantasy_team_id',
-        profileUrl: '/fantasy_teams', 
+        profileUrl: '/admin/fantasy_teams', 
       },
     },
     "season.name": {
@@ -28,7 +28,7 @@ export default function AdminFantasyTeamSeasonLinksPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: {
         key: 'seasons_id',
-        profileUrl: '/seasons', 
+        profileUrl: '/admin/seasons', 
       },
     },
     "fantasy_league.name": {
@@ -36,7 +36,7 @@ export default function AdminFantasyTeamSeasonLinksPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: {
         key: 'fantasy_league_id',
-        profileUrl: '/fantasy_leagues', 
+        profileUrl: '/admin/fantasy_leagues', 
       },
     },
     "fantasy_team_owner.name": {
@@ -44,7 +44,7 @@ export default function AdminFantasyTeamSeasonLinksPage() {
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: {
         key: 'fantasy_team_owner_id',
-        profileUrl: '/users', 
+        profileUrl: '/admin/users', 
       },
     },
     created_at: {
@@ -63,7 +63,8 @@ export default function AdminFantasyTeamSeasonLinksPage() {
       <h1>Admin Fantasy Team Season Links</h1>
       <MnfpDataTable
         outboundModelName="FantasyTeamSeasonLinkOutboundModel"
-        entityUrl={`${import.meta.env.VITE_BASE_API_URL}/fantasy_team_season_links`}
+        baseApiUrl={import.meta.env.VITE_BASE_API_URL} 
+        entityApiName="fantasy_team_season_links"
         columnTemplate={columnTemplate}
         defaultSortColumn="created_at"
         defaultSortDirection="desc" 

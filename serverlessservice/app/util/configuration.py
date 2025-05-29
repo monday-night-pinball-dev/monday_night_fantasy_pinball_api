@@ -99,6 +99,15 @@ class Configuration:
             password=self.DATABASE_PASSWORD,
         )
 
+    def setup_pg_connection_pool(self):
+        self.pg_connection.create_connection_pool(
+            host=self.DATABASE_HOST,
+            port=self.DATABASE_PORT,
+            database=self.DATABASE_NAME,
+            username=self.DATABASE_USERNAME,
+            password=self.DATABASE_PASSWORD,
+        )
+
 
 def get_global_configuration():
     return cast(Configuration, globals()["configuration"])

@@ -19,6 +19,8 @@ class Environment:
 
         self.configuration.setup_pg_connection()
 
+        self.configuration.setup_pg_connection_pool()
+
         print(
             f"Database Connection Created: {self.configuration.pg_connection.connection.get_dsn_parameters()['port']}"
         )

@@ -3,58 +3,36 @@
 import { Combobox, Input, InputBase, TextInput, useCombobox } from "@mantine/core"; 
 import { useEffect, useState } from "react";
 import classes from "./EntityProfileComponents.module.css";  
-import axios from "axios";
-import { resolveOptionNameHydration, resolveOptionNameValue } from "@/Lib/profileFunctions";
+import axios from "axios"; 
+import { resolveOptionNameHydration, resolveOptionNameValue } from "../../Lib/profileFunctions";
 
-export type ProfileFieldEnumOption = {
-    displayName: string;
-    value: string;
-}
-
-export type ProfileFieldEnumEditParams = {
-    options: ProfileFieldEnumOption[]
-} 
-
-export type ProfileFieldNumberEditParams = {
-  min?: number;
-  max?: number;
-  decimalPlaces?: number;
-  allowNegative?: boolean;
-}
-
-export type FkLinkEditParams = {
+export type FkLinkCreateParams = {
   searchUrl: string; 
   searchKey: string; 
   optionNameKeys: string[],
 }
 
-interface DefaultEditComponentProps {
+interface DefaultCreateComponentProps {
     itemKey: string,
     actualKey: string,
-    title: string, 
-    existingValue: string
-    isEnabled: boolean,
+    title: string,  
     onChangeHandler: (key: string, value: string, actualKey: string) => void
 }
 
-interface FkLinkEditComponentProps {
+interface FkLinkCreateComponentProps {
     itemKey: string,
-    title: string, 
-    existingValue: string,
-    params: FkLinkEditParams
-    isEnabled: boolean,
+    title: string,  
+    params: FkLinkCreateParams 
     onChangeHandler: (key: string, value: string, actualKey: string) => void
 }
 
-export const DefaultEditComponent: React.FC<DefaultEditComponentProps> = ({     
+export const DefaultCreateComponent: React.FC<DefaultCreateComponentProps> = ({     
     itemKey, 
-    title,
-    existingValue,
-    isEnabled,
+    title, 
     onChangeHandler
 }) => { 
 
-  const [value, setValue] = useState<string>(existingValue);
+  const [value, setValue] = useState<string>("");
   
 
   useEffect(() => { 
@@ -70,12 +48,9 @@ export const DefaultEditComponent: React.FC<DefaultEditComponentProps> = ({
             <TextInput
                 type="text" 
                 className={classes.entityProfileFieldBoxPropertyValueSectionTextArea}
-                value={value || ""}
-                disabled={!isEnabled}
-                readOnly={!isEnabled}
+                value={value || ""} 
                 style={{ resize: 'none' }}  
-                onChange={(e) => {
-                    console.log("value", e.target.value);
+                onChange={(e) => { 
                     setValue(e.target.value);
                 }}
             /> 
@@ -84,47 +59,28 @@ export const DefaultEditComponent: React.FC<DefaultEditComponentProps> = ({
   );  
 } 
 
-export const FkLinkEditComponent: React.FC<FkLinkEditComponentProps> = ({     
+export const FkLinkCreateComponent: React.FC<FkLinkCreateComponentProps> = ({     
     itemKey,
-    title,
-    existingValue,
-    params,
-    isEnabled,
+    title, 
+    params, 
     onChangeHandler
 }) => { 
- 
-  const getAsyncData = async (existingValue? : string) => {
-    const optionsArray: {id:string, name: string}[] = [];
-
-    console.log("getAsyncData called with existingValue:", existingValue);
-
     
-    const hydration = resolveOptionNameHydration(params.optionNameKeys);
-    
-    if(existingValue)
-    {
-        const retrieveUrl = new URL(`${import.meta.env.VITE_BASE_API_URL}${params.searchUrl}/${existingValue}`);
-        const retrieveResponse = await axios.get(retrieveUrl.toString(), hydration ? { headers: { 'MNFP-Hydration': hydration } } : {});
 
-        if(retrieveResponse.status === 200) { 
-            console.log("retrieveData.id:", retrieveResponse.data.id);
-
-            optionsArray.push({
-                id: retrieveResponse.data.id,
-                name: resolveOptionNameValue(retrieveResponse.data, params.optionNameKeys) || ""
-            });
-        }
-    }
-
+  const getAsyncData = async () => {
+    const optionsArray: { id: string, name: string }[] = [];
+   
     const searchUrl = new URL(`${import.meta.env.VITE_BASE_API_URL}${params.searchUrl}`);
-
+ 
     searchUrl.searchParams.set("page_length", "10");
     
     if(search)
     {
         searchUrl.searchParams.set(params.searchKey, search);
     }
-
+    
+    const hydration = resolveOptionNameHydration(params.optionNameKeys);
+    
     const response = await axios.get(searchUrl.toString(), hydration ? { headers: { 'MNFP-Hydration': hydration } } : {});
   
     response.data.items.forEach((item: Record<string,any>) => 
@@ -134,11 +90,7 @@ export const FkLinkEditComponent: React.FC<FkLinkEditComponentProps> = ({
         }
     ));
 
-    setOptions(optionsArray)
-
-    if(existingValue) {
-        setValue(existingValue);
-    } 
+    setOptions(optionsArray) 
   };
  
   const [value, setValue] = useState<string | null>(null);
@@ -159,7 +111,7 @@ export const FkLinkEditComponent: React.FC<FkLinkEditComponentProps> = ({
   });
   
   useEffect(() => { 
-    getAsyncData(existingValue);
+    getAsyncData();
   }, []);
 
   useEffect(() => { 
@@ -178,8 +130,7 @@ export const FkLinkEditComponent: React.FC<FkLinkEditComponentProps> = ({
             {title}:
         </div>
         <div className={classes.entityProfileFieldBoxPropertyValueSection}> 
-            <Combobox
-            disabled={!isEnabled}
+            <Combobox 
             store={combobox}
             withinPortal={false}
             onOptionSubmit={(val) => {

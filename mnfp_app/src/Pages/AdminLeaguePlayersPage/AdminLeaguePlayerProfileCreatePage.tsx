@@ -1,19 +1,19 @@
+import { MnfpEntityCreateProfile, ProfileCreateTemplate, ProfileFieldCreateTypes } from "@/Components/EntityProfileComponents/MnfpEntityCreateProfile";
 import {  useParams } from "react-router-dom"; 
-import { MnfpEntityEditProfile, ProfileEditTemplate, ProfileFieldEditTypes } from "@/Components/EntityProfileComponents/MnfpEntityEditProfile";
 
      
   
-export const AdminLeaguePlayerProfileEditPage : React.FC = () => {
+export const AdminLeaguePlayerProfileCreatePage : React.FC = () => {
       
   const { id } = useParams();  
      
-  const profileTemplate: ProfileEditTemplate = new ProfileEditTemplate([
+  const profileTemplate: ProfileCreateTemplate = new ProfileCreateTemplate([
       ['name', { title: 'Name' }],
       ['global_mnp_id', { title: 'MNP ID' }],
       ['league_team_id', {
          title: 'League Team', 
          typeOverride: {
-            type: ProfileFieldEditTypes.FK_LINK,
+            type: ProfileFieldCreateTypes.FK_LINK,
             typeParams: { 
               optionNameKeys: ['name'],
               searchKey: 'name_like',
@@ -21,19 +21,17 @@ export const AdminLeaguePlayerProfileEditPage : React.FC = () => {
         
             } 
           } 
-        }],
-      ['created_at', { title: 'Created At' }], 
+        }], 
     ])
   
   
   return (
     <div>
-      <MnfpEntityEditProfile  
+      <MnfpEntityCreateProfile  
         entityId={id || ''} 
         entityApiName="league_players" 
-        entityNameSingular="LeaguePlayer"   
-        entityInboundUpdateModelName="LeaguePlayerInboundUpdateModel"
-        
+        entityNameSingular="LeaguePlayer"    
+        entityInboundCreateModelName="LeaguePlayerInboundCreateModel"
         entityOutboundModelName="LeaguePlayerOutboundModel"  
         profileFieldTemplate={profileTemplate} 
         baseApiUrl={`${import.meta.env.VITE_BASE_API_URL}`}/>

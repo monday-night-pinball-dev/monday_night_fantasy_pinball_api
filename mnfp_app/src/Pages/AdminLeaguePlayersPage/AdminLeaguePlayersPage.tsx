@@ -41,8 +41,9 @@ export default function AdminLeaguePlayersPage() {
     <div>
       <h1>Admin League Players</h1>
       <MnfpDataTable
-        outboundModelName="LeaguePlayerOutboundModel"
-        entityUrl={`${import.meta.env.VITE_BASE_API_URL}/league_players`}
+        outboundModelName="LeaguePlayerOutboundModel" 
+        baseApiUrl={import.meta.env.VITE_BASE_API_URL}
+        entityApiName="league_players"
         columnTemplate={columnTemplate}
         defaultSortColumn="created_at"
         defaultSortDirection="desc" 

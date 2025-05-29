@@ -1,6 +1,5 @@
-import {  useParams } from "react-router-dom"; 
-import { ProfileFieldReadTypes } from "@/Components/EntityProfileComponents/MnfpEntityProfile";
-import { MnfpEntityReadProfile, ProfileReadTemplate } from "@/Components/EntityProfileComponents/MnfpEntityReadProfile";
+import {  useParams } from "react-router-dom";  
+import { MnfpEntityReadProfile, ProfileFieldReadTypes, ProfileReadTemplate } from "@/Components/EntityProfileComponents/MnfpEntityReadProfile";
  
 export const AdminUserProfileReadPage : React.FC = () => {
       

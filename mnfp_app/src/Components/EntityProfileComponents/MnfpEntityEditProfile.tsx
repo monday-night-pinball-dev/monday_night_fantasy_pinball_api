@@ -5,7 +5,7 @@ import axios from "axios";
 import { JSX, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { FaClipboard } from "react-icons/fa6"; 
-import { DefaultEditComponent, FkLinkEditComponent, FkLinkEditParams } from "./EntityProfileEditComponents";
+import { DefaultEditComponent, FkLinkEditComponent, FkLinkEditParams, ProfileFieldEnumEditParams, ProfileFieldNumberEditParams } from "./EntityProfileEditComponents";
 
 export enum ProfileFieldEditTypes {
   STRING = 'STRING',
@@ -15,21 +15,8 @@ export enum ProfileFieldEditTypes {
   NUMBER = 'NUMBER',
 }
    
-export type ProfileFieldEnumOption = {
-    displayName: string;
-    value: string;
-}
 
-export type ProfileFieldEnumEditParams = {
-    options: ProfileFieldEnumOption[]
-} 
 
-export type ProfileFieldNumberEditParams = {
-  min?: number;
-  max?: number;
-  decimalPlaces?: number;
-  allowNegative?: boolean;
-}
    
 export type ProfileFieldEditTypeAndParams = {
   type: ProfileFieldEditTypes.DATE 
@@ -164,7 +151,7 @@ export const MnfpEntityEditProfile : React.FC<ProfilePageEditParams> = ({
   
       if(columnDef?.type.type === ProfileFieldEditTypes.FK_LINK) {
         const params: FkLinkEditParams = { 
-            optionNameKey: columnDef.type.typeParams?.optionNameKey || '', 
+            optionNameKeys: columnDef.type.typeParams?.optionNameKeys || [], 
             searchKey: columnDef.type.typeParams?.searchKey || '',
             searchUrl: columnDef.type.typeParams?.searchUrl || '', 
         }

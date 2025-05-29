@@ -1,7 +1,7 @@
 import datetime
 
 from requests import Response
-from tests.qdk.qa_requests import qa_get, qa_patch, qa_post
+from tests.qdk.qa_requests import qa_get, qa_post
 from tests.qdk.types import (
     PagedResponseItemList,
     PagingResponseModel,

@@ -1,8 +1,6 @@
 import { MnfpDataTable } from "@/Components/MnfpDataTable";
 import { ColumnDefTemplateItem, ColumnTypes } from "@/Lib/tableFunctions";
 
- 
-
 type ColumnDefTemplate = Record<string, ColumnDefTemplateItem> 
 
 export default function AdminVenuesPage() {
@@ -33,7 +31,8 @@ export default function AdminVenuesPage() {
       <h1>Admin Venues</h1>
       <MnfpDataTable
         outboundModelName="VenueOutboundModel"
-        entityUrl={`${import.meta.env.VITE_BASE_API_URL}/venues`}
+        baseApiUrl={import.meta.env.VITE_BASE_API_URL}
+        entityApiName="venues"
         columnTemplate={columnTemplate}
         defaultSortColumn="created_at"
         defaultSortDirection="desc"

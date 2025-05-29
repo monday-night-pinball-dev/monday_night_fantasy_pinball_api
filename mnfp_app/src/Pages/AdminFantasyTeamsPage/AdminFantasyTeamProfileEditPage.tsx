@@ -1,6 +1,5 @@
-import {  useParams } from "react-router-dom"; 
-import {  ProfileFieldEditTypes } from "@/Components/EntityProfileComponents/MnfpEntityProfile";
-import { MnfpEntityEditProfile, ProfileEditTemplate } from "@/Components/EntityProfileComponents/MnfpEntityEditProfile";
+import {  useParams } from "react-router-dom";  
+import { MnfpEntityEditProfile, ProfileEditTemplate, ProfileFieldEditTypes } from "@/Components/EntityProfileComponents/MnfpEntityEditProfile";
 
      
  
@@ -15,7 +14,7 @@ export const AdminFantasyTeamProfileEditPage : React.FC = () => {
         typeOverride: {
           type: ProfileFieldEditTypes.FK_LINK,
           typeParams: {
-            optionNameKey: 'name',
+            optionNameKeys: ['name'],
             searchKey: 'name_like',
             searchUrl: '/users',
           } 
@@ -26,7 +25,7 @@ export const AdminFantasyTeamProfileEditPage : React.FC = () => {
         typeOverride: {
           type: ProfileFieldEditTypes.FK_LINK,
           typeParams: {
-            optionNameKey: 'name',
+            optionNameKeys: ['name'],
             searchKey: 'name_like',
             searchUrl: '/fantasy_leagues',
           } 

@@ -36,7 +36,8 @@ export default function AdminSeasonsPage() {
       <h1>Admin Seasons</h1>
       <MnfpDataTable
         outboundModelName="SeasonOutboundModel"
-        entityUrl={`${import.meta.env.VITE_BASE_API_URL}/seasons`}
+        baseApiUrl={import.meta.env.VITE_BASE_API_URL}
+        entityApiName="seasons"
         columnTemplate={columnTemplate}
         defaultSortColumn="created_at"
         defaultSortDirection="desc"

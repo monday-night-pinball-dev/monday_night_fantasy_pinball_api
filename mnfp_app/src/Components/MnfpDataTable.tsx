@@ -1,12 +1,15 @@
 /* eslint-disable dot-notation */
 import { ColumnDefTemplateItem, determineColumnDefs } from '@/Lib/tableFunctions';
+import { Button } from '@mantine/core';
 import axios from 'axios'; 
 import { DataTable, DataTableColumn, DataTableSortStatus } from 'mantine-datatable';
 import { useEffect, useState } from 'react'; 
+import { NavLink } from 'react-router-dom';
 
 interface MnfpDataTableProps {
-    outboundModelName: string,
-    entityUrl: string,
+    outboundModelName: string, 
+    baseApiUrl : string,
+    entityApiName: string,
     columnTemplate : Record<string, ColumnDefTemplateItem>,
     defaultSortColumn: string,
     defaultSortDirection: "asc" | "desc" ,
@@ -15,7 +18,8 @@ interface MnfpDataTableProps {
 
 export const MnfpDataTable: React.FC<MnfpDataTableProps> = ({
     outboundModelName,
-    entityUrl,
+    baseApiUrl,
+    entityApiName,
     columnTemplate,
     defaultSortColumn,
     defaultSortDirection,
@@ -26,7 +30,7 @@ export const MnfpDataTable: React.FC<MnfpDataTableProps> = ({
 
         const isDescending = sortStatusIn.direction === 'desc' ? 'true' : 'false';
 
-        const response = await axios.get(`${entityUrl}?page=${pageIn}&page_length=${pageSizeIn}&sort_by=${String(sortStatusIn.columnAccessor)}&is_sort_descending=${isDescending}`, {
+        const response = await axios.get(`${baseApiUrl}/${entityApiName}?page=${pageIn}&page_length=${pageSizeIn}&sort_by=${String(sortStatusIn.columnAccessor)}&is_sort_descending=${isDescending}`, {
             headers: {
                 'MNFP-Hydration': hydration?.join(","),
             }
@@ -86,34 +90,43 @@ export const MnfpDataTable: React.FC<MnfpDataTableProps> = ({
   
   return (
     <div>
-       <DataTable
-          height={300}
-          withTableBorder
-          withRowBorders
-          paginationWithControls
-          paginationWithEdges
-          withColumnBorders
-          records={records}
-          columns={columns}
-          totalRecords={totalRecords}
-          recordsPerPage={pageSize}
-          page={page}
-          recordsPerPageOptions={[5, 10, 15, 20, 25]}
-          onSortStatusChange={(val: DataTableSortStatus) => { 
-              fetchTableData(page, pageSize, val);
-          }}
-          sortStatus={sortStatus} 
-          onPageChange={
-            (val: number) => { 
-              fetchTableData(val, pageSize, sortStatus);
-            }
-          } 
-          onRecordsPerPageChange={
-            (val: number) => { 
-              fetchTableData(page, val, sortStatus);
-            }
-          } 
-        /> 
+      <div  style={{float:'right'}}>
+        <NavLink to={`/admin/${entityApiName}/new`} className="btn btn-primary">
+          <Button variant="filled" color="blue">
+            Create
+          </Button>
+        </NavLink>
+      </div>
+      <div style={{clear: 'both'}}>
+        <DataTable
+            height={300}
+            withTableBorder
+            withRowBorders
+            paginationWithControls
+            paginationWithEdges
+            withColumnBorders
+            records={records}
+            columns={columns}
+            totalRecords={totalRecords}
+            recordsPerPage={pageSize}
+            page={page}
+            recordsPerPageOptions={[5, 10, 15, 20, 25]}
+            onSortStatusChange={(val: DataTableSortStatus) => { 
+                fetchTableData(page, pageSize, val);
+            }}
+            sortStatus={sortStatus} 
+            onPageChange={
+              (val: number) => { 
+                fetchTableData(val, pageSize, sortStatus);
+              }
+            } 
+            onRecordsPerPageChange={
+              (val: number) => { 
+                fetchTableData(page, val, sortStatus);
+              }
+            } 
+          /> 
+      </div>
     </div>
   );
 }

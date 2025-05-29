@@ -15,7 +15,7 @@ export const AdminUserProfileEditPage : React.FC = () => {
          typeOverride: {
             type: ProfileFieldEditTypes.FK_LINK,
             typeParams: { 
-              optionNameKey: 'name',
+              optionNameKeys: ['name'],
               searchKey: 'name_like',
               searchUrl: '/league_players',
         

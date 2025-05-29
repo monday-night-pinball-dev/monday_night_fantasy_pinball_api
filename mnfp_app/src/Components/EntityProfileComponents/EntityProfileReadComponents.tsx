@@ -3,8 +3,14 @@
 import { Button, CopyButton } from "@mantine/core";
 import { FaClipboard } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import classes from "./EntityProfileComponents.module.css";
-import { FkLinkReadParams } from "./MnfpEntityProfile";
+import classes from "./EntityProfileComponents.module.css"; 
+
+ 
+export type FkLinkReadParams = {
+  propertyKey: string;
+  profileUrl: string;
+  displayKey: string; // Optional, if not provided, will use the propertyKey
+} 
 
 interface DefaultReadComponentProps {
     propertyKey: string,
