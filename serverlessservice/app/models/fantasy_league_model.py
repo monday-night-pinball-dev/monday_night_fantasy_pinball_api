@@ -15,12 +15,12 @@ from models.common_model import (
 
 # Pydantic causes these class variables to safely be instance variables.
 class FantasyLeagueInboundCreateModel(BaseModel):
-    name: str = Field(..., max_length=64)
+    name: str = Field(..., strip_whitespace=True, min_length=1, max_length=64)
 
 
 # Pydantic causes these class variables to safely be instance variables.
 class FantasyLeagueInboundUpdateModel(BaseModel):
-    name: str = Field(..., max_length=64)
+    name: str = Field(..., strip_whitespace=True, min_length=1, max_length=64)
 
 
 # Pydantic causes these class variables to safely be instance variables.

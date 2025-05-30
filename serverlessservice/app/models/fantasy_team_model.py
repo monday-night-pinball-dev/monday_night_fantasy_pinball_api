@@ -23,12 +23,14 @@ from models.user_model import UserModel, UserOutboundModel
 class FantasyTeamInboundCreateModel(BaseModel):
     owner_id: Annotated[UUID4, Strict(False)] = Field(...)
     fantasy_league_id: Annotated[UUID4, Strict(False)] = Field(...)
-    name: str = Field(..., max_length=64)
+    name: str = Field(..., strip_whitespace=True, min_length=1, max_length=64)
 
 
 # Pydantic causes these class variables to safely be instance variables.
 class FantasyTeamInboundUpdateModel(BaseModel):
-    name: Optional[str] = Field(default=None, max_length=64)
+    name: Optional[str] = Field(
+        default=None, strip_whitespace=True, min_length=1, max_length=64
+    )
     owner_id: Optional[Annotated[UUID4, Strict(False)]] = Field(
         default=None,
     )

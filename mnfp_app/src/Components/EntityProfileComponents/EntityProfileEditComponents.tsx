@@ -34,6 +34,7 @@ interface DefaultEditComponentProps {
     title: string, 
     existingValue: string
     isEnabled: boolean,
+    error: string | undefined,
     onChangeHandler: (key: string, value: string, actualKey: string) => void
 }
 
@@ -43,6 +44,7 @@ interface FkLinkEditComponentProps {
     existingValue: string,
     params: FkLinkEditParams
     isEnabled: boolean,
+    error: string | undefined,
     onChangeHandler: (key: string, value: string, actualKey: string) => void
 }
 
@@ -51,6 +53,7 @@ export const DefaultEditComponent: React.FC<DefaultEditComponentProps> = ({
     title,
     existingValue,
     isEnabled,
+    error,
     onChangeHandler
 }) => { 
 
@@ -74,11 +77,13 @@ export const DefaultEditComponent: React.FC<DefaultEditComponentProps> = ({
                 disabled={!isEnabled}
                 readOnly={!isEnabled}
                 style={{ resize: 'none' }}  
-                onChange={(e) => {
-                    console.log("value", e.target.value);
+                onChange={(e) => { 
                     setValue(e.target.value);
                 }}
             /> 
+        </div>
+        <div>
+            { error && <span className={`${classes.errorText}`}>{error}</span> }
         </div>
     </div>
   );  
@@ -95,10 +100,7 @@ export const FkLinkEditComponent: React.FC<FkLinkEditComponentProps> = ({
  
   const getAsyncData = async (existingValue? : string) => {
     const optionsArray: {id:string, name: string}[] = [];
-
-    console.log("getAsyncData called with existingValue:", existingValue);
-
-    
+ 
     const hydration = resolveOptionNameHydration(params.optionNameKeys);
     
     if(existingValue)
@@ -107,8 +109,7 @@ export const FkLinkEditComponent: React.FC<FkLinkEditComponentProps> = ({
         const retrieveResponse = await axios.get(retrieveUrl.toString(), hydration ? { headers: { 'MNFP-Hydration': hydration } } : {});
 
         if(retrieveResponse.status === 200) { 
-            console.log("retrieveData.id:", retrieveResponse.data.id);
-
+          
             optionsArray.push({
                 id: retrieveResponse.data.id,
                 name: resolveOptionNameValue(retrieveResponse.data, params.optionNameKeys) || ""

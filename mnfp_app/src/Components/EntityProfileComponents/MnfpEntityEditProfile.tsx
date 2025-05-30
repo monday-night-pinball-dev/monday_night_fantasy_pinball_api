@@ -1,11 +1,11 @@
 
 
-import { Button, CopyButton, Grid } from "@mantine/core";
-import axios from "axios";
+import { Button, CopyButton, Grid } from "@mantine/core"; 
 import { JSX, useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { FaClipboard } from "react-icons/fa6"; 
 import { DefaultEditComponent, FkLinkEditComponent, FkLinkEditParams, ProfileFieldEnumEditParams, ProfileFieldNumberEditParams } from "./EntityProfileEditComponents";
+import { uiaxios } from "@/Lib/uiaxios";
 
 export enum ProfileFieldEditTypes {
   STRING = 'STRING',
@@ -163,6 +163,7 @@ export const MnfpEntityEditProfile : React.FC<ProfilePageEditParams> = ({
                 existingValue={value} 
                 params={params}
                 isEnabled={columnDef.is_editable || false}
+                error={profileFieldErrors[key]}
                 onChangeHandler={ProfileFieldValueChangedHandler}
             />
         )
@@ -175,6 +176,7 @@ export const MnfpEntityEditProfile : React.FC<ProfilePageEditParams> = ({
           title={columnDef.title} 
           existingValue={value} 
           isEnabled={columnDef.is_editable || false}
+          error={profileFieldErrors[key]}
           onChangeHandler={ProfileFieldValueChangedHandler}
         />
       )
@@ -182,7 +184,7 @@ export const MnfpEntityEditProfile : React.FC<ProfilePageEditParams> = ({
 
  
 
-  async function renderProfileFields(entity: any) {
+  async function renderProfileFields() {
      
     const kvps = profileFieldDefs ? Array.from(profileFieldDefs.entries()) : []
     const elements = kvps.map((kvp: any) => { 
@@ -192,7 +194,7 @@ export const MnfpEntityEditProfile : React.FC<ProfilePageEditParams> = ({
         
         <Grid.Col span={{ base: 12, md: 6, lg: 4, sm: 12 }} key={key}>
           <div>
-            {renderSingleEditProfileField(key, entity[key], def)}
+            {renderSingleEditProfileField(key, entity?.[key], def)}
           </div> 
         </Grid.Col>  
       );
@@ -204,7 +206,7 @@ export const MnfpEntityEditProfile : React.FC<ProfilePageEditParams> = ({
 
   async function fetchEntityData() {
  
-    const schema = await axios.get(`${import.meta.env.VITE_BASE_API_URL}/openapi.json`);
+    const schema = await uiaxios.get(`${import.meta.env.VITE_BASE_API_URL}/openapi.json`, {});
    
     const profileFields = determinePropertyDefs(
         schema.data, 
@@ -214,7 +216,7 @@ export const MnfpEntityEditProfile : React.FC<ProfilePageEditParams> = ({
     );
 
     const entityUrl = `${baseApiUrl}/${entityApiName}/${entityId}`;
-    const response = await axios.get(entityUrl);
+    const response = await uiaxios.get(entityUrl, {});
 
     setProfileFieldDefs(profileFields);
     setEntity(response.data);
@@ -225,19 +227,46 @@ export const MnfpEntityEditProfile : React.FC<ProfilePageEditParams> = ({
       return;
     }
 
-    renderProfileFields(entity) 
+    renderProfileFields() 
   }
 
   async function sendUpdateToApi() { 
     const updateUrl = `${baseApiUrl}/${entityApiName?.toLocaleLowerCase()}/${entityId}`;
-    const response = await axios.patch(updateUrl || '', ProfileFieldValues);
-    setEntity(response.data);
+    const response = await uiaxios.patch(updateUrl || '', ProfileFieldValues, {});
+      
+    if(response.status === 200) { 
+      navigate(`/admin/${entityApiName}/${response.data.id}`);
+    }
+    else
+    {
+      const errorsRecord : Record<string,string>= {}
+
+      if(response.status === 422) {
+        const errors = response.data.detail;
+
+        errors.forEach((error: any) => {
+          const errorLocation = error.loc[1]
+          errorsRecord[errorLocation] = error.msg;
+          
+        });
+      
+      }
+      else {
+        console.error('Error creating entity:', response);
+      }
+
+      setProfileFieldErrors(errorsRecord); // Trigger re-render with errors 
+      setEntity(response.data);
+    }
   }
+  
    
+  const navigate = useNavigate();
   const [entity, setEntity] = useState();
   const [ProfileFields, setProfileFields] = useState<(JSX.Element | undefined)[]>();
   const [profileFieldDefs, setProfileFieldDefs] = useState<ProfileFieldEditDefs>();    
   const [ProfileFieldValues] = useState<Record<string, any>>({});
+  const [profileFieldErrors, setProfileFieldErrors] = useState<Record<string, string>>({});
      
   useEffect(() => { 
     fetchEntityData() 
@@ -246,6 +275,12 @@ export const MnfpEntityEditProfile : React.FC<ProfilePageEditParams> = ({
   useEffect(() => {
     handleEntityChanged();
   }, [entity])
+
+  useEffect(() => {
+    if(profileFieldDefs) {
+      renderProfileFields();
+    }
+  }, [profileFieldDefs, profileFieldErrors]);
  
   return (
     <div>
@@ -284,17 +319,15 @@ export const MnfpEntityEditProfile : React.FC<ProfilePageEditParams> = ({
                 Cancel
               </Button>
             </NavLink>
-
-            <NavLink to={`/admin/${entityApiName}/${entityId}`}>
-              <Button
-                  onClick={() => {
-                    sendUpdateToApi()
-                  }
+ 
+            <Button
+                onClick={() => {
+                  sendUpdateToApi()
                 }
-                color="blue" size="s" style={{ marginLeft: 5 }}>
-                Save Changes
-              </Button>
-            </NavLink>
+              }
+              color="blue" size="s" style={{ marginLeft: 5 }}>
+              Save Changes
+            </Button> 
           </span>
        
       </div>

@@ -90,15 +90,6 @@ class Configuration:
         self.DATABASE_NAME = os.getenv("DATABASE_NAME") or ""
         self.STAGE = os.getenv("STAGE") or ""
 
-    def setup_pg_connection(self):
-        self.pg_connection.create_connection(
-            host=self.DATABASE_HOST,
-            port=self.DATABASE_PORT,
-            database=self.DATABASE_NAME,
-            username=self.DATABASE_USERNAME,
-            password=self.DATABASE_PASSWORD,
-        )
-
     def setup_pg_connection_pool(self):
         self.pg_connection.create_connection_pool(
             host=self.DATABASE_HOST,

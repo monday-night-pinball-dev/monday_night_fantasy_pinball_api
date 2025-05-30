@@ -21,18 +21,22 @@ from models.venue_model import (
 # Pydantic causes these class variables to safely be instance variables.
 class LeagueTeamInboundCreateModel(BaseModel):
     home_venue_id: Annotated[UUID4, Strict(False)] = Field(...)
-    short_name: str = Field(..., max_length=3)
-    name: str = Field(..., max_length=64)
+    short_name: str = Field(..., strip_whitespace=True, min_length=1, max_length=3)
+    name: str = Field(..., strip_whitespace=True, min_length=1, max_length=64)
     global_mnp_id: Annotated[UUID4, Strict(False)] = Field(...)
 
 
 # Pydantic causes these class variables to safely be instance variables.
 class LeagueTeamInboundUpdateModel(BaseModel):
-    name: Optional[str] = Field(default=None, max_length=64)
+    name: Optional[str] = Field(
+        default=None, strip_whitespace=True, min_length=1, max_length=64
+    )
     home_venue_id: Optional[Annotated[UUID4, Strict(False)]] = Field(
         default=None,
     )
-    short_name: Optional[str] = Field(default=None, max_length=3)
+    short_name: Optional[str] = Field(
+        default=None, strip_whitespace=True, min_length=1, max_length=3
+    )
 
 
 # Pydantic causes these class variables to safely be instance variables.

@@ -14,21 +14,23 @@ export type FkLinkCreateParams = {
 
 interface DefaultCreateComponentProps {
     itemKey: string,
-    actualKey: string,
     title: string,  
+    error: string | undefined,
     onChangeHandler: (key: string, value: string, actualKey: string) => void
 }
 
 interface FkLinkCreateComponentProps {
     itemKey: string,
     title: string,  
-    params: FkLinkCreateParams 
+    params: FkLinkCreateParams,
+    error: string | undefined,
     onChangeHandler: (key: string, value: string, actualKey: string) => void
 }
 
 export const DefaultCreateComponent: React.FC<DefaultCreateComponentProps> = ({     
     itemKey, 
     title, 
+    error,
     onChangeHandler
 }) => { 
 
@@ -55,6 +57,9 @@ export const DefaultCreateComponent: React.FC<DefaultCreateComponentProps> = ({
                 }}
             /> 
         </div>
+        <div>
+            {error && <span className={`${classes.errorText}`}>{error}</span>}
+        </div>
     </div>
   );  
 } 
@@ -63,6 +68,7 @@ export const FkLinkCreateComponent: React.FC<FkLinkCreateComponentProps> = ({
     itemKey,
     title, 
     params, 
+    error,
     onChangeHandler
 }) => { 
     
@@ -170,6 +176,9 @@ export const FkLinkCreateComponent: React.FC<FkLinkCreateComponentProps> = ({
                 </Combobox.Options>
             </Combobox.Dropdown>
             </Combobox>
+        </div>
+        <div>
+            {error && <span className={`${classes.errorText}`}>{error}</span>}
         </div>
     </div>
   );

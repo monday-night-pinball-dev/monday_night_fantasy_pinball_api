@@ -19,13 +19,15 @@ from models.league_team_model import LeagueTeamModel, LeagueTeamOutboundModel
 class LeaguePlayerInboundCreateModel(BaseModel):
     league_team_id: Optional[Annotated[UUID4, Strict(False)]] = Field(default=None)
     global_mnp_id: Annotated[UUID4, Strict(False)] = Field(...)
-    name: str = Field(..., max_length=255)
+    name: str = Field(..., strip_whitespace=True, min_length=1, max_length=255)
 
 
 # Pydantic causes these class variables to safely be instance variables.
 class LeaguePlayerInboundUpdateModel(BaseModel):
     league_team_id: Optional[Annotated[UUID4, Strict(False)]] = Field(default=None)
-    name: Optional[str] = Field(default=None, max_length=255)
+    name: Optional[str] = Field(
+        default=None, strip_whitespace=True, min_length=1, max_length=255
+    )
 
 
 # Pydantic causes these class variables to safely be instance variables.

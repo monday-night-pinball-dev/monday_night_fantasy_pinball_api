@@ -72,6 +72,7 @@ class PGConnection:
             raise e
         finally:
             conn.close()
+            self.pool.putconn(conn)
 
     def execute_command_with_results(self, sqlstring: str) -> list[tuple[Any, ...]]:
         conn = self.pool.getconn()
@@ -90,6 +91,7 @@ class PGConnection:
             raise e
         finally:
             conn.close()
+            self.pool.putconn(conn)
 
     def insert(
         self,
@@ -131,6 +133,7 @@ class PGConnection:
 
         finally:
             conn.close()
+            self.pool.putconn(conn)
 
     def select_by_id(
         self,
@@ -170,6 +173,7 @@ class PGConnection:
 
         finally:
             conn.close()
+            self.pool.putconn(conn)
 
     def select(
         self,
@@ -231,6 +235,7 @@ class PGConnection:
             raise e
         finally:
             conn.close()
+            self.pool.putconn(conn)
 
     def update(
         self,
@@ -291,6 +296,7 @@ class PGConnection:
             raise e
         finally:
             conn.close()
+            self.pool.putconn(conn)
 
     def delete(
         self,
@@ -331,6 +337,7 @@ class PGConnection:
             raise e
         finally:
             conn.close()
+            self.pool.putconn(conn)
 
     def build_insert_query(
         self,

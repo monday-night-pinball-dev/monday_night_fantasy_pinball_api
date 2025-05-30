@@ -15,3 +15,9 @@
   height: '20px';
   margin: '0px 2px 0px 2px' 
 }
+
+.errorText
+{
+  color: 'red'; 
+  margin: '0px 2px 0px 2px';
+}

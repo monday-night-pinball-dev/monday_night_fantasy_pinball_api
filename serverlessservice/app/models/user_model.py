@@ -19,13 +19,15 @@ from models.league_player_model import LeaguePlayerModel, LeaguePlayerOutboundMo
 # Pydantic causes these class variables to safely be instance variables.
 class UserInboundCreateModel(BaseModel):
     league_player_id: Optional[Annotated[UUID4, Strict(False)]] = Field(default=None)
-    name: str = Field(..., max_length=255)
-    username: EmailStr = Field(..., max_length=320)
+    name: str = Field(..., strip_whitespace=True, min_length=1, max_length=255)
+    username: EmailStr = Field(..., strip_whitespace=True, min_length=1, max_length=320)
 
 
 # Pydantic causes these class variables to safely be instance variables.
 class UserInboundUpdateModel(BaseModel):
-    name: Optional[str] = Field(default=None, max_length=255)
+    name: Optional[str] = Field(
+        default=None, strip_whitespace=True, min_length=1, max_length=255
+    )
 
 
 # Pydantic causes these class variables to safely be instance variables.

@@ -14,14 +14,16 @@ from models.common_model import (
 
 # Pydantic causes these class variables to safely be instance variables.
 class SeasonInboundCreateModel(BaseModel):
-    name: str = Field(..., max_length=255)
+    name: str = Field(..., strip_whitespace=True, min_length=1, max_length=255)
     season_number: int = Field(...)
 
     # Pydantic causes these class variables to safely be instance variables.
 
 
 class SeasonInboundUpdateModel(BaseModel):
-    name: Optional[str] = Field(default=None, max_length=255)
+    name: Optional[str] = Field(
+        default=None, strip_whitespace=True, min_length=1, max_length=255
+    )
 
 
 # Pydantic causes these class variables to safely be instance variables.

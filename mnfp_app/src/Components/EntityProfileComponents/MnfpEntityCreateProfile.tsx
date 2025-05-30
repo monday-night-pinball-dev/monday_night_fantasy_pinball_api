@@ -1,11 +1,12 @@
 
 
-import { Button, CopyButton, Grid } from "@mantine/core";
-import axios from "axios";
+import { Button, CopyButton, Grid } from "@mantine/core"; 
+import { uiaxios } from "../../Lib/uiaxios"
 import { JSX, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaClipboard } from "react-icons/fa6";  
 import { DefaultCreateComponent, FkLinkCreateComponent, FkLinkCreateParams } from "./EntityProfileCreateComponents";
+ 
 
 export enum ProfileFieldCreateTypes {
   STRING = 'STRING',
@@ -142,16 +143,13 @@ export const MnfpEntityCreateProfile : React.FC<ProfilePageCreateParams> = ({
             title: columnTemplate.title,
             type: columnTemplate.typeOverride ?? edit_type, 
             is_creatable: inboundCreateModelPropertyKeys.includes(key)
-
         }
         
         createFieldItems.set(key, fieldItemCreateDef)
       } 
     });
 
-
     return createFieldItems;
- 
   }
     
   async function ProfileFieldValueChangedHandler(key: string, value: string) {
@@ -172,6 +170,7 @@ export const MnfpEntityCreateProfile : React.FC<ProfilePageCreateParams> = ({
                 itemKey={key}
                 title={columnDef.title}  
                 params={params} 
+                error={profileFieldErrors[key]}
                 onChangeHandler={ProfileFieldValueChangedHandler}
             />
         )
@@ -179,9 +178,9 @@ export const MnfpEntityCreateProfile : React.FC<ProfilePageCreateParams> = ({
         
       return (
         <DefaultCreateComponent 
-          itemKey={key} 
-          actualKey="BEEF"
+          itemKey={key}  
           title={columnDef.title}  
+          error={profileFieldErrors[key]}
           onChangeHandler={ProfileFieldValueChangedHandler}
         />
       )
@@ -189,14 +188,32 @@ export const MnfpEntityCreateProfile : React.FC<ProfilePageCreateParams> = ({
 
   async function sendCreateToApi() { 
     const createUrl = `${baseApiUrl}/${entityApiName?.toLocaleLowerCase()}`;
-    const response = await axios.post(createUrl || '', profileFieldValues);
+    const response = await uiaxios.post(createUrl || '', profileFieldValues);
+
+    
  
     if(response.status === 201) { 
       navigate(`/admin/${entityApiName}/${response.data.id}`);
     }
     else
     {
-      renderProfileFields();
+      const errorsRecord : Record<string,string>= {}
+
+      if(response.status === 422) {
+        const errors = response.data.detail;
+
+        errors.forEach((error: any) => {
+          const errorLocation = error.loc[1]
+          errorsRecord[errorLocation] = error.msg;
+          
+        });
+      
+      }
+      else {
+        console.error('Error creating entity:', response);
+      }
+
+      setProfileFieldErrors(errorsRecord); // Trigger re-render with errors 
     }
   }
 
@@ -222,7 +239,7 @@ export const MnfpEntityCreateProfile : React.FC<ProfilePageCreateParams> = ({
 
   async function fetchEntitySchema() {
  
-    const schema = await axios.get(`${import.meta.env.VITE_BASE_API_URL}/openapi.json`);
+    const schema = await uiaxios.get(`${import.meta.env.VITE_BASE_API_URL}/openapi.json`,{});
    
     const profileFields = determinePropertyDefs(
         schema.data, 
@@ -238,6 +255,7 @@ export const MnfpEntityCreateProfile : React.FC<ProfilePageCreateParams> = ({
   const [profileFields, setProfileFields] = useState<(JSX.Element | undefined)[]>();
   const [profileFieldDefs, setProfileFieldDefs] = useState<ProfileFieldCreateDefs>();    
   const [profileFieldValues] = useState<Record<string, any>>({});
+  const [profileFieldErrors, setProfileFieldErrors] = useState<Record<string, string>>({});
      
   const navigate = useNavigate();
 
@@ -249,7 +267,7 @@ export const MnfpEntityCreateProfile : React.FC<ProfilePageCreateParams> = ({
     if(profileFieldDefs) {
       renderProfileFields();
     }
-  }, [profileFieldDefs]);
+  }, [profileFieldDefs, profileFieldErrors]);
  
   return (
     <div>
