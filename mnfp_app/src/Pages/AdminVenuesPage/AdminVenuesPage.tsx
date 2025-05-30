@@ -1,39 +1,52 @@
-import { MnfpDataTable } from "@/Components/MnfpDataTable";
-import { ColumnDefTemplateItem, ColumnTypes } from "@/Lib/tableFunctions";
-
-type ColumnDefTemplate = Record<string, ColumnDefTemplateItem> 
+import { MnfpDataTable } from "@/Components/EntitySearchComponents/MnfpDataTable";
+import { FilterTemplate, FilterTypes } from "@/Components/EntitySearchComponents/MnfpFilters";
+import {   ColumnDefTemplate, ColumnTypes } from "@/Lib/tableFunctions"; 
 
 export default function AdminVenuesPage() {
-  const columnTemplate: ColumnDefTemplate = {
-    
-    name: {
-      title: 'Name',  
+  const columnTemplate: ColumnDefTemplate = new ColumnDefTemplate([
+    ['name', {
+      title: 'Name',
       typeOverride: ColumnTypes.FK_LINK,
-      typeParams: { 
+      typeParams: {
         key: 'id',
         profileUrl: '/admin/venues',
-      },  
+      },
       sortable: true,
-    },    
-    created_at: {
+    }],
+    ['created_at', {
       title: 'Created At',
-      typeOverride: ColumnTypes.DATE, 
+      typeOverride: ColumnTypes.DATE,
       typeParams: {
         format: 'MMM D YYYY',
         locale: 'en',
       },
       sortable: true,
-    },
-  }
-  
+    }], 
+  ])
+
+
+  const filterTemplate: FilterTemplate = new FilterTemplate([ 
+    ['name', { 
+      title: 'Name',
+      type: FilterTypes.STRING, 
+      typeParams: { 
+        searchKey: 'name_like'
+      } 
+    }],
+  ])
+
   return (
     <div>
-      <h1>Admin Venues</h1>
+      <div>
+        <h1>Admin Venues</h1>
+      </div>
+  
       <MnfpDataTable
         outboundModelName="VenueOutboundModel"
         baseApiUrl={import.meta.env.VITE_BASE_API_URL}
         entityApiName="venues"
         columnTemplate={columnTemplate}
+        filterTemplate={filterTemplate}
         defaultSortColumn="created_at"
         defaultSortDirection="desc"
       />

@@ -54,7 +54,7 @@ export type ProfileTemplateCreateItem = {
   
 export type ProfileFieldCreateDef = {
   title: string;
-  is_creatable?: boolean;
+  isCreatable?: boolean;
   type: ProfileFieldCreateTypeAndParams
 }
  
@@ -142,7 +142,7 @@ export const MnfpEntityCreateProfile : React.FC<ProfilePageCreateParams> = ({
         const fieldItemCreateDef: ProfileFieldCreateDef = {  
             title: columnTemplate.title,
             type: columnTemplate.typeOverride ?? edit_type, 
-            is_creatable: inboundCreateModelPropertyKeys.includes(key)
+            isCreatable: inboundCreateModelPropertyKeys.includes(key)
         }
         
         createFieldItems.set(key, fieldItemCreateDef)
@@ -219,7 +219,7 @@ export const MnfpEntityCreateProfile : React.FC<ProfilePageCreateParams> = ({
 
   async function renderProfileFields() {
      
-    const kvps = profileFieldDefs ? Array.from(profileFieldDefs.entries().filter((x)=> x[1].is_creatable)) : []
+    const kvps = profileFieldDefs ? Array.from(profileFieldDefs.entries().filter((x)=> x[1].isCreatable)) : []
     const elements = kvps.map((kvp: any) => { 
       const def = kvp[1]
       const key = kvp[0]

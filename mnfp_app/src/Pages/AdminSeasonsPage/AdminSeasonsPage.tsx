@@ -1,4 +1,4 @@
-import { MnfpDataTable } from "@/Components/MnfpDataTable";
+import { MnfpDataTable } from "@/Components/EntitySearchComponents/MnfpDataTable";
 import { ColumnDefTemplateItem, ColumnTypes,  } from "@/Lib/tableFunctions";
 
 

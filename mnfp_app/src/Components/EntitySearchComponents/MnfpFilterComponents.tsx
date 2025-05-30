@@ -2,43 +2,46 @@
 
 import { Combobox, Input, InputBase, TextInput, useCombobox } from "@mantine/core"; 
 import { useEffect, useState } from "react";
-import classes from "./EntityProfileComponents.module.css";  
-import axios from "axios"; 
+import classes from "./EntityFilterComponents.module.css";   
 import { resolveOptionNameHydration, resolveOptionNameValue } from "../../Lib/profileFunctions";
+import { uiaxios } from "../../Lib/uiaxios";
 
-export type FkLinkCreateParams = {
+export type FkLinkFilterParams = {
   searchUrl: string; 
   searchKey: string; 
   optionNameKeys: string[],
 }
 
-interface DefaultCreateComponentProps {
-    itemKey: string,
-    title: string,  
-    error: string | undefined,
-    onChangeHandler: (key: string, value: string) => void
+export type DefaultFilterParams = {
+ 
+  searchKey: string;  
 }
 
-interface FkLinkCreateComponentProps {
+interface DefaultFilterProps {
     itemKey: string,
-    title: string,  
-    params: FkLinkCreateParams,
-    error: string | undefined,
-    onChangeHandler: (key: string, value: string) => void
+    title: string,   
+    searchKey: string,
+    onChangeHandler: (key: string, value: string, searchKey: string) => void
 }
 
-export const DefaultCreateComponent: React.FC<DefaultCreateComponentProps> = ({     
+interface FkLinkFilterProps {
+    itemKey: string,
+    title: string,  
+    params: FkLinkFilterParams, 
+    onChangeHandler: (key: string, value: string, searchKey: string) => void
+}
+
+export const DefaultFilterComponent: React.FC<DefaultFilterProps> = ({     
     itemKey, 
-    title, 
-    error,
+    title,   
+    searchKey,
     onChangeHandler
 }) => { 
 
   const [value, setValue] = useState<string>("");
-  
-
+   
   useEffect(() => { 
-     onChangeHandler(itemKey, value); 
+     onChangeHandler(itemKey, value, searchKey); 
   }, [value]);
 
   return (
@@ -57,18 +60,14 @@ export const DefaultCreateComponent: React.FC<DefaultCreateComponentProps> = ({
                 }}
             /> 
         </div>
-        <div>
-            {error && <span className={`${classes.errorText}`}>{error}</span>}
-        </div>
     </div>
   );  
 } 
 
-export const FkLinkCreateComponent: React.FC<FkLinkCreateComponentProps> = ({     
+export const FkLinkFilterComponent: React.FC<FkLinkFilterProps> = ({     
     itemKey,
     title, 
-    params, 
-    error,
+    params,  
     onChangeHandler
 }) => { 
     
@@ -87,7 +86,7 @@ export const FkLinkCreateComponent: React.FC<FkLinkCreateComponentProps> = ({
     
     const hydration = resolveOptionNameHydration(params.optionNameKeys);
     
-    const response = await axios.get(searchUrl.toString(), hydration ? { headers: { 'MNFP-Hydration': hydration } } : {});
+    const response = await uiaxios.get(searchUrl.toString(), hydration ? { headers: { 'MNFP-Hydration': hydration } } : {});
   
     response.data.items.forEach((item: Record<string,any>) => 
         optionsArray.push({ 
@@ -127,7 +126,7 @@ export const FkLinkCreateComponent: React.FC<FkLinkCreateComponentProps> = ({
   useEffect(() => { 
     const name = options.find((option) => option.id === value)?.name || null
     setValueDisplay(name);
-    onChangeHandler(itemKey, value || "");
+    onChangeHandler(itemKey, value || "", itemKey);
   }, [value]);
  
   return (
@@ -176,10 +175,7 @@ export const FkLinkCreateComponent: React.FC<FkLinkCreateComponentProps> = ({
                 </Combobox.Options>
             </Combobox.Dropdown>
             </Combobox>
-        </div>
-        <div>
-            {error && <span className={`${classes.errorText}`}>{error}</span>}
-        </div>
+        </div> 
     </div>
   );
 } 

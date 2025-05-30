@@ -1,36 +1,51 @@
 /* eslint-disable dot-notation */
-import { ColumnDefTemplateItem, determineColumnDefs } from '@/Lib/tableFunctions';
+import { ColumnDefTemplate, determineColumnDefs } from '@/Lib/tableFunctions';
 import { Button } from '@mantine/core';
 import axios from 'axios'; 
 import { DataTable, DataTableColumn, DataTableSortStatus } from 'mantine-datatable';
 import { useEffect, useState } from 'react'; 
 import { NavLink } from 'react-router-dom';
+import { FilterTemplate, MnfpFilters } from './MnfpFilters'; 
+import { convertFromRecordToQueryArgs } from '@/Lib/util'; 
 
 interface MnfpDataTableProps {
     outboundModelName: string, 
     baseApiUrl : string,
     entityApiName: string,
-    columnTemplate : Record<string, ColumnDefTemplateItem>,
+    columnTemplate : ColumnDefTemplate,
+    filterTemplate: FilterTemplate,
     defaultSortColumn: string,
     defaultSortDirection: "asc" | "desc" ,
     hydration?: string[],
 }
 
-export const MnfpDataTable: React.FC<MnfpDataTableProps> = ({
-    outboundModelName,
+export const MnfpDataTable: React.FC<MnfpDataTableProps> = ({ 
     baseApiUrl,
     entityApiName,
     columnTemplate,
+    filterTemplate,
     defaultSortColumn,
     defaultSortDirection,
     hydration,
 }) => { 
 
-    async function fetchTableData(pageIn: number, pageSizeIn: number, sortStatusIn: DataTableSortStatus<any>) { 
-
+    async function fetchTableData(
+      pageIn: number, 
+      pageSizeIn: number, 
+      sortStatusIn: DataTableSortStatus<any>, 
+      values: Record<string, any> = {}
+    ) { 
         const isDescending = sortStatusIn.direction === 'desc' ? 'true' : 'false';
 
-        const response = await axios.get(`${baseApiUrl}/${entityApiName}?page=${pageIn}&page_length=${pageSizeIn}&sort_by=${String(sortStatusIn.columnAccessor)}&is_sort_descending=${isDescending}`, {
+        const queryArgs = convertFromRecordToQueryArgs(values);
+
+        let url = `${baseApiUrl}/${entityApiName}?page=${pageIn}&page_length=${pageSizeIn}&sort_by=${String(sortStatusIn.columnAccessor)}&is_sort_descending=${isDescending}`
+
+        if(queryArgs) {
+            url += `&${queryArgs}`;
+        }
+
+        const response = await axios.get(url, {
             headers: {
                 'MNFP-Hydration': hydration?.join(","),
             }
@@ -65,6 +80,8 @@ export const MnfpDataTable: React.FC<MnfpDataTableProps> = ({
 
             setSortStatus(sortStatusTemp);
         }
+
+        setFilterValues(values);
     }
  
   const [pageSize, setPageSize] = useState(15);
@@ -72,6 +89,7 @@ export const MnfpDataTable: React.FC<MnfpDataTableProps> = ({
   const [totalRecords, setTotalRecords] = useState(0);
   const [records, setRecords] = useState([]);
   const [columns, setColumns] = useState<DataTableColumn[]>([]);
+  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
 
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus<any>>({
     columnAccessor: defaultSortColumn,
@@ -80,16 +98,26 @@ export const MnfpDataTable: React.FC<MnfpDataTableProps> = ({
   
   useEffect(() => {
     const fetchColumnDefs = async () => {
-      const schema = await axios.get(`${import.meta.env.VITE_BASE_API_URL}/openapi.json`);
-      const columnDefs = determineColumnDefs(outboundModelName, schema.data, columnTemplate); 
+      // const schema = await axios.get(`${import.meta.env.VITE_BASE_API_URL}/openapi.json`);s
+      const columnDefs = determineColumnDefs(columnTemplate); 
       setColumns(columnDefs);
     }
     fetchColumnDefs();
-    fetchTableData(page, pageSize, sortStatus);
+    fetchTableData(page, pageSize, sortStatus, filterValues);
   }, [])
   
   return (
     <div>
+      <div>
+        Filters:
+        <MnfpFilters  
+          filterTemplate={filterTemplate}
+          onFilterChange={(values) => {
+            // Handle filter change, e.g., refetch data with new filters
+            fetchTableData(page, pageSize, sortStatus, values);
+          }}
+        />
+      </div>
       <div  style={{float:'right'}}>
         <NavLink to={`/admin/${entityApiName}/new`} className="btn btn-primary">
           <Button variant="filled" color="blue">
@@ -112,17 +140,17 @@ export const MnfpDataTable: React.FC<MnfpDataTableProps> = ({
             page={page}
             recordsPerPageOptions={[5, 10, 15, 20, 25]}
             onSortStatusChange={(val: DataTableSortStatus) => { 
-                fetchTableData(page, pageSize, val);
+                fetchTableData(page, pageSize, val, filterValues);
             }}
             sortStatus={sortStatus} 
             onPageChange={
               (val: number) => { 
-                fetchTableData(val, pageSize, sortStatus);
+                fetchTableData(val, pageSize, sortStatus, filterValues);
               }
             } 
             onRecordsPerPageChange={
               (val: number) => { 
-                fetchTableData(page, val, sortStatus);
+                fetchTableData(page, val, sortStatus, filterValues);
               }
             } 
           /> 
