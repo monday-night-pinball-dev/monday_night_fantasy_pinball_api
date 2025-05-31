@@ -1,12 +1,11 @@
 import { MnfpDataTable } from "@/Components/EntitySearchComponents/MnfpDataTable";
-import { ColumnDefTemplateItem, ColumnTypes } from "@/Lib/tableFunctions";
-
-type ColumnDefTemplate = Record<string, ColumnDefTemplateItem> 
-
+import { FilterTemplate, FilterTypes } from "@/Components/EntitySearchComponents/MnfpFilters";
+import { ColumnDefTemplate, ColumnTypes } from "@/Lib/tableFunctions";
+ 
 export default function AdminFantasyLeaguesPage() {
-  const columnTemplate: ColumnDefTemplate = {
+  const columnTemplate: ColumnDefTemplate = new ColumnDefTemplate([
     
-    name: {
+    ['name', {
       title: 'Name',  
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: { 
@@ -14,8 +13,8 @@ export default function AdminFantasyLeaguesPage() {
         profileUrl: '/admin/fantasy_leagues',
       },  
       sortable: true,
-    },  
-    created_at: {
+    }],  
+    ['created_at', {
       title: 'Created At',
       typeOverride: ColumnTypes.DATE, 
       typeParams: {
@@ -23,8 +22,25 @@ export default function AdminFantasyLeaguesPage() {
         locale: 'en',
       },
       sortable: true,
-    },
-  }
+    }],
+  ]);
+
+  const filterTemplate = new FilterTemplate([
+    ['id', { 
+      title: 'Id',
+      type: FilterTypes.STRING, 
+      typeParams: { 
+        searchKey: 'ids'
+      } 
+    }],
+    ['name', { 
+      title: 'Name',
+      type: FilterTypes.STRING, 
+      typeParams: { 
+        searchKey: 'name_like'
+      } 
+    }],
+  ]);
 
 
   return (
@@ -35,6 +51,7 @@ export default function AdminFantasyLeaguesPage() {
         baseApiUrl={import.meta.env.VITE_BASE_API_URL} 
         entityApiName="fantasy_leagues"
         columnTemplate={columnTemplate}
+        filterTemplate={filterTemplate}
         defaultSortColumn="created_at"
         defaultSortDirection="desc" 
       />

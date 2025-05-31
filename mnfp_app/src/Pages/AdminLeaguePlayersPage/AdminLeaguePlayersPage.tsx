@@ -1,12 +1,10 @@
 import { MnfpDataTable } from "@/Components/EntitySearchComponents/MnfpDataTable";
-import { ColumnDefTemplateItem, ColumnTypes } from "@/Lib/tableFunctions";
-
-type ColumnDefTemplate = Record<string, ColumnDefTemplateItem> 
+import { FilterTemplate, FilterTypes } from "@/Components/EntitySearchComponents/MnfpFilters";
+import { ColumnDefTemplate, ColumnTypes } from "@/Lib/tableFunctions";
 
 export default function AdminLeaguePlayersPage() {
-  const columnTemplate: ColumnDefTemplate = {
-    
-    name: {
+  const columnTemplate: ColumnDefTemplate = new ColumnDefTemplate([ 
+    ['name', {
       title: 'Name',  
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: { 
@@ -14,19 +12,19 @@ export default function AdminLeaguePlayersPage() {
         profileUrl: '/admin/league_players',
       },  
       sortable: true,
-    },  
-    global_mnp_id: {
+    }],  
+    ['global_mnp_id', {
       title: 'MNP ID',
-    },
-    "league_team.name": {
+    }],
+    ["league_team.name", {
       title: 'League Team',    
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: {
         key: 'league_team_id',
         profileUrl: '/admin/league_teams',
       },
-    },
-    created_at: {
+    }],
+    ['created_at', {
       title: 'Created At',
       typeOverride: ColumnTypes.DATE, 
       typeParams: {
@@ -34,8 +32,46 @@ export default function AdminLeaguePlayersPage() {
         locale: 'en',
       },
       sortable: true,
-    },
-  } 
+    }]
+  ]);
+
+  const filterTemplate: FilterTemplate = new FilterTemplate([ 
+    ['id', { 
+      title: 'Id',
+      type: FilterTypes.STRING, 
+      typeParams: { 
+        searchKey: 'ids'
+      } 
+    }], 
+    ['league_team_id', { 
+      title: 'League Team Id',
+      type: FilterTypes.STRING, 
+      typeParams: { 
+        searchKey: 'league_team_ids'
+      } 
+    }], 
+    ['name', { 
+      title: 'Name',
+      type: FilterTypes.STRING, 
+      typeParams: { 
+        searchKey: 'name_like'
+      } 
+    }],
+    ['short_name', { 
+      title: 'Short Name',
+      type: FilterTypes.STRING, 
+      typeParams: { 
+        searchKey: 'short_name'
+      } 
+    }],
+    ['global_mnp_id', { 
+      title: 'Mnp Id',
+      type: FilterTypes.STRING, 
+      typeParams: { 
+        searchKey: 'global_mnp_id'
+      } 
+    }],
+  ])
 
   return (
     <div>
@@ -45,6 +81,7 @@ export default function AdminLeaguePlayersPage() {
         baseApiUrl={import.meta.env.VITE_BASE_API_URL}
         entityApiName="league_players"
         columnTemplate={columnTemplate}
+        filterTemplate={filterTemplate}
         defaultSortColumn="created_at"
         defaultSortDirection="desc" 
         hydration={["league_team"]}

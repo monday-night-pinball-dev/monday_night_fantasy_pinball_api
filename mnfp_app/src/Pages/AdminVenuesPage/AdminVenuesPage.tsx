@@ -26,6 +26,13 @@ export default function AdminVenuesPage() {
 
 
   const filterTemplate: FilterTemplate = new FilterTemplate([ 
+    ['id', { 
+      title: 'Name',
+      type: FilterTypes.STRING, 
+      typeParams: { 
+        searchKey: 'ids'
+      } 
+    }],
     ['name', { 
       title: 'Name',
       type: FilterTypes.STRING, 

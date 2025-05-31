@@ -1,13 +1,13 @@
 import { MnfpDataTable } from "@/Components/EntitySearchComponents/MnfpDataTable";
-import { ColumnDefTemplateItem, ColumnTypes,  } from "@/Lib/tableFunctions";
+import { FilterTemplate, FilterTypes } from "@/Components/EntitySearchComponents/MnfpFilters";
+import { ColumnDefTemplate, ColumnTypes,  } from "@/Lib/tableFunctions";
 
-
-type ColumnDefTemplate = Record<string, ColumnDefTemplateItem> 
+ 
 
 export default function AdminSeasonsPage() {
-  const columnTemplate: ColumnDefTemplate = {
+  const columnTemplate: ColumnDefTemplate = new ColumnDefTemplate([
     
-    name: {
+    ['name', {
       title: 'Name',  
       typeOverride: ColumnTypes.FK_LINK,
       typeParams: { 
@@ -15,12 +15,12 @@ export default function AdminSeasonsPage() {
         profileUrl: '/admin/seasons',
       },  
       sortable: true,
-    },  
-    season_number: {
+    }],  
+    ['season_number', {
       title: 'Season Number',  
       sortable: true,
-    },
-    created_at: {
+    }],
+    ['created_at', {
       title: 'Created At',
       typeOverride: ColumnTypes.DATE, 
       typeParams: {
@@ -28,8 +28,27 @@ export default function AdminSeasonsPage() {
         locale: 'en',
       },
       sortable: true,
-    },
-  }
+    }], 
+  ])
+  
+
+
+  const filterTemplate: FilterTemplate = new FilterTemplate([ 
+    ['id', { 
+      title: 'Id',
+      type: FilterTypes.STRING, 
+      typeParams: { 
+        searchKey: 'ids'
+      } 
+    }],
+    ['name', { 
+      title: 'Name',
+      type: FilterTypes.STRING, 
+      typeParams: { 
+        searchKey: 'name_like'
+      } 
+    }],
+  ])
   
   return (
     <div>
@@ -39,6 +58,7 @@ export default function AdminSeasonsPage() {
         baseApiUrl={import.meta.env.VITE_BASE_API_URL}
         entityApiName="seasons"
         columnTemplate={columnTemplate}
+        filterTemplate={filterTemplate}
         defaultSortColumn="created_at"
         defaultSortDirection="desc"
       />
